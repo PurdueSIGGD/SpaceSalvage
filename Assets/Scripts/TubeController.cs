@@ -12,8 +12,8 @@ public class TubeController : MonoBehaviour {
 	private float tubelength = 2;
 	private Vector3[] tubes; //There is no function to get a value at the index for LineRenderer
 	private float dist = 0;
-	private float timesincelast = 0;
-	private float timesincedrop = 0;
+	private float timesincelast = 4;
+	private float timesincedrop = 4	;
 	// Use this for initialization
 	void Start () {
 		tubes = new Vector3[tubesleft + 1];
@@ -31,15 +31,13 @@ public class TubeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print (tubesleft + "   " + tubecount);
 
 		if (!ejectkey) { //Stop everything if ejected
-			print (tubesleft + "   " + tubecount);
 						ejectkey = Input.GetKey (KeyCode.G);
 						tubes [tubecount - 1] = this.transform.position; //Update position
 						LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-						if (tubecount > 1) { //In order to pick up tubes
-								if (timesincedrop > 2 && (Math.Abs (this.transform.position.x - ((Vector3)tubes [tubecount - 2]).x) < .6) && (Math.Abs (this.transform.position.y - ((Vector3)tubes [tubecount - 2]).y) < .6)) {
+						if (tubecount > 2) { //In order to pick up tubes
+								if (timesincedrop > 2 && (Math.Abs (this.transform.position.x - ((Vector3)tubes [tubecount - 2]).x) < .8) && (Math.Abs (this.transform.position.y - ((Vector3)tubes [tubecount - 2]).y) < .8)) {
 										
 										tubecount--;
 										dist = 0;
@@ -54,17 +52,19 @@ public class TubeController : MonoBehaviour {
 						l.SetPosition (tubecount - 1, this.transform.position);
 						timesincelast += Time.deltaTime;
 						timesincedrop += Time.deltaTime;
-						if (dist > tubelength && timesincelast > 2 && tubesleft > 0) { //can we drop it like it is hot?
+			if (dist > tubelength && tubesleft > 0 && (Vector3.Magnitude (transform.rigidbody2D.velocity) > 3 || timesincelast > 4 || dist > tubelength * 1.5 ) ) { //can we drop it like it is hot?
+								print (dist);
 								timesincedrop = 0;
 								tubesleft--;
-								tubecount++;
+								tubecount++; 
 								tubes [tubecount - 1] = this.transform.position;
 								l.SetVertexCount (tubecount);
 								l.SetPosition (tubecount - 1, this.transform.position);
 								dist = 0;
 						}
+						
 						if ( tubesleft == 0) {
-							this.transform.rigidbody2D.AddForce(tubes[tubecount - 2] - transform.position);
+							this.transform.rigidbody2D.AddForce((tubes[tubecount - 2] - transform.position));
 				
 						}
 						
@@ -84,7 +84,12 @@ public class TubeController : MonoBehaviour {
 		}
 
 		if (ejectkey) {
+			if (!ejected) {
+				this.transform.rigidbody2D.AddForce(80 * (transform.position - tubes[tubecount - 2]));
+			}
 			ejected = true;
+
+
 		}
 	}
 }
