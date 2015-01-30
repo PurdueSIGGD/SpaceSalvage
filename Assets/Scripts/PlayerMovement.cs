@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
+	public float moverate = 1;
 	//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
 
 	// Use this for initialization
@@ -18,14 +19,6 @@ public class PlayerMovement : MonoBehaviour {
 	private bool right;
 	private bool left;
 
-	void OnCollisionEnter2D(Collision2D col) {
-		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
-			health -= Vector3.Magnitude(col.relativeVelocity);
-		}
-		
-		
-		
-	}
 	// Update is called once per frame
 
 	void Update() {
@@ -61,20 +54,20 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (right)
 		{
-			this.rigidbody2D.AddForce(new Vector2(80 * Time.deltaTime, 0));
+			this.rigidbody2D.AddForce(new Vector2(80 * 1/moverate * Time.deltaTime, 0));
 
 		}
 		if (left)
 		{
-			this.rigidbody2D.AddForce(new Vector2(-80 * Time.deltaTime, 0));
+			this.rigidbody2D.AddForce(new Vector2(-80 * 1/moverate * Time.deltaTime, 0));
 		}
 		if (up)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0,80 * Time.deltaTime));
+			this.rigidbody2D.AddForce(new Vector2(0,80 * 1/moverate * Time.deltaTime));
 		}
 		if (down)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0,-80 * Time.deltaTime));
+			this.rigidbody2D.AddForce(new Vector2(0,-80 * 1/moverate * Time.deltaTime));
 		}
 
 	}

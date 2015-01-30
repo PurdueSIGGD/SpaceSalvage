@@ -39,7 +39,7 @@ public class TubeController : MonoBehaviour {
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		returnkey = Input.GetKey (KeyCode.E);
 		reelkey = Input.GetKey (KeyCode.Q);
-		if (!ejectkey && !returnkey) { //Stop everything if ejected
+		if (!ejectkey && !returning) { //Stop everything if ejected
 					ejectkey = Input.GetKey (KeyCode.G);
 					dist = Vector3.Magnitude ((tubes [tubecount - 2] - transform.position)); //far away enough?
 					tubes [tubecount - 1] = this.transform.position; //Update position
@@ -63,7 +63,13 @@ public class TubeController : MonoBehaviour {
 	void FixedUpdate() {
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 
-
+		if (returning && !ejectkey) {
+			if (tubecount != 2 && Vector3.Magnitude (transform.position - tubes[tubecount - 2]) < tubelength && Vector3.Magnitude (tubes [tubecount - 3] - (tubes[tubecount - 2] + (transform.position - tubes[tubecount - 2]))) < tubelength + tubelength/4) {
+				tubes[tubecount - 2] += (transform.position - tubes[tubecount - 2	]) / 20	;
+				l.SetPosition (tubecount - 2, tubes[tubecount - 2]);
+			}
+			
+		}
 		/*for (int i = 1; i < tubecount; i++) { //line bending
 			if (returnkey && !ejectkey) {
 				if (Vector3.Magnitude(tubes[i] - tubes[i + 1]) < 2.5 && Vector3.Magnitude(tubes[i] - tubes[i - 1]) < 2.5 && !(tubecount == 2)) {
@@ -102,7 +108,7 @@ public class TubeController : MonoBehaviour {
 			}
 
 			if (returning) { //In order to pick up tubes
-				if (tubecount > 2 && Math.Abs (this.transform.position.x - ((Vector3)tubes [tubecount - 2]).x) < .4 && this.transform.position.y - ((Vector3)tubes [tubecount - 2]).y < .4 ) {
+				if (tubecount > 2 && Math.Abs (this.transform.position.x - ((Vector3)tubes [tubecount - 2]).x) < .2 && this.transform.position.y - ((Vector3)tubes [tubecount - 2]).y < .2 ) {
 					tubecount--;
 					dist = 0;
 					tubesleft++;
@@ -111,7 +117,7 @@ public class TubeController : MonoBehaviour {
 
 
 				}
-				if (Vector3.Magnitude (tubes [tubecount - 2] - transform.position) > tubelength) {
+				if (Vector3.Magnitude (tubes [tubecount - 2] - transform.position) > tubelength + tubelength/2	) {
 					this.transform.rigidbody2D.AddForce(2 * (tubes[tubecount - 2] - transform.position));
 				}
 				if (reelkey) { 
