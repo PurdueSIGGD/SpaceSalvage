@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
-
+	public float health = 100;
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
@@ -18,7 +18,16 @@ public class PlayerMovement : MonoBehaviour {
 	private bool right;
 	private bool left;
 
+	void OnCollisionEnter2D(Collision2D col) {
+		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
+			health -= Vector3.Magnitude(col.relativeVelocity);
+		}
+		
+		
+		
+	}
 	// Update is called once per frame
+
 	void Update() {
 		AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
 

@@ -7,6 +7,9 @@ public class TubeController : MonoBehaviour {
 	public Vector3 tubeorigin;
 	private float ejectcooldown;
 	private bool returnkey;
+	private bool lastkey; //also toggle
+	private bool returning; //toggle
+	private bool reelkey;
 	private bool ejectkey;
 	private bool ejected = false;
 	private int tubecount = 0; //because I am stupid and +- 1 errors are the bane of my existence
@@ -27,12 +30,15 @@ public class TubeController : MonoBehaviour {
 		tubesleft -= tubecount;
 		ejectkey = false;
 		returnkey = false;
+		lastkey = false;
+		reelkey = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-		returnkey = Input.GetKey (KeyCode.Q);
+		returnkey = Input.GetKey (KeyCode.E);
+		reelkey = Input.GetKey (KeyCode.Q);
 		if (!ejectkey && !returnkey) { //Stop everything if ejected
 					ejectkey = Input.GetKey (KeyCode.G);
 					dist = Vector3.Magnitude ((tubes [tubecount - 2] - transform.position)); //far away enough?
@@ -88,7 +94,14 @@ public class TubeController : MonoBehaviour {
 
 			tubes [tubecount - 1] = this.transform.position; //Update position
 			l.SetPosition (tubecount - 1, this.transform.position);
-			if (returnkey) { //In order to pick up tubes
+			if (returnkey != lastkey) { //toggle
+				if (returnkey) {
+					returning = !returning;
+				}
+				lastkey = returnkey;
+			}
+
+			if (returning) { //In order to pick up tubes
 				if (tubecount > 2 && Math.Abs (this.transform.position.x - ((Vector3)tubes [tubecount - 2]).x) < .4 && this.transform.position.y - ((Vector3)tubes [tubecount - 2]).y < .4 ) {
 					tubecount--;
 					dist = 0;
@@ -98,9 +111,13 @@ public class TubeController : MonoBehaviour {
 
 
 				}
+				if (Vector3.Magnitude (tubes [tubecount - 2] - transform.position) > tubelength) {
+					this.transform.rigidbody2D.AddForce(2 * (tubes[tubecount - 2] - transform.position));
+				}
+				if (reelkey) { 
+					this.transform.rigidbody2D.AddForce(3 * (tubes[tubecount - 2] - transform.position));
+				}
 
-				//this.transform.rigidbody2D.AddForce(3 * (tubes[tubecount - 2] - transform.position));
-				returnkey = true;
 					
 				
 			}
