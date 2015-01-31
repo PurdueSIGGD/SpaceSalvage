@@ -13,11 +13,13 @@ public class PlayerCollisionController : MonoBehaviour {
 		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 			health -= Vector3.Magnitude(col.relativeVelocity);
 			print ("Ow don't do that, I have " + health + " health left");
+
 		}
-		
+		//abletopickup = true;
 		
 	}
 	void OnCollisionExit2D(Collision2D col) {
+		//abletopickup = false;
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		abletopickup = true;
@@ -27,7 +29,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-	
+		Physics2D.IgnoreLayerCollision(0,8);
 	}
 	
 	// Update is called once per frame
@@ -38,7 +40,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
 		if (pickupkey != lastkey && abletopickup) { //toggle
 			if (pickupkey) {
-				print (pickup);
+				//print (pickup);
 				pickup = !pickup;
 
 			} else {
