@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
@@ -29,23 +29,23 @@ public class PlayerMovement : MonoBehaviour {
 		right = Input.GetKey (KeyCode.D);
 		left = Input.GetKey (KeyCode.A);
 
-		if (right) {
-			audio.clip = move;
-			audio.Play();
+		/*if (right) {
+			//audio.clip = move;
+			audio.PlayOneShot(move, 0.7);
 		}
 		if (left) {
-			audio.clip = move;
-			audio.Play();
+			//audio.clip = move;
+			audio.PlayOneShot(move, 0.7);
 		}
 		if (up) {
-			audio.clip = move;
-			audio.Play();
+			//audio.clip = move;
+			audio.PlayOneShot(move, 0.7);
 		}
 		if (down) {
-			audio.clip = move;
-			audio.Play();
+			//audio.clip = move;
+			audio.PlayOneShot(move, 0.7);
 		}
-
+		*/
 	}
 
 	//Handles physics and stuff
