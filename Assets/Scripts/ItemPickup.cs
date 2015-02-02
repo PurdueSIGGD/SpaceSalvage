@@ -4,15 +4,15 @@ using System.Collections;
 public class ItemPickup : MonoBehaviour {
 	public Transform bulletPrefab;
 	public GameObject Player;
+	private Vector3 delta;
+	private Vector3 difference;
+	private bool ended = false;
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
-		//Physics2D.IgnoreCollision(Player.collider2D, collider2D);	
+		//4i;	
 	}
-	void followSuit() {
-		transform.position = ((CraneController)Player.GetComponentInChildren<CraneController>()).current;
 
-	}
 	/*void OnCollisionStay2D(Collision2D col) {
 		if (col.collider.GetComponent("PlayerCollisionController") != null) {
 
@@ -31,7 +31,24 @@ public class ItemPickup : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		transform.position = ((CraneController)Player.GetComponentInChildren<CraneController>()).current;
+
+		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
+			if (!ended) {
+				Physics2D.IgnoreCollision(Player.collider2D, collider2D);
+				difference = transform.position - ((CraneController)Player.GetComponentInChildren<CraneController>()).current;
+			}
+			delta = transform.position;
+			//print (((CraneController)Player.GetComponentInChildren<CraneController>()).current + difference + "        " + transform.position);
+			transform.position = ((CraneController)Player.GetComponentInChildren<CraneController>()).current + difference;
+			ended = true;
+
+		} else {
+			if (ended) {
+				Physics2D.IgnoreCollision(Player.collider2D, collider2D, false);
+				this.rigidbody2D.velocity = 60 * (transform.position - delta);
+				ended = false;
+			}
+		}
 
 	}
 }

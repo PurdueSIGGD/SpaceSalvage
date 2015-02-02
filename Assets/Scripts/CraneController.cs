@@ -6,9 +6,9 @@ public class CraneController : MonoBehaviour {
 	private GameObject focus;
 	public Vector3 current;
 	private Vector3 pz;
-	public int movespeed = 30;
+	public int movespeed = 1;
 	public float cranelength = 2;
-	private bool grabbed = false;
+	public bool grabbed = false;
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
@@ -23,38 +23,42 @@ public class CraneController : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-
-		((CircleCollider2D)this.GetComponent("CircleCollider2D")).center = pz;
+		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		pz.z = 0;
 		if (Input.GetMouseButtonDown(0)) {
-			print ("FUCK");
-			Collider[] hitColliders = Physics.OverlapSphere(pz, .3f);
-			int i = 0;
-			while (i < hitColliders.Length) {
-				if (focus.collider.GetComponent("ItemPickup") != null) {
-					focus = hitColliders[i].gameObject;
+			if (!grabbed) {
+				Collider2D hitCollider = Physics2D.OverlapCircle(pz, .3f);
+				if (hitCollider.GetComponent("ItemPickup") != null) {
+					print ("Got one");
+					focus = hitCollider.gameObject;
 					grabbed = true;
+					((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
 				}
-				i++;
+			} else {
+				focus = null;
+				grabbed = false;
+				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 1;
+				//((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = Player.rigidbody2D.velocity;
 			}
 		}
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		pz.z = 0;
+
 		//focus.transform.position = pz;
-		/*if (Vector3.Magnitude(Player.transform.position - pz) < cranelength) {
+		if (Vector3.Magnitude(Player.transform.position - pz) < cranelength) {
 			pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			pz.z = 0;
 		} else {
-			float theta = Mathf.Atan(pz.y/pz.x);
-			pz = new Vector3((cranelength - .3f) * Mathf.Sin(theta), (cranelength - .3f) * Mathf.Cos (theta));
-		}*/
-		current += ((pz - current) / movespeed);
-		if (grabbed) {
-			focus.SendMessage("followSuit");
+
+			float theta = Mathf.Atan(Mathf.Abs(pz.y - transform.position.y)/Mathf.Abs (pz.x - transform.position.x));
+			print (Mathf.Rad2Deg * theta);
+			//pz = new Vector3((cranelength) * Mathf.Sin(theta), (cranelength) * Mathf.Cos (theta));
 		}
 
+		current += ((pz - current) / movespeed);
+
+
 		l.SetPosition(0, Player.transform.position);
-		l.SetPosition(1, pz);
+		l.SetPosition(1, current);
 	}
 	void FixedUpdate () {
 		/*if (mouse0 != lastmouse0) { //toggle
