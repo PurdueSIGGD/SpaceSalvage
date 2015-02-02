@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 
 	void Update() {
-		AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
+		AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false); //overflow eventually
 
 		up = Input.GetKey (KeyCode.W);
 		down = Input.GetKey (KeyCode.S);

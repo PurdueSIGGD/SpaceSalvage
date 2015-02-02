@@ -62,7 +62,7 @@ public class TubeController : MonoBehaviour {
 	}
 	void FixedUpdate() {
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-
+		 
 		if (returning && !ejectkey) {
 			if (tubecount != 2 && Vector3.Magnitude (transform.position - tubes[tubecount - 2]) < tubelength && Vector3.Magnitude (tubes [tubecount - 3] - (tubes[tubecount - 2] + (transform.position - tubes[tubecount - 2]))) < tubelength + tubelength/4) {
 				tubes[tubecount - 2] += (transform.position - tubes[tubecount - 2	]) / 20	;
