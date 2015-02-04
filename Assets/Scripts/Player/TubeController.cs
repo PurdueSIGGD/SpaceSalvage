@@ -11,7 +11,8 @@ public class TubeController : MonoBehaviour {
 	private bool returning; //toggle
 	private bool reelkey;
 	private bool ejectkey;
-	private bool ejected = false;
+	public bool ejected = false;
+	private bool death = false;
 	private int tubecount = 0; //because I am stupid and +- 1 errors are the bane of my existence
 	private float tubelength = .5f;
 	private Vector3[] tubes; //There is no function to get a value at the index for LineRenderer
@@ -19,12 +20,11 @@ public class TubeController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		tubes = new Vector3[tubesleft + 1];
-
 		LineRenderer l = (LineRenderer) GetComponent<LineRenderer>();
 		l.SetColors(Color.cyan, Color.cyan);
 		l.SetVertexCount (2);
-		l.SetPosition (0, tubeorigin);
-		l.SetPosition (1, this.transform.position);
+		l.SetPosition (0, new Vector3(tubeorigin.x, tubeorigin.y, 1));
+		l.SetPosition (1, new Vector3(this.transform.position.x, this.transform.position.y, 1));
 		tubes[0] = (tubeorigin); //Start with two values, one being in ship, one on you (free to change);
 		tubecount = 2;
 		tubesleft -= tubecount;
@@ -60,6 +60,10 @@ public class TubeController : MonoBehaviour {
 
 
 	}
+	void DeathIsSoon() {
+		ejectkey = true;
+		death = true;
+	}
 	void FixedUpdate() {
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		 
@@ -90,7 +94,7 @@ public class TubeController : MonoBehaviour {
 
 		if (ejected) {
 			ejectcooldown += Time.fixedDeltaTime;
-			if (ejectcooldown >= 4 && (Math.Abs(this.transform.position.x - ((Vector3)tubes [tubecount - 1]).x) < .6) && (Math.Abs (this.transform.position.y - ((Vector3)tubes [tubecount - 1]).y) < .6 )) {
+			if (!death && ejectcooldown >= 4 && (Math.Abs(this.transform.position.x - ((Vector3)tubes [tubecount - 1]).x) < .6) && (Math.Abs (this.transform.position.y - ((Vector3)tubes [tubecount - 1]).y) < .6 )) {
 				ejectkey = false; //come back from ejecting
 				ejected = false;
 				ejectcooldown = 0;

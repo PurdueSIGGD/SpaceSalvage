@@ -3,13 +3,17 @@ using System.Collections;
 
 public class CraneController : MonoBehaviour {
 	public GameObject Player;
-	private GameObject focus;
+	public GameObject focus;
 	public Vector3 current;
 	private Vector3 pz;
+	private Vector3 delta;
+	private Vector3 difference;
 	public int movespeed = 1;
 	public float cranelength = 2;
 	public bool grabbed = false;
 	private bool rot = false;
+	private bool ended = false;
+
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
@@ -28,15 +32,16 @@ public class CraneController : MonoBehaviour {
 		pz.z = 0;
 		if (Input.GetMouseButtonDown(0)) {
 			if (!grabbed) {
-				Collider2D hitCollider = Physics2D.OverlapCircle(current, .3f);
+				Collider2D hitCollider = Physics2D.OverlapCircle(current, .1f);
 				if (hitCollider.GetComponent("ItemPickup") != null) {
 					print ("Got one");
 					focus = hitCollider.gameObject;
 					grabbed = true;
+					Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
 					((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
 				}
 			} else {
-				focus = null;
+				//focus = null;
 				grabbed = false;
 				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 1;
 				//((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = Player.rigidbody2D.velocity;
@@ -55,6 +60,22 @@ public class CraneController : MonoBehaviour {
 
 
 		}
+		if (grabbed) {
+			if (!ended) {
+
+				difference = focus.transform.position - current;
+			}
+			delta = focus.transform.position;
+			focus.transform.position = current + difference;
+			ended = true;
+			
+		} else {
+			if (ended) {
+				Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D, false);
+				((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = 60 * (focus.transform.position - delta);
+				ended = false;
+			}
+		}
 
 		current += ((pz - current) / movespeed);
 
@@ -64,7 +85,7 @@ public class CraneController : MonoBehaviour {
 	}
 	void FixedUpdate () {
 		if (rot && grabbed) {
-			print(focus.transform.rotation);
+			//print(focus.transform.rotation);
 			focus.transform.Rotate(Vector3.back);
 		}
 		/*if (mouse0 != lastmouse0) { //toggle

@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Airlock : MonoBehaviour {
 
-	public bool on;
+	public bool on = true;
 	public bool closed;
-	public bool leftside;
+	public bool leftside = true;
 	private Vector3 topposleft;
 	private Vector3 bottomposleft;
 	private Vector3 topposright;
@@ -14,8 +14,7 @@ public class Airlock : MonoBehaviour {
 	private float cooldowntime = 10;
 	// Use this for initialization
 	void Start () {
-		leftside = true;
-		on = true;
+
 		Physics2D.IgnoreCollision(transform.FindChild("Door1left").collider2D  , collider2D);
 		Physics2D.IgnoreCollision(transform.FindChild("Door2left").collider2D  , collider2D);
 		Physics2D.IgnoreCollision(transform.FindChild("Door1right").collider2D  , collider2D);
@@ -51,6 +50,9 @@ public class Airlock : MonoBehaviour {
 				closed = true;
 
 
+			}
+			if (cooldowntime < 10) {
+				time = 0;
 			}
 		}
 	}

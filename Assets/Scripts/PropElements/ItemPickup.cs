@@ -12,7 +12,16 @@ public class ItemPickup : MonoBehaviour {
 		Player = GameObject.Find("Player");
 		//4i;	
 	}
+	void OnCollisionEnter2D(Collision2D col) {
+		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
+			print (40 * (this.transform.position - delta));
+			col.collider.rigidbody2D.AddForce(4000 * (this.transform.position - delta));
+			
+			
+			
+		}
 
+	}
 	/*void OnCollisionStay2D(Collision2D col) {
 		if (col.collider.GetComponent("PlayerCollisionController") != null) {
 
@@ -31,8 +40,15 @@ public class ItemPickup : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		delta = transform.position;
 		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
+
+
+
+
+		}/*
+
+
 			if (!ended) {
 				Physics2D.IgnoreCollision(Player.collider2D, collider2D);
 				difference = transform.position - ((CraneController)Player.GetComponentInChildren<CraneController>()).current;
@@ -48,7 +64,7 @@ public class ItemPickup : MonoBehaviour {
 				this.rigidbody2D.velocity = 60 * (transform.position - delta);
 				ended = false;
 			}
-		}
+		} */
 
 	}
 }
