@@ -25,7 +25,7 @@ public class PlayerCollisionController : MonoBehaviour {
 				((TubeController)this.GetComponent("TubeController")).SendMessage("DeathIsSoon");
 			} else {
 				health -= Vector3.Magnitude(col.relativeVelocity);
-				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health;
+				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");
 			}
 
 		}
@@ -54,13 +54,13 @@ public class PlayerCollisionController : MonoBehaviour {
 	void Update () {
 		pickupkey = Input.GetKey (KeyCode.F);
 		if (((TubeController)this.GetComponent("TubeController")).ejected) {
-			((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy;
+			((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2");
 			oxy -= Time.deltaTime;
 			if (oxy <= 0) {
 				GameObject.Destroy (this);
 			}
 		} else {
-			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health;
+			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");
 			oxy = startingoxy;
 		}
 

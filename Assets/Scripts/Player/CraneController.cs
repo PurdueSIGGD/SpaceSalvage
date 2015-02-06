@@ -8,7 +8,8 @@ public class CraneController : MonoBehaviour {
 	private Vector3 pz;
 	private Vector3 delta;
 	private Vector3 difference;
-	public int movespeed = 1;
+	public float movespeed = .5f;
+	private float changedmovespeed;
 	public float cranelength = 2;
 	public bool grabbed = false;
 	private bool rot = false;
@@ -18,6 +19,7 @@ public class CraneController : MonoBehaviour {
 	void Start () {
 		Player = GameObject.Find("Player");
 		current = Player.transform.position;
+		changedmovespeed = movespeed;
 	}
 	void OnMouseDown() {
 
@@ -33,13 +35,15 @@ public class CraneController : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)) {
 			if (!grabbed) {
 				Collider2D hitCollider = Physics2D.OverlapCircle(current, .1f);
-				if (hitCollider.GetComponent("ItemPickup") != null) {
-					print ("Got one");
-					focus = hitCollider.gameObject;
-					grabbed = true;
-					Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
-					((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
-				}
+					if (hitCollider != null) {
+						if (hitCollider.GetComponent("ItemPickup") != null) {
+							print ("Got one");
+							focus = hitCollider.gameObject;
+							grabbed = true;
+							Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
+							((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
+						}
+					}
 			} else {
 				//focus = null;
 				grabbed = false;
@@ -50,16 +54,23 @@ public class CraneController : MonoBehaviour {
 		rot = Input.GetMouseButton(1);
 
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-
+		float dist = Vector3.Magnitude (Player.transform.position - pz);
 		//focus.transform.position = pz;
-		if (Vector3.Magnitude(Player.transform.position - pz) > cranelength) {
-			float theta = Mathf.Atan(Mathf.Abs(pz.y - Player.transform.position.y)/Mathf.Abs (pz.x - Player.transform.position.x));
+		if (dist > cranelength) {
+			changedmovespeed = movespeed * .5f;
+			//float theta = Mathf.Atan(Mathf.Abs(pz.y - Player.transform.position.y)/Mathf.Abs (pz.x - Player.transform.position.x));
 			//print (this.transform.position);
 			//pz = new Vector3((cranelength) * Mathf.Sin(theta), (cranelength) * Mathf.Cos (theta));
+			//movespeed = 1;
 		} else {
-
-
+			changedmovespeed = movespeed;
+			//movespeed = 2;
 		}
+		current += ((pz - current) * Time.deltaTime * changedmovespeed);
+
+		l.SetPosition(0, Player.transform.position);
+		l.SetPosition(1, current);
+
 		if (grabbed) {
 			if (!ended) {
 
@@ -77,11 +88,9 @@ public class CraneController : MonoBehaviour {
 			}
 		}
 
-		current += ((pz - current) / movespeed);
 
 
-		l.SetPosition(0, Player.transform.position);
-		l.SetPosition(1, current);
+
 	}
 	void FixedUpdate () {
 		if (rot && grabbed) {
