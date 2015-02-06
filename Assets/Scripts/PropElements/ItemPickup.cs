@@ -6,7 +6,6 @@ public class ItemPickup : MonoBehaviour {
 	public GameObject Player;
 	private Vector3 delta;
 	private Vector3 difference;
-	private bool ended = false;
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
@@ -14,9 +13,9 @@ public class ItemPickup : MonoBehaviour {
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
-			print (40 * (this.transform.position - delta));
+			//print (40 * (this.transform.position - delta));
 			if (col.collider.GetComponent("Rigidbody2D") != null) {
-				((Rigidbody2D)col.collider.GetComponent("Rigidbody2D")).AddForce(4000 * (this.transform.position - delta));
+				((Rigidbody2D)col.collider.GetComponent("Rigidbody2D")).AddForce(40 * (col.transform.position - this.transform.position));
 			}
 			
 			

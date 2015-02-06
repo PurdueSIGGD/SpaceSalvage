@@ -5,11 +5,6 @@ public class PlayerCollisionController : MonoBehaviour {
 	public float health = 100;
 	public float startingoxy = 60;
 	private float oxy;
-	public bool abletopickup = false;
-	public bool pickup = false;
-	private bool pickupkey = false;
-	private bool lastkey = false;
-
 	private GameObject text;
 		
 	void OnCollisionStay2D(Collision2D col) {
@@ -29,12 +24,9 @@ public class PlayerCollisionController : MonoBehaviour {
 			}
 
 		}
-		abletopickup = true;
 		
 	}
-	void OnCollisionExit2D(Collision2D col) {
-		abletopickup = false;
-	}
+	void OnCollisionExit2D(Collision2D col) {}
 	void OnTriggerEnter2D(Collider2D col) {
 		//abletopickup = true;
 	}
@@ -52,7 +44,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	// Update is called once per frame
 
 	void Update () {
-		pickupkey = Input.GetKey (KeyCode.F);
+		//pickupkey = Input.GetKey (KeyCode.F);
 		if (((TubeController)this.GetComponent("TubeController")).ejected) {
 			((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2");
 			oxy -= Time.deltaTime;
@@ -67,16 +59,6 @@ public class PlayerCollisionController : MonoBehaviour {
 	}
 	void FixedUpdate() {
 
-		if (pickupkey != lastkey && abletopickup) { //toggle
-			if (pickupkey) {
-				//print (pickup);
-				pickup = !pickup;
-
-			} else {
-
-			}
-			lastkey = pickupkey;
-		}
 
 	}
 }

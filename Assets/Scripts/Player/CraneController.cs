@@ -7,12 +7,13 @@ public class CraneController : MonoBehaviour {
 	public Vector3 current;
 	private Vector3 pz;
 	private Vector3 delta;
+	private Vector3 playerdelta;
 	private Vector3 difference;
 	public float movespeed = .5f;
-	private float changedmovespeed;
+	public float changedmovespeed;
 	public float cranelength = 2;
 	public bool grabbed = false;
-	private bool rot = false;
+	private bool rot = false; 
 	private bool ended = false;
 
 	// Use this for initialization
@@ -21,12 +22,7 @@ public class CraneController : MonoBehaviour {
 		current = Player.transform.position;
 		changedmovespeed = movespeed;
 	}
-	void OnMouseDown() {
 
-	}
-	void OnMouseUp() {
-
-	}
 	// Update is called once per frame
 	void Update () {
 		this.transform.position = Player.transform.position;
@@ -45,31 +41,49 @@ public class CraneController : MonoBehaviour {
 						}
 					}
 			} else {
-				//focus = null;
 				grabbed = false;
 				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 1;
-				//((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = Player.rigidbody2D.velocity;
 			}
 		}
 		rot = Input.GetMouseButton(1);
-
+		if (playerdelta != Player.transform.position) { //keep it up with the player
+			current += (Player.transform.position - playerdelta);
+		}
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		float dist = Vector3.Magnitude (Player.transform.position - pz);
-		//focus.transform.position = pz;
 		if (dist > cranelength) {
-			changedmovespeed = movespeed * .5f;
-			//float theta = Mathf.Atan(Mathf.Abs(pz.y - Player.transform.position.y)/Mathf.Abs (pz.x - Player.transform.position.x));
-			//print (this.transform.position);
-			//pz = new Vector3((cranelength) * Mathf.Sin(theta), (cranelength) * Mathf.Cos (theta));
-			//movespeed = 1;
+		
+			int xval = 1, yval = 1;
+
+			if (pz.x + Player.transform.position.x < 0) {
+				xval *= -1;
+			}
+			if (pz.y + Player.transform.position.y < 0) {
+				yval *= -1;
+			}
+			if (Mathf.Abs(Player.transform.position.x) > Mathf.Abs(pz.x)) {
+				xval*=-1;
+			}
+			if (Mathf.Abs(Player.transform.position.y) > Mathf.Abs(pz.y)) {
+				yval*=-1;
+			}
+	
+			float theta = Mathf.Atan((Player.transform.position.y - pz.y)/ (Player.transform.position.x - pz.x));
+		
+			pz = new Vector3((xval * Mathf.Abs((cranelength) * Mathf.Cos(theta))) + Player.transform.position.x, (yval * Mathf.Abs((cranelength) * 1 * Mathf.Sin (theta))) + Player.transform.position.y);
+
+		
 		} else {
 			changedmovespeed = movespeed;
-			//movespeed = 2;
+		;
 		}
 		current += ((pz - current) * Time.deltaTime * changedmovespeed);
 
+		//current = pz + transform.position;
+		current.z = .02f;
 		l.SetPosition(0, Player.transform.position);
 		l.SetPosition(1, current);
+	
 
 		if (grabbed) {
 			if (!ended) {
@@ -89,20 +103,16 @@ public class CraneController : MonoBehaviour {
 		}
 
 
-
-
+		transform.FindChild("Ending").transform.position = new Vector3(current.x, current.y, 0);
+		playerdelta = Player.transform.position;
 	}
 	void FixedUpdate () {
+
 		if (rot && grabbed) {
-			//print(focus.transform.rotation);
+
 			focus.transform.Rotate(Vector3.back);
 		}
-		/*if (mouse0 != lastmouse0) { //toggle
-			if (mouse0) {
-				grabattempt = !grabattempt;
-			}
-			lastmouse0 = mouse0;
-		}*/
+	
 		
 
 

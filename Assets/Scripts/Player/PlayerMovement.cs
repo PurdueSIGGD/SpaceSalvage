@@ -69,6 +69,12 @@ public class PlayerMovement : MonoBehaviour {
 		{
 			this.rigidbody2D.AddForce(new Vector2(0,-80 * 1/moverate * Time.deltaTime));
 		}
+		if (!(right || left || up || down)) {
+			//this.GetComponentInChildren<CraneController>().changedmovespeed = 1;
 
+		} else {
+
+			//if (Vector2.SqrMagnitude(this.transform.rigidbody2D.velocity) > 2) this.GetComponentInChildren<CraneController>().changedmovespeed = 3;
+		}
 	}
 }
