@@ -36,6 +36,8 @@ public class CraneController : MonoBehaviour {
 							print ("Got one");
 							focus = hitCollider.gameObject;
 							grabbed = true;
+						 
+							focus.transform.rigidbody2D.angularVelocity = 0;
 							Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
 							((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
 						}
@@ -45,6 +47,7 @@ public class CraneController : MonoBehaviour {
 				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 1;
 			}
 		}
+	
 		rot = Input.GetMouseButton(1);
 		if (playerdelta != Player.transform.position) { //keep it up with the player
 			current += (Player.transform.position - playerdelta);
@@ -86,6 +89,7 @@ public class CraneController : MonoBehaviour {
 	
 
 		if (grabbed) {
+			//print (focus.transform.rigidbody2D.angularVelocity);
 			if (!ended) {
 
 				difference = focus.transform.position - current;
@@ -102,15 +106,20 @@ public class CraneController : MonoBehaviour {
 			}
 		}
 
+		Transform ending = transform.FindChild("Ending");
+		ending.position = (new Vector3(current.x, current.y, 0));
+		//print ( Mathf.Asin((ending.position.x - Player.transform.position.x )/( ending.position.y - Player.transform.position.y)));
+		//ending.Rotate(new Vector3(0,0,45));
 
-		transform.FindChild("Ending").transform.position = new Vector3(current.x, current.y, 0);
 		playerdelta = Player.transform.position;
 	}
 	void FixedUpdate () {
 
 		if (rot && grabbed) {
-
+			print ("Rotate");
+			//focus.transform.rotation = new Quaternion(0,0,Time.DeltaTime,0);
 			focus.transform.Rotate(Vector3.back);
+			//focus.transform.RotateAround(Vector3.zero, current, Time.deltaTime * 50);
 		}
 	
 		
