@@ -54,20 +54,20 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (right)
 		{
-			this.rigidbody2D.AddForce(new Vector2(80 * 1/moverate * Time.deltaTime, 0));
+			this.rigidbody2D.AddForce(new Vector2(130 * 1/moverate * Time.deltaTime, 0));
 
 		}
 		if (left)
 		{
-			this.rigidbody2D.AddForce(new Vector2(-80 * 1/moverate * Time.deltaTime, 0));
+			this.rigidbody2D.AddForce(new Vector2(-130 * 1/moverate * Time.deltaTime, 0));
 		}
 		if (up)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0,80 * 1/moverate * Time.deltaTime));
+			this.rigidbody2D.AddForce(new Vector2(0,130 * 1/moverate * Time.deltaTime));
 		}
 		if (down)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0,-80 * 1/moverate * Time.deltaTime));
+			this.rigidbody2D.AddForce(new Vector2(0,-130 * 1/moverate * Time.deltaTime));
 		}
 		if (!(right || left || up || down)) {
 			//this.GetComponentInChildren<CraneController>().changedmovespeed = 1;

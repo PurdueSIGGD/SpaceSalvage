@@ -78,7 +78,7 @@ public class CraneController : MonoBehaviour {
 		
 		} else {
 			changedmovespeed = movespeed;
-		;
+		
 		}
 		current += ((pz - current) * Time.deltaTime * changedmovespeed);
 
@@ -108,17 +108,28 @@ public class CraneController : MonoBehaviour {
 
 		Transform ending = transform.FindChild("Ending");
 		ending.position = (new Vector3(current.x, current.y, 0));
-		//print ( Mathf.Asin((ending.position.x - Player.transform.position.x )/( ending.position.y - Player.transform.position.y)));
-		//ending.Rotate(new Vector3(0,0,45));
+		float thetaersnenig = (Mathf.Atan( ((ending.position.y - Player.transform.position.y) /(ending.position.x - Player.transform.position.x))));
+		thetaersnenig = thetaersnenig/2;
+		if (thetaersnenig < 0) {
+			thetaersnenig+= Mathf.PI/2;
+		}
+		if (current.y - Player.transform.position.y < 0) {
+			thetaersnenig+= Mathf.PI/2;
+		}
+		thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg;
+		print	(thetaersnenig + "   " +  ending.rotation.eulerAngles.z);
+
+		ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 
 		playerdelta = Player.transform.position;
 	}
 	void FixedUpdate () {
 
 		if (rot && grabbed) {
-			print ("Rotate");
+
+			//print ("Rotate");
 			//focus.transform.rotation = new Quaternion(0,0,Time.DeltaTime,0);
-			focus.transform.Rotate(Vector3.back);
+			focus.transform.Rotate(Time.deltaTime * 40 * Vector3.back);
 			//focus.transform.RotateAround(Vector3.zero, current, Time.deltaTime * 50);
 		}
 	
