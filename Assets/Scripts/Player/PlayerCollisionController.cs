@@ -7,6 +7,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	private float oxy;
 	private GameObject text;
 		
+	public int wallet = 0;
 	void OnCollisionStay2D(Collision2D col) {
 
 	}
