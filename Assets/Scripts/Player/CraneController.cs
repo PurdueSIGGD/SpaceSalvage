@@ -117,7 +117,7 @@ public class CraneController : MonoBehaviour {
 			thetaersnenig+= Mathf.PI/2;
 		}
 		thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg;
-		print	(thetaersnenig + "   " +  ending.rotation.eulerAngles.z);
+		//print	(thetaersnenig + "   " +  ending.rotation.eulerAngles.z);
 
 		ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 
