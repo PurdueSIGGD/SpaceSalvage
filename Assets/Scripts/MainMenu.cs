@@ -4,11 +4,16 @@ using System.Collections;
 public class MainMenu : MonoBehaviour {
 
 	public Texture backgroundTexture;
-	public float guiPlacementX1;
-	public float guiPlacementX2;
-	public float guiPlacementY1;
+	public float guiPlacementX1 = .5f;
+	public float guiPlacementX2 = .5f;
+	public float guiPlacementY1 = .5f;
 	public float guiPlacementY2;
+	void Start() {
+		guiPlacementX2 = .5f;
+		guiPlacementY2 = .5f;
+		guiPlacementY1 = .5f;
 
+	}
 	void OnGUI() {
 		GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
 
