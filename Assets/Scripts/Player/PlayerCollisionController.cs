@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCollisionController : MonoBehaviour {
 	public float health = 100;
 	public float startingoxy = 60;
-	private float oxy;
+	public float oxy;
 	private GameObject text;
 		
 	public int wallet = 0;
