@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 	public int sampleRate = 0;
 	public float frequency = 440;
 	public float moverate = 1;
+	public bool emp;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
 	private SpriteRenderer LeftThruster;
@@ -15,6 +16,8 @@ public class PlayerMovement : MonoBehaviour {
 	private static double FrontAngle = 90;
 	private static double LeftAngle = 180;
 	private static double RightAngle = 0;
+	public float emprechargetime = 10;
+	private float currentemptime;
 
 	//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
 
@@ -24,8 +27,16 @@ public class PlayerMovement : MonoBehaviour {
 		FrontThruster = GameObject.Find ("FrontThruster").GetComponent<SpriteRenderer> ();
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
 		RightThruster = GameObject.Find ("RightThruster").GetComponent<SpriteRenderer> ();
+		currentemptime = 0;
+		//emp = false;
 	}
+	void EMP() {
+		currentemptime = 0;
+		emp = true;
+		this.GetComponent<TubeController>().emp = true;
+		GameObject.Find ("Crane").GetComponent<CraneController>().emp = true;
 
+	}
 	private bool up;
 	private bool down;
 	private bool right;
@@ -35,7 +46,14 @@ public class PlayerMovement : MonoBehaviour {
 
 	void Update() {
 		//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false); //overflow eventually
-
+		if (emp) {
+			currentemptime+= Time.deltaTime;
+			if (currentemptime > emprechargetime) {
+				emp = false;
+				this.GetComponent<TubeController>().emp = false;
+				GameObject.Find ("Crane").GetComponent<CraneController>().emp = false;
+			}
+		}
 		up = Input.GetKey (KeyCode.W);
 		down = Input.GetKey (KeyCode.S);
 		right = Input.GetKey (KeyCode.D);
@@ -59,123 +77,153 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		*/
 	}
+	bool inRange(double d, double rangestart, double rangeend) {
+		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
+	}
+	bool inRangeLeft(double d, double rangestart, double rangeend) {
+		//return false;
+		//if 0 < theta < 90
+		bool arg1 = (d + this.transform.rotation.eulerAngles.z + 180 + 360)  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend;
+		//if 270 < theta < 0
+		bool arg2 = (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend + 360;
 
+		return (left && (arg1 || arg2));
+	}
 	//Handles physics and stuff
 	void FixedUpdate () {
-		double rangestart = 0;
-		double rangeend = 0;
-		bool flying = false;
-		if (right)
-		{
-			this.rigidbody2D.AddForce(new Vector2(130 * 1/moverate * Time.deltaTime, 0));
-			rangestart = 100;
-			rangeend = 260;
-			flying = true;
-		}
-		if (left)
-		{
-			this.rigidbody2D.AddForce(new Vector2(-130 * 1/moverate * Time.deltaTime, 0));
-			rangestart = 280;
-			rangeend = 80 + 360;
-			flying = true;
-		}
-		if (up)
-		{
-			this.rigidbody2D.AddForce(new Vector2(0,130 * 1/moverate * Time.deltaTime));
-			if (flying) {
-				if (right) {
+		if (!emp) {
+			double rangestart = 0;
+			double rangeend = 0;
+			bool flying = false;
+			if (right)
+			{
+				this.rigidbody2D.AddForce(new Vector2(130 * 1/moverate * Time.deltaTime, 0));
+				rangestart = 100;
+				rangeend = 260;
+				flying = true;
+			}
+			if (left)
+			{
+				this.rigidbody2D.AddForce(new Vector2(-130 * 1/moverate * Time.deltaTime, 0));
+				rangestart = 280;
+				rangeend = 80;
+				flying = true;
+			}
+			if (up)
+			{
+				this.rigidbody2D.AddForce(new Vector2(0,130 * 1/moverate * Time.deltaTime));
+				if (flying) {
+					if (right) {
+						rangestart = 190;
+						rangeend = 350;
+					}
+					if (left) {
+						rangestart = 190;
+						rangeend = 80;
+					}
+				
+				} else {
+					// ("Only up");
 					rangestart = 190;
 					rangeend = 350;
 				}
-				if (left) {
-					rangestart = 190;
-					rangeend = 80 + 360;
-				}
-			
-			} else {
-				rangestart = 190;
-				rangeend = 350;
-			}
 
-			flying = true;
-		}
-		if (down)
-		{
-			this.rigidbody2D.AddForce(new Vector2(0,-130 * 1/moverate * Time.deltaTime));
-			if (flying) {
-				if (right) {
+				flying = true;
+			}
+			if (down)
+			{
+				this.rigidbody2D.AddForce(new Vector2(0,-130 * 1/moverate * Time.deltaTime));
+				if (flying) {
+					if (right) {
+						rangestart = 10;
+						rangeend = 260;
+					}
+					if (left) {
+						rangestart = 280;
+						rangeend = 170 + 360;
+					}
+					
+				} else {
 					rangestart = 10;
-					rangeend = 260;
+					rangeend = 170;
 				}
-				if (left) {
-					rangestart = 280;
-					rangeend = 170 + 360;
+				flying = true;
+			}
+			//print ((BackAngle + this.transform.rotation.eulerAngles.z + 360 - 180) % 360);
+			//print(rangestart + "   " + rangeend);
+
+			if (flying) {
+				//print (rangestart);
+				//BackAngle
+				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
+					if (BackThruster.color.a < 1) {
+						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 10);
+					}
+				} else {
+					if (BackThruster.color.a > 0) {
+						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
+					}
+				}
+				//FrontAngle
+				//print ((FrontAngle + this.transform.rotation.eulerAngles.z + 180));
+				if (inRange(FrontAngle, rangestart, rangeend)|| inRangeLeft(FrontAngle, rangestart, rangeend)) {
+					if (FrontThruster.color.a < 1) {
+						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 10);
+					}
+				} else {
+					if (FrontThruster.color.a > 0) {
+						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 10);
+					}
+				}
+				//LeftAngle
+				if (inRange(LeftAngle, rangestart, rangeend) || inRangeLeft(LeftAngle, rangestart, rangeend)) {
+					if (LeftThruster.color.a < 1) {
+						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 10);
+					}
+				} else {
+					if (LeftThruster.color.a > 0) {
+						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 10);
+					}
+				}
+				//RightAngle
+				//print (((BackAngle + this.transform.rotation.eulerAngles.z + 180) % 360) + "           " + rangestart + "    " + rangeend);
+				//print (((RightAngle + this.transform.rotation.eulerAngles.z + 180) % 360) + "           " + rangestart + "    " + rangeend);
+				if (inRange(RightAngle, rangestart, rangeend) || inRangeLeft(RightAngle, rangestart, rangeend)) {
+					if (RightThruster.color.a < 1) {
+						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 10);
+					}
+				} else {
+					if (RightThruster.color.a > 0) {
+						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 10);
+					}
 				}
 				
 			} else {
-				rangestart = 10;
-				rangeend = 170;
-			}
-			flying = true;
-		}
-		//print ((BackAngle + this.transform.rotation.eulerAngles.z + 360 - 180) % 360);
-
-
-		if (flying) {
-			//print (rangestart);
-			//BackAngle
-			if ((BackAngle + this.transform.rotation.eulerAngles.z + 180)  > rangestart % 360 && (BackAngle + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360) { //if my back thruster's angle is within the beginning and ending of the range
-				if (BackThruster.color.a < 1) {
-					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 10);
-				}
-			} else {
 				if (BackThruster.color.a > 0) {
-						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
+					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
 				}
-			}
-			//FrontAngle
-			if ((FrontAngle + this.transform.rotation.eulerAngles.z + 180)  > rangestart % 360 && (FrontAngle + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360) { //if my front thruster's angle is within the beginning and ending of the range
-				if (FrontThruster.color.a < 1) {
-					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 10);
-				}
-			} else {
 				if (FrontThruster.color.a > 0) {
 					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 10);
 				}
-			}
-			//LeftAngle
-			if ((LeftAngle + this.transform.rotation.eulerAngles.z + 180)  > rangestart % 360 && (LeftAngle + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360) { //if my left thruster's angle is within the beginning and ending of the range
-				if (LeftThruster.color.a < 1) {
-					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 10);
-				}
-			} else {
 				if (LeftThruster.color.a > 0) {
 					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 10);
 				}
-			}
-			//RightAngle
-			if ((RightAngle + this.transform.rotation.eulerAngles.z + 180)  > rangestart % 360 && (RightAngle + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360) { //if my right thruster's angle is within the beginning and ending of the range
-				if (RightThruster.color.a < 1) {
-					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 10);
-				}
-			} else {
 				if (RightThruster.color.a > 0) {
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 10);
 				}
 			}
-			
 		} else {
 			if (BackThruster.color.a > 0) {
-				BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
+				BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 2);
 			}
 			if (FrontThruster.color.a > 0) {
-				FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 10);
+				FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 2);
 			}
 			if (LeftThruster.color.a > 0) {
-				LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 10);
+				LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 2);
 			}
 			if (RightThruster.color.a > 0) {
-				RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 10);
+				RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 2);
 			}
 		}
 	}

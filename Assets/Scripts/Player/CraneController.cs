@@ -5,6 +5,7 @@ public class CraneController : MonoBehaviour {
 	public GameObject Player;
 	public GameObject focus;
 	public Vector3 current;
+	public bool emp;
 	private Vector3 pz;
 	private Vector3 delta;
 	private Vector3 playerdelta;
@@ -25,6 +26,7 @@ public class CraneController : MonoBehaviour {
 		changedmovespeed = movespeed;
 		lastTheta = Player.transform.rotation.z;
 		lastDeltaTheta = 0;
+		//emp = false;
 	}
 
 	// Update is called once per frame
@@ -84,8 +86,9 @@ public class CraneController : MonoBehaviour {
 			changedmovespeed = movespeed;
 		
 		}
-		current += ((pz - current) * Time.deltaTime * changedmovespeed);
-
+		if (!emp) {
+			current += ((pz - current) * Time.deltaTime * changedmovespeed);
+		}
 		//current = pz + transform.position;
 		current.z = .02f;
 		l.SetPosition(0, Player.transform.position);

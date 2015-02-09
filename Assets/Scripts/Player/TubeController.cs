@@ -6,6 +6,7 @@ public class TubeController : MonoBehaviour {
 	public int tubesleft = 50;
 	public Vector3 tubeorigin;
 	private float ejectcooldown;
+	public bool emp;
 	private bool returnkey;
 	private bool lastkey; //also toggle
 	private bool returning; //toggle
@@ -36,6 +37,7 @@ public class TubeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		returnkey = Input.GetKey (KeyCode.E);
 		reelkey = Input.GetKey (KeyCode.Q);
@@ -134,7 +136,7 @@ public class TubeController : MonoBehaviour {
 
 		}
 
-		if (ejectkey) {
+		if (ejectkey && !emp	) {
 			if (!ejected) {
 				this.transform.rigidbody2D.AddForce(80 * (transform.position - tubes[tubecount - 2]));
 			}
