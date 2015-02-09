@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OxygenStation : MonoBehaviour {
 
-	private float oxygenAmt = 50;
+	public float oxygenAmt = 50;
 	private GameObject Player;
 
 	// Use this for initialization

@@ -9,6 +9,8 @@ public class CraneController : MonoBehaviour {
 	private Vector3 delta;
 	private Vector3 playerdelta;
 	private Vector3 difference;
+	private float lastTheta;
+	private float lastDeltaTheta;
 	public float movespeed = .5f;
 	public float changedmovespeed;
 	public float cranelength = 2;
@@ -21,6 +23,8 @@ public class CraneController : MonoBehaviour {
 		Player = GameObject.Find("Player");
 		current = Player.transform.position;
 		changedmovespeed = movespeed;
+		lastTheta = Player.transform.rotation.z;
+		lastDeltaTheta = 0;
 	}
 
 	// Update is called once per frame
@@ -118,8 +122,31 @@ public class CraneController : MonoBehaviour {
 		}
 		thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg;
 		//print	(thetaersnenig + "   " +  ending.rotation.eulerAngles.z);
+		SpriteRenderer ThrusterCW = (SpriteRenderer)GameObject.Find ("ThrusterCW").GetComponent ("SpriteRenderer");
+		SpriteRenderer ThrusterCCW = (SpriteRenderer)GameObject.Find ("ThrusterCCW").GetComponent ("SpriteRenderer");
+		//print (ThrusterCW.color.a);
+		if (Mathf.Abs (lastTheta - thetaersnenig) > 1) {
+				if (thetaersnenig < lastTheta) {
+						if (ThrusterCW.color.a < 1)
+								ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 10);
+						if (ThrusterCCW.color.a > 0)
+								ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 10);
 
+				} else {
+						if (ThrusterCW.color.a > 0)
+								ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 10);
+						if (ThrusterCCW.color.a < 1)
+								ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a + Time.deltaTime * 10);
+			    }
+		} else {
+
+			if (ThrusterCW.color.a > 0) ThrusterCW.color = new Color(ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 8);
+			if (ThrusterCCW.color.a > 0) ThrusterCCW.color = new Color(ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 8);
+		}
+		lastDeltaTheta = thetaersnenig - lastTheta;
+		lastTheta = thetaersnenig;
 		ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
+		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90));
 
 		playerdelta = Player.transform.position;
 	}
