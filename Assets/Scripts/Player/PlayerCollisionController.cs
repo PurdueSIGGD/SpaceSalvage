@@ -50,7 +50,7 @@ public class PlayerCollisionController : MonoBehaviour {
 			((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2");
 			oxy -= Time.deltaTime;
 			if (oxy <= 0) {
-				GameObject.Destroy (this);
+				GameObject.Destroy (this.gameObject);
 			}
 		} else {
 			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");
