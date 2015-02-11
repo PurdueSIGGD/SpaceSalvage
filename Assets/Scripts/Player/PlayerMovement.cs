@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float frequency = 440;
 	public float moverate = 1;
 	public bool emp;
+	private bool twoways;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
 	private SpriteRenderer LeftThruster;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
 		RightThruster = GameObject.Find ("RightThruster").GetComponent<SpriteRenderer> ();
 		currentemptime = 0;
+		twoways = false;
 		//emp = false;
 	}
 	void EMP() {
@@ -87,7 +89,7 @@ public class PlayerMovement : MonoBehaviour {
 		//if 270 < theta < 0
 		bool arg2 = (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend + 360;
 
-		return (left && (arg1 || arg2));
+		return ( left && (arg1 || arg2));
 	}
 	//Handles physics and stuff
 	void FixedUpdate () {
@@ -113,9 +115,11 @@ public class PlayerMovement : MonoBehaviour {
 			{
 				this.rigidbody2D.AddForce(new Vector2(0,130 * 1/moverate * Time.deltaTime));
 				if (flying) {
+					twoways = true;
 					if (right) {
-						rangestart = 190;
-						rangeend = 350;
+						rangestart = 125;
+						rangeend = 315;
+
 					}
 					if (left) {
 						rangestart = 190;
@@ -123,6 +127,7 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				
 				} else {
+					twoways = false;
 					// ("Only up");
 					rangestart = 190;
 					rangeend = 350;
@@ -135,15 +140,17 @@ public class PlayerMovement : MonoBehaviour {
 				this.rigidbody2D.AddForce(new Vector2(0,-130 * 1/moverate * Time.deltaTime));
 				if (flying) {
 					if (right) {
+						twoways = true;
 						rangestart = 10;
 						rangeend = 260;
 					}
 					if (left) {
-						rangestart = 280;
-						rangeend = 170 + 360;
+						rangestart = 315;
+						rangeend = 125;
 					}
 					
 				} else {
+					twoways = false;
 					rangestart = 10;
 					rangeend = 170;
 				}
@@ -153,7 +160,7 @@ public class PlayerMovement : MonoBehaviour {
 			//print(rangestart + "   " + rangeend);
 
 			if (flying) {
-				//print (rangestart);
+				//print (rangestart + "     " + rangeend);
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
