@@ -4,17 +4,21 @@ using System.Collections;
 public class ExitScript : MonoBehaviour {
 	//private GameObject display;
 	// Use this for initialization
+
 	GameObject go;
 	void Start () {
+
 		//go = new GameObject("Return");
 		//display = GameObject.Find ("display");
 		//go.AddComponent("GUIText");
 
 	}
-	void OnTriggerEnter2D(Collider2D col) {
-		//go.guiText.text = "Whatever";
+	void OnCollisionEnter2D(Collision2D col) {
+
 	}
+
 	void OnTriggerExit2D (Collider2D col) {
+		//Physics2D.IgnoreCollision(this.collider2D, col);
 		//go.guiText.text = "";
 	}
 	void OnTriggerStay2D(Collider2D col) {

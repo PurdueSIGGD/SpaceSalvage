@@ -31,7 +31,9 @@ public class BehindWall : MonoBehaviour {
 	void Update () {
 		if (exiting) {
 			SpriteRenderer focus = (SpriteRenderer)this.GetComponent("SpriteRenderer");
-			focus.color = new Color(focus.color.r, focus.color.g, focus.color.b, focus.color.a + Time.deltaTime);
+			if (focus.color.a < 1) {
+				focus.color = new Color(focus.color.r, focus.color.g, focus.color.b, focus.color.a + Time.deltaTime);
+			}
 
 		}
 	}

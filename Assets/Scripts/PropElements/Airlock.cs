@@ -64,9 +64,15 @@ public class Airlock : MonoBehaviour {
 	void Update () {
 
 		if (closed) {
+			((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity =(Time.deltaTime * 20 * ((Vector2)(transform.FindChild("Door2left").position - transform.FindChild("Door1left").position)));
+			((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity =(Time.deltaTime * 20 * ((Vector2)(transform.FindChild("Door1left").position - transform.FindChild("Door2left").position)));
+			
+			((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity =(Time.deltaTime * 20 * ((Vector2)(transform.FindChild("Door2right").position - transform.FindChild("Door1right").position)));
+			((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity =(Time.deltaTime * 20 * ((Vector2)(transform.FindChild("Door1right").position - transform.FindChild("Door2right").position)));
 			if (leftside) {
-				((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity =(5 * ((Vector2)(transform.FindChild("Door2left").position - transform.FindChild("Door1left").position)));
-				((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity =(5 * ((Vector2)(transform.FindChild("Door1left").position - transform.FindChild("Door2left").position)));
+
+				//print (time);
+
 				if (time > 10) {
 					leftside = false;
 					time = 0;
@@ -76,9 +82,6 @@ public class Airlock : MonoBehaviour {
 				}
 				//print ("Push");
 			} else {
-
-				((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door2right").position - transform.FindChild("Door1right").position)));
-				((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door1right").position - transform.FindChild("Door2right").position)));
 				if (time > 10) {
 					leftside = true;
 					time = 0;
@@ -92,18 +95,18 @@ public class Airlock : MonoBehaviour {
 		} else {
 			cooldowntime+= Time.deltaTime;
 			if (leftside) {
-				((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(topposleft - transform.FindChild("Door1left").position))); //opens left doors
-				((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(bottomposleft - transform.FindChild("Door2left").position)));
+				((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(topposleft - transform.FindChild("Door1left").position))); //opens left doors
+				((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(bottomposleft - transform.FindChild("Door2left").position)));
 				//print ("Opening left side");
-				((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door2right").position - transform.FindChild("Door1right").position))); //closes right doors
-				((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door1right").position - transform.FindChild("Door2right").position)));
-
+				((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(transform.FindChild("Door2right").position - transform.FindChild("Door1right").position))); //closes right doors
+				((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(transform.FindChild("Door1right").position - transform.FindChild("Door2right").position)));
+				print (transform.FindChild("Door2right").position);
 			} else {
-				((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(topposright - transform.FindChild("Door1right").position))); //opens right doors
-				((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(bottomposright - transform.FindChild("Door2right").position)));
+				((Rigidbody2D)transform.FindChild("Door1right").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(topposright - transform.FindChild("Door1right").position))); //opens right doors
+				((Rigidbody2D)transform.FindChild("Door2right").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(bottomposright - transform.FindChild("Door2right").position)));
 				//print ("Opening right side");
-				((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door2left").position - transform.FindChild("Door1left").position))); //closes left doors
-				((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity = (5 * ((Vector2)(transform.FindChild("Door1left").position - transform.FindChild("Door2left").position)));
+				((Rigidbody2D)transform.FindChild("Door1left").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(transform.FindChild("Door2left").position - transform.FindChild("Door1left").position))); //closes left doors
+				((Rigidbody2D)transform.FindChild("Door2left").GetComponent("Rigidbody2D")).velocity = (Time.deltaTime * 30 * ((Vector2)(transform.FindChild("Door1left").position - transform.FindChild("Door2left").position)));
 
 			}
 
