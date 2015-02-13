@@ -18,7 +18,7 @@ public class ItemHolder : MonoBehaviour {
 		for (int i = 0; i < 3; i++) {
 			try {
 				if (items[i].Equals(col.gameObject)) {
-					print("OPOIUHVILGOEWIT");
+				
 					meh = true; 
 					break;
 				}
@@ -27,13 +27,17 @@ public class ItemHolder : MonoBehaviour {
 			}
 		}
 		if (numpackages < maxnumpackages && col.collider.GetComponent<Loot>() && !meh) {
+			col.collider.isTrigger = true;
 			items[numpackages] = col.gameObject;
 			col.collider.rigidbody2D.velocity = new Vector2(0,0);
 			col.collider.rigidbody2D.angularVelocity = 0;
-			Physics2D.IgnoreCollision(this.collider2D, col.collider);
-			print("enter");
-			col.transform.position = new Vector3(packagearea.x, packagearea.y,-1);
+			col.transform.rotation = Quaternion.Euler(0,0,90);
+			//Physics2D.IgnoreCollision(this.collider2D, col.collider);
+
 			numpackages++;
+			print(numpackages);
+			col.transform.position = new Vector3(packagearea.x, packagearea.y + 1 * numpackages,-1);
+
 			GameObject.Find("Player").GetComponentInChildren<CraneController>().SendMessage("I_am_letting_go_now");
 			((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed = false;
 
@@ -41,14 +45,19 @@ public class ItemHolder : MonoBehaviour {
 		}
 	}
 	void OnCollisionExit2D(Collision2D col) {
-		if (col.collider.GetComponent<Loot>() && !((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed) {
+
+
+
+	}
+	void OnTriggerExit2D(Collider2D col) {
+		if (col.GetComponent<Loot>()) {// && !((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed) {
+			(items[numpackages - 1]).collider2D.isTrigger = false;
 			items[numpackages - 1] = null;
 			numpackages--;
-			print("exit");
-			Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
-
+			print(numpackages);
+			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
+			
 		}
-
 
 	}
 	// Update is called once per frame

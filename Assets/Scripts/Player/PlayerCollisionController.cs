@@ -20,7 +20,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 
 			//print ("Ow don't do that, I have " + health + " health left");
-			if (health < 0) {
+			if (health < 0 || oxy < startingoxy) {
 				oxy -= Vector3.Magnitude(col.relativeVelocity);
 				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + 0;
 				((TubeController)this.GetComponent("TubeController")).SendMessage("DeathIsSoon");
@@ -83,8 +83,12 @@ public class PlayerCollisionController : MonoBehaviour {
 				Left.color = new Color(Left.color.r, Left.color.g, Left.color.b, 0);
 				Right.color = new Color(Right.color.r, Right.color.g, Right.color.b, 0);
 				Crane.SetColors (new Color(0,0,0,0), new Color(0,0,0,0));
-				if(Fader.color.a < 255) Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime);
-				else GameObject.Destroy (this.gameObject);
+				if(Fader.color.a < 255) {
+					Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
+					Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime);
+					
+				}
+					else GameObject.Destroy (this.gameObject);
 				
 			}
 		} else {
