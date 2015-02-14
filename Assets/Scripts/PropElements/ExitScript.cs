@@ -4,10 +4,17 @@ using System.Collections;
 public class ExitScript : MonoBehaviour {
 	//private GameObject display;
 	// Use this for initialization
-
-	GameObject go;
+	private bool exiting;
+	private GameObject go;
+	private GameObject faderObject;
+	private SpriteRenderer Fader;
+	public Vector3 playerseat;
 	void Start () {
-
+		if (playerseat == Vector3.zero) {
+			playerseat = this.transform.position;
+		}
+		faderObject = GameObject.Find ("Fader");
+		Fader = faderObject.GetComponent<SpriteRenderer> ();
 		//go = new GameObject("Return");
 		//display = GameObject.Find ("display");
 		//go.AddComponent("GUIText");
@@ -26,10 +33,26 @@ public class ExitScript : MonoBehaviour {
 		//print ("hi");
 
 
-		if (Input.GetKey (KeyCode.F) && col.name.Equals("Player")) {
-			//Application.LoadLevel("Testing Scene 1");
-			// this will be our scene where you start to purchase items and change your stats
+		if (Input.GetKey (KeyCode.F) && col.name.Equals("Player") && !exiting) {
+
+			exiting = true;
 			print ("Loading new level");
+		}
+		if (exiting) {
+			if (col.name.Equals("Player")) {
+
+				col.SendMessage("EMP");
+				col.transform.position = playerseat;
+				col.transform.rotation = Quaternion.Euler(0,0,180);
+				col.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
+			}
+			if (Fader.color.a < 1) {
+				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
+				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
+				
+			} else {
+				Application.LoadLevel("MainMenu");
+			}
 		}
 	}
 	// Update is called once per frame

@@ -40,7 +40,7 @@ public class CraneController : MonoBehaviour {
 				Collider2D hitCollider = Physics2D.OverlapCircle(current, .1f);
 					if (hitCollider != null) {
 						if (hitCollider.GetComponent("ItemPickup") != null) {
-							print ("Got one");
+							//print ("Got one");
 							focus = hitCollider.gameObject;
 							grabbed = true;
 						 

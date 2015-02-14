@@ -35,7 +35,7 @@ public class ItemHolder : MonoBehaviour {
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider);
 
 			numpackages++;
-			print(numpackages);
+			//print(numpackages);
 			col.transform.position = new Vector3(packagearea.x, packagearea.y + 1 * numpackages,-1);
 
 			GameObject.Find("Player").GetComponentInChildren<CraneController>().SendMessage("I_am_letting_go_now");
@@ -54,7 +54,7 @@ public class ItemHolder : MonoBehaviour {
 			(items[numpackages - 1]).collider2D.isTrigger = false;
 			items[numpackages - 1] = null;
 			numpackages--;
-			print(numpackages);
+			//print(numpackages);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
 			
 		}
