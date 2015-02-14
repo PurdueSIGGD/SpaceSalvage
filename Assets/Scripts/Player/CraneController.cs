@@ -20,6 +20,10 @@ public class CraneController : MonoBehaviour {
 	public bool ended = false;
 	private bool heislettinggo = false;
 
+	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
+	// not appear when the screen turns black
+	public bool deadThrusters = false;
+
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
@@ -133,7 +137,7 @@ public class CraneController : MonoBehaviour {
 		//print (ThrusterCW.color.a);
 		if (Mathf.Abs (lastTheta - thetaersnenig) > 1) {
 				if (thetaersnenig < lastTheta) {
-						if (ThrusterCW.color.a < 1)
+						if (ThrusterCW.color.a < 1 && !deadThrusters)
 								ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 10);
 						if (ThrusterCCW.color.a > 0)
 								ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 10);
@@ -141,7 +145,7 @@ public class CraneController : MonoBehaviour {
 				} else {
 						if (ThrusterCW.color.a > 0)
 								ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 10);
-						if (ThrusterCCW.color.a < 1)
+				if (ThrusterCCW.color.a < 1 && !deadThrusters)
 								ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a + Time.deltaTime * 10);
 			    }
 		} else {
