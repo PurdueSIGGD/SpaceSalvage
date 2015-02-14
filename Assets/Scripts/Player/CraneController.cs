@@ -17,7 +17,8 @@ public class CraneController : MonoBehaviour {
 	public float cranelength = 2;
 	public bool grabbed = false;
 	private bool rot = false; 
-	private bool ended = false;
+	public bool ended = false;
+	private bool heislettinggo = false;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -110,9 +111,11 @@ public class CraneController : MonoBehaviour {
 			ended = true;
 			
 		} else {
-			if (ended) {
+			if (ended ) {
+
 				Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D, false);
-				((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = 60 * (focus.transform.position - delta);
+				if (!heislettinggo) ((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = 60 * (focus.transform.position - delta);
+				heislettinggo = false;
 				ended = false;
 			}
 		}
@@ -156,6 +159,11 @@ public class CraneController : MonoBehaviour {
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90));
 
 		playerdelta = Player.transform.position;
+	}
+	void I_am_letting_go_now () {
+		heislettinggo = true;
+
+
 	}
 	void FixedUpdate () {
 
