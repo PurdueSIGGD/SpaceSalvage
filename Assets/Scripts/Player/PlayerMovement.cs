@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
-	public float health = 100;
+	//public float health = 100;
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;

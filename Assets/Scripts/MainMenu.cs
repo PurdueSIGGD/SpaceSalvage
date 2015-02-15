@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour {
 			Application.LoadLevel("Testing Scene 1");	
 		}
 
-		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Options")) {
+		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Controls")) {
 			
 		}
 

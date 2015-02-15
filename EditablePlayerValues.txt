@@ -1,0 +1,15 @@
+Player Movement {
+	Moverate
+	Emprechargetime
+}
+Tube Controller {
+	Tubesleft
+}
+Player Collision Controller {
+	Startingoxy
+	Wallet
+}
+Crane Controller {
+	Movespeed
+	CraneLength
+}

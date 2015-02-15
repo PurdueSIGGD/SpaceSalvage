@@ -50,12 +50,12 @@ public class CraneController : MonoBehaviour {
 						 
 							focus.transform.rigidbody2D.angularVelocity = 0;
 							Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
-							((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 2;
+						((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate * 2;
 						}
 					}
 			} else {
 				grabbed = false;
-				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = 1;
+				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate /2 ;
 			}
 		}
 	
