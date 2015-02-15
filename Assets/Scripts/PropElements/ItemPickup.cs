@@ -6,12 +6,15 @@ public class ItemPickup : MonoBehaviour {
 	public GameObject Player;
 	private Vector3 delta;
 	private Vector3 difference;
+	public bool colliding;
 	// Use this for initialization
 	void Start () {
+		colliding = false;
 		Player = GameObject.Find("Player");
 		//4i;	
 	}
 	void OnCollisionEnter2D(Collision2D col) {
+		colliding = true;
 		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
 			//print (40 * (this.transform.position - delta));
 			if (col.collider.GetComponent("Rigidbody2D") != null) {
@@ -20,6 +23,10 @@ public class ItemPickup : MonoBehaviour {
 			
 			
 		}
+
+	}
+	void OnCollisionExit2D(Collision2D col) {
+		colliding = false;
 
 	}
 	/*void OnCollisionStay2D(Collision2D col) {

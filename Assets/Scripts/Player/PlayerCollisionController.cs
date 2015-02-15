@@ -48,7 +48,16 @@ public class PlayerCollisionController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+		if (PlayerPrefs.HasKey("startingoxy")) {
+			startingoxy = PlayerPrefs.GetFloat("startingoxy");
+		} else {
+			PlayerPrefs.SetFloat("startingoxy",startingoxy);
+		}
+		if (PlayerPrefs.HasKey ("wallet")) {
+			wallet = PlayerPrefs.GetInt("wallet");
+		} else {
+			PlayerPrefs.SetInt("wallet", wallet);
+		}	
 		/*Here I initialize my many, many SpriteRenderer and LineRenderer variables
 		 that help make the ship look like it disappears right before the screen turns black*/
 
@@ -70,7 +79,9 @@ public class PlayerCollisionController : MonoBehaviour {
 		Physics2D.IgnoreLayerCollision(0,8);
 		//((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health;
 	}
-	
+	void Im_Leaving() {
+		print("Oh fuck he is leaving");
+	}
 	// Update is called once per frame
 
 	void Update () {
@@ -114,8 +125,10 @@ public class PlayerCollisionController : MonoBehaviour {
 				 the point when it's completely black, the (completely invisible) 
 				 player ship finally destroys itself*/
 				if(Fader.color.a < 255) Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime);
-				else GameObject.Destroy (this.gameObject);
-				
+				else {
+					PlayerPrefs.Save();
+					GameObject.Destroy (this.gameObject);
+				}
 			}
 		} else {
 			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");

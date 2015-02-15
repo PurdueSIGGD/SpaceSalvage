@@ -7,32 +7,31 @@ public class ItemHolder : MonoBehaviour {
 	public int maxnumpackages = 3;
 	public Vector2 packagearea;
 	public GameObject[] items;
+	private String[] itemnames; 
 	// Use this for initialization
 	void Start () {
+		itemnames = new string[maxnumpackages];
 		numpackages = 0;
 		items = new GameObject[maxnumpackages];
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		//go.guiText.text = "Whatever";
 		bool meh = false;
-		for (int i = 0; i < 3; i++) {
-			try {
-				if (items[i].Equals(col.gameObject)) {
-				
-					meh = true; 
-					break;
-				}
-			} catch (Exception e) {
-				break;
-			}
+		for (int i = 0; i < maxnumpackages; i++) {
+			itemnames[i] = "";
 		}
 		if (numpackages < maxnumpackages && col.collider.GetComponent<Loot>() && !meh) {
 			col.collider.isTrigger = true;
 			items[numpackages] = col.gameObject;
+			itemnames[numpackages] = col.collider.GetComponent<Loot>().itemtype;
 			col.collider.rigidbody2D.velocity = new Vector2(0,0);
 			col.collider.rigidbody2D.angularVelocity = 0;
 			col.transform.rotation = Quaternion.Euler(0,0,90);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider);
+
+
+
+
 
 			numpackages++;
 			//print(numpackages);
@@ -62,6 +61,15 @@ public class ItemHolder : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-	
+		
+	}
+	void Im_Leaving() {
+		if (itemnames[0] != null) {
+			if (PlayerPrefsX.GetBool("Items")){
+				itemnames = PlayerPrefsX.GetStringArray("Items");
+			} else {
+				PlayerPrefsX.SetStringArray("Items", itemnames);
+			}
+		}
 	}
 }

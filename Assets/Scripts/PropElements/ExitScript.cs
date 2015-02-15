@@ -51,7 +51,9 @@ public class ExitScript : MonoBehaviour {
 				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
 				
 			} else {
-				Application.LoadLevel("MainMenu");
+				this.SendMessageUpwards("Im_Leaving");
+				PlayerPrefs.Save();
+				Application.LoadLevel("MissionResults");
 			}
 		}
 	}

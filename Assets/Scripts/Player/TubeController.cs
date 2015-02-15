@@ -20,6 +20,12 @@ public class TubeController : MonoBehaviour {
 	private float dist = 0;
 	// Use this for initialization
 	void Start () {
+		if (PlayerPrefs.HasKey("tubesleft")) {
+			tubesleft = PlayerPrefs.GetInt("tubesleft");
+		} else {
+			PlayerPrefs.SetInt("tubesleft",tubesleft);
+		}
+
 		tubes = new Vector3[tubesleft + 1];
 		LineRenderer l = (LineRenderer) GetComponent<LineRenderer>();
 		l.SetColors(Color.cyan, Color.cyan);

@@ -24,6 +24,22 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if (PlayerPrefs.HasKey("moverate")) {
+			//print (PlayerPrefs.GetInt("moverate"));
+			//print (PlayerPrefs.GetFloat("moverate"));
+			moverate = PlayerPrefs.GetFloat("moverate");
+			//print (moverate);
+		} else {
+			//print (PlayerPrefs.GetFloat("moverate"));
+			PlayerPrefs.SetFloat("moverate", moverate);
+			//print (PlayerPrefs.GetFloat("moverate"));
+		}
+		if (PlayerPrefs.HasKey ("emprechargetime")) {
+			print (PlayerPrefs.GetFloat("emprechargetime"));
+			emprechargetime = PlayerPrefs.GetFloat("emprechargetime");
+		} else {
+			PlayerPrefs.SetFloat("emprechargetime", emprechargetime);
+		}
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
 		FrontThruster = GameObject.Find ("FrontThruster").GetComponent<SpriteRenderer> ();
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();

@@ -26,6 +26,16 @@ public class CraneController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if (PlayerPrefs.HasKey("movespeed")) {
+			movespeed = PlayerPrefs.GetFloat("movespeed");
+		} else {
+			PlayerPrefs.SetFloat("movespeed",movespeed);
+		}
+		if (PlayerPrefs.HasKey ("cranelength")) {
+			cranelength = PlayerPrefs.GetFloat("cranelength");
+		} else {
+			PlayerPrefs.SetFloat("cranelength", cranelength);
+		}
 		Player = GameObject.Find("Player");
 		current = Player.transform.position;
 		changedmovespeed = movespeed;
@@ -55,7 +65,7 @@ public class CraneController : MonoBehaviour {
 					}
 			} else {
 				grabbed = false;
-				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate /2 ;
+
 			}
 		}
 	
@@ -91,7 +101,10 @@ public class CraneController : MonoBehaviour {
 			changedmovespeed = movespeed;
 		
 		}
+		//print (delta);
+
 		if (!emp) {
+
 			current += ((pz - current) * Time.deltaTime * changedmovespeed);
 		}
 		//current = pz + transform.position;
@@ -103,16 +116,26 @@ public class CraneController : MonoBehaviour {
 		if (grabbed) {
 			//print (focus.transform.rigidbody2D.angularVelocity);
 			if (!ended) {
-
 				difference = focus.transform.position - current;
 			}
+			/*bool canmove = true;
+			if (focus) {
+				//print (focus.collider2D.bounds.max);
+				Collider2D projectedItem = Physics2D.OverlapArea(focus.collider2D.bounds.min + difference, focus.collider2D.bounds.min + difference);
+				if (projectedItem != null && projectedItem.transform.position.z == focus.transform.position.z) {
+					print("Gonna collide");
+					canmove = false;
+				}
+			}*/
 			delta = focus.transform.position;
+			//if (canmove) {
 			focus.transform.position = current + difference;
+			//}
 			ended = true;
 			
 		} else {
 			if (ended ) {
-
+				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate / 2 ;
 				Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D, false);
 				if (!heislettinggo) ((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = 60 * (focus.transform.position - delta);
 				heislettinggo = false;
