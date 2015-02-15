@@ -26,7 +26,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 
 			//print ("Ow don't do that, I have " + health + " health left");
-			if (health < 0) {
+			if (health < 0 || oxy < startingoxy) {
 				oxy -= Vector3.Magnitude(col.relativeVelocity);
 				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + 0;
 				((TubeController)this.GetComponent("TubeController")).SendMessage("DeathIsSoon");
@@ -61,7 +61,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		Back = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
 		Cw = GameObject.Find ("ThrusterCW").GetComponent<SpriteRenderer> ();
 		Ccw = GameObject.Find ("ThrusterCCW").GetComponent<SpriteRenderer> ();
-		faderObject = GameObject.Find ("Fader");
+		faderObject = GameObject.Find("Fader");
 		Fader = faderObject.GetComponent<SpriteRenderer> ();
 
 
@@ -88,12 +88,12 @@ public class PlayerCollisionController : MonoBehaviour {
 			else{
 				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = 0.00";
 			}
-			oxy -= Time.deltaTime*10;
+			oxy -= Time.deltaTime;
 			if (oxy <= 0) {
 
 				/*  When the player ship dies, it stops moving */
 				GameObject.Find ("Player").rigidbody2D.velocity = new Vector2(0,0);
-
+				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
 
 				/*Here is where, during the 'GAME OVER' stage,
 				 * the entire ship disappears (by _immediately_ becoming transparent)*/
