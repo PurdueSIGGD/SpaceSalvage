@@ -7,6 +7,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	public float oxy;
 	private GameObject text;
 	public int wallet = 0;
+	private int startingwallet;
 
 	// Creating SpriteRender (and a LineRenderer) variables for the Fading Screen,
 	//the Player sprite,
@@ -55,8 +56,15 @@ public class PlayerCollisionController : MonoBehaviour {
 		}
 		if (PlayerPrefs.HasKey ("wallet")) {
 			wallet = PlayerPrefs.GetInt("wallet");
+			startingwallet =  PlayerPrefs.GetInt("wallet");
 		} else {
 			PlayerPrefs.SetInt("wallet", wallet);
+		}	
+		if (PlayerPrefs.HasKey ("health")) {
+			health = PlayerPrefs.GetFloat("health");
+			health = 100; //REMOVE LATER
+		} else {
+			PlayerPrefs.SetFloat("health", health);
 		}	
 		/*Here I initialize my many, many SpriteRenderer and LineRenderer variables
 		 that help make the ship look like it disappears right before the screen turns black*/
@@ -80,7 +88,11 @@ public class PlayerCollisionController : MonoBehaviour {
 		//((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health;
 	}
 	void Im_Leaving() {
-		print("Oh fuck he is leaving");
+		//print ("wallet: " + wallet);
+		//print ("startingwallet: " + startingwallet);
+		PlayerPrefs.SetInt ("wallet", wallet);
+		PlayerPrefs.SetFloat ("health", health);
+		PlayerPrefs.SetInt ("startingwallet", startingwallet);
 	}
 	// Update is called once per frame
 
@@ -94,10 +106,10 @@ public class PlayerCollisionController : MonoBehaviour {
 			/*The following if-else statements ensure that the oxygen amount displayed on screen
 			 is never negative*/
 			if (oxy > 0){
-				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2");
+				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2") + "\nCash: " + wallet;
 			}
 			else{
-				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = 0.00";
+				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = 0.00 + " + "\nCash: " + wallet;
 			}
 			oxy -= Time.deltaTime;
 			if (oxy <= 0) {
@@ -131,7 +143,7 @@ public class PlayerCollisionController : MonoBehaviour {
 				}
 			}
 		} else {
-			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");
+			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2") + "\nCash: " + wallet;
 			oxy = startingoxy;
 		}
 
@@ -140,4 +152,5 @@ public class PlayerCollisionController : MonoBehaviour {
 
 
 	}
+
 }

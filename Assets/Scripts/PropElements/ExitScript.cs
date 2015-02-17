@@ -51,8 +51,12 @@ public class ExitScript : MonoBehaviour {
 				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
 				
 			} else {
-				this.SendMessageUpwards("Im_Leaving");
+				GameObject[] gos = (GameObject[])GameObject.FindObjectsOfType(typeof(GameObject));
+				foreach (GameObject go in gos) {
+					go.SendMessage("Im_Leaving");
+				}
 				PlayerPrefs.Save();
+
 				Application.LoadLevel("MissionResults");
 			}
 		}

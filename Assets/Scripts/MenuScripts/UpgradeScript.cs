@@ -33,9 +33,9 @@ public class UpgradeScript : MonoBehaviour {
 			Application.LoadLevel("ReturnTest");	
 		}
 		
-		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Upgrade Menu")) {
+		GUI.Box (new Rect (Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Upgrade Menu");
 			
-		}
+		
 		
 	}
 }

@@ -23,10 +23,11 @@ public class ItemHolder : MonoBehaviour {
 		if (numpackages < maxnumpackages && col.collider.GetComponent<Loot>() && !meh) {
 			col.collider.isTrigger = true;
 			items[numpackages] = col.gameObject;
+			//print (numpackages + "   " + col.collider.GetComponent<Loot>().itemtype);
 			itemnames[numpackages] = col.collider.GetComponent<Loot>().itemtype;
 			col.collider.rigidbody2D.velocity = new Vector2(0,0);
 			col.collider.rigidbody2D.angularVelocity = 0;
-			col.transform.rotation = Quaternion.Euler(0,0,90);
+			col.transform.rotation = Quaternion.Euler(0,0,0);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider);
 
 
@@ -53,7 +54,7 @@ public class ItemHolder : MonoBehaviour {
 			(items[numpackages - 1]).collider2D.isTrigger = false;
 			items[numpackages - 1] = null;
 			numpackages--;
-			//print(numpackages);
+			print(numpackages);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
 			
 		}
@@ -61,15 +62,19 @@ public class ItemHolder : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		
+		/*for (int i = 0; i < itemnames.Length; i++) {
+			print (itemnames[i] + "  " + i);
+		}*/
 	}
 	void Im_Leaving() {
-		if (itemnames[0] != null) {
-			if (PlayerPrefsX.GetBool("Items")){
-				itemnames = PlayerPrefsX.GetStringArray("Items");
-			} else {
-				PlayerPrefsX.SetStringArray("Items", itemnames);
-			}
+		//print ("Oh he leaving");
+
+			//print ("Sending and stuff");
+		for (int i = 0; i < numpackages; i++) {
+			itemnames[i] = items[i].GetComponent<Loot>().itemtype;
 		}
+		PlayerPrefsX.SetStringArray("Items", itemnames);
+
 	}
+
 }

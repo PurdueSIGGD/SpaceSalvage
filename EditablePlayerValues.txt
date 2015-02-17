@@ -7,9 +7,15 @@ Tube Controller {
 }
 Player Collision Controller {
 	Startingoxy
-	Wallet
+	Wallet - return at end
+	Health - return at end
+	startingwallet - return at end
 }
 Crane Controller {
 	Movespeed
 	CraneLength
+}
+ItemHolder {
+	itemnames - return at end
+	
 }
