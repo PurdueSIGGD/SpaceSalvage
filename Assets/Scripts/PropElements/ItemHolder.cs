@@ -10,6 +10,11 @@ public class ItemHolder : MonoBehaviour {
 	private String[] itemnames; 
 	// Use this for initialization
 	void Start () {
+		if (PlayerPrefs.HasKey("capacity")) {
+			maxnumpackages = PlayerPrefs.GetInt("capacity");
+		} else {
+			PlayerPrefs.SetInt("capacity",3);
+		}
 		itemnames = new string[maxnumpackages];
 		numpackages = 0;
 		items = new GameObject[maxnumpackages];

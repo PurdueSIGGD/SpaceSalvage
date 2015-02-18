@@ -62,7 +62,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		}	
 		if (PlayerPrefs.HasKey ("health")) {
 			health = PlayerPrefs.GetFloat("health");
-			health = 100; //REMOVE LATER
+			//health = 100; //REMOVE LATER
 		} else {
 			PlayerPrefs.SetFloat("health", health);
 		}	

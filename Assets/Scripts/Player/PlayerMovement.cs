@@ -115,21 +115,21 @@ public class PlayerMovement : MonoBehaviour {
 			bool flying = false;
 			if (right)
 			{
-				this.rigidbody2D.AddForce(new Vector2(130 * 1/moverate * Time.deltaTime, 0));
+				this.rigidbody2D.AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));
 				rangestart = 100;
 				rangeend = 260;
 				flying = true;
 			}
 			if (left)
 			{
-				this.rigidbody2D.AddForce(new Vector2(-130 * 1/moverate * Time.deltaTime, 0));
+				this.rigidbody2D.AddForce(new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
 				rangestart = 280;
 				rangeend = 80;
 				flying = true;
 			}
 			if (up)
 			{
-				this.rigidbody2D.AddForce(new Vector2(0,130 * 1/moverate * Time.deltaTime));
+				this.rigidbody2D.AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
 				if (flying) {
 					twoways = true;
 					if (right) {
@@ -153,7 +153,7 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			if (down)
 			{
-				this.rigidbody2D.AddForce(new Vector2(0,-130 * 1/moverate * Time.deltaTime));
+				this.rigidbody2D.AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
 				if (flying) {
 					if (right) {
 						twoways = true;

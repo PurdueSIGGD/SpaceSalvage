@@ -60,7 +60,7 @@ public class CraneController : MonoBehaviour {
 						 
 							focus.transform.rigidbody2D.angularVelocity = 0;
 							Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D);
-						((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate * 2;
+						((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate / 2;
 						}
 					}
 			} else {
@@ -135,7 +135,7 @@ public class CraneController : MonoBehaviour {
 			
 		} else {
 			if (ended ) {
-				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate / 2 ;
+				((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate = ((PlayerMovement)Player.GetComponent("PlayerMovement")).moverate * 2 ;
 				Physics2D.IgnoreCollision(focus.collider2D, GameObject.Find("Player").collider2D, false);
 				if (!heislettinggo) ((Rigidbody2D)focus.GetComponent("Rigidbody2D")).velocity = 60 * (focus.transform.position - delta);
 				heislettinggo = false;

@@ -1,21 +1,22 @@
 Player Movement {
-	Moverate
-	Emprechargetime
+	Moverate (float)
+	Emprechargetime (float)
 }
 Tube Controller {
-	Tubesleft
+	Tubesleft (int)
 }
 Player Collision Controller {
-	Startingoxy
-	Wallet - return at end
-	Health - return at end
-	startingwallet - return at end
+	Startingoxy (float)
+	Wallet - return at end (int)
+	Health - return at end (float)
+	startingwallet - return at end (int)
 }
 Crane Controller {
-	Movespeed
-	CraneLength
+	Movespeed (float)
+	CraneLength (double)
 }
 ItemHolder {
-	itemnames - return at end
+	itemnames - return at end (string[])
+	itemcapacity (int);
 	
 }
