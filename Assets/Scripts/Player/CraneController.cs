@@ -6,6 +6,7 @@ public class CraneController : MonoBehaviour {
 	public GameObject focus;
 	public Vector3 current;
 	public bool emp;
+	private bool firing;
 	private Vector3 pz;
 	private Vector3 delta;
 	private Vector3 playerdelta;
@@ -19,6 +20,7 @@ public class CraneController : MonoBehaviour {
 	private bool rot = false; 
 	public bool ended = false;
 	private bool heislettinggo = false;
+	private float thetaersnenig;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -47,13 +49,14 @@ public class CraneController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		this.transform.position = Player.transform.position;
+		current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
-		ending.position = Player.transform.position; //for now
+		ending.position = current; //for now
 	
 		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition); //the current mouse position
 		pz.z = 0;
 
-		float thetaersnenig = (Mathf.Atan( ((pz.y - Player.transform.position.y) /(pz.x - Player.transform.position.x)))); //angle from mouse to me, formatting later
+		thetaersnenig = (Mathf.Atan( ((pz.y - Player.transform.position.y) /(pz.x - Player.transform.position.x)))); //angle from mouse to me, formatting later
 		thetaersnenig = thetaersnenig/2;
 		if (thetaersnenig < 0) {
 			thetaersnenig+= Mathf.PI/2;
@@ -88,6 +91,7 @@ public class CraneController : MonoBehaviour {
 		lastTheta = thetaersnenig; //set the last angle
 		ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig)); //set the rotation for ending sprite
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
+		firing = Input.GetMouseButton(0);
 
 
 
@@ -235,7 +239,12 @@ public class CraneController : MonoBehaviour {
 
 	}
 	void FixedUpdate () {
+		float dist = Vector3.Magnitude (Player.transform.position - pz);
 
+		if (firing) {
+			print ("pshhhh");
+			current = new Vector3(current.x + (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime), current.y + (Mathf.Sin(thetaersnenig) * dist * Time.deltaTime), current.z);
+		}
 		if (rot && grabbed) {
 
 			//print ("Rotate");

@@ -26,6 +26,7 @@ public class ItemHolder : MonoBehaviour {
 			itemnames[i] = "";
 		}
 		if (numpackages < maxnumpackages && col.collider.GetComponent<Loot>() && !meh) {
+			col.gameObject.SendMessage("DestroyRope");
 			col.collider.isTrigger = true;
 			items[numpackages] = col.gameObject;
 			//print (numpackages + "   " + col.collider.GetComponent<Loot>().itemtype);

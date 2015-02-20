@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour {
 			//print (PlayerPrefs.GetInt("moverate"));
 			//print (PlayerPrefs.GetFloat("moverate"));
 			moverate = PlayerPrefs.GetFloat("moverate");
+			moverate = 3;
 			//print (moverate);
 		} else {
 			//print (PlayerPrefs.GetFloat("moverate"));
