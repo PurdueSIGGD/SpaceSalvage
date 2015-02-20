@@ -8,10 +8,12 @@ public class Options : MonoBehaviour {
 	public float guiPlacementX2 = .5f;
 	public float guiPlacementY1 = .5f;
 	public float guiPlacementY2;
-	private string label;
-	private bool clicked;
+
+	private string label,backLabel;
+	private bool clicked,backClicked;
 	void Start() {
 		label = "Delete Player Progress";
+		backLabel = "Back";
 		guiPlacementX2 = .5f;
 		guiPlacementY2 = .5f;
 		guiPlacementY1 = .5f;
@@ -30,9 +32,15 @@ public class Options : MonoBehaviour {
 			}
 		}
 		
-		
 		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Options")) {
 			Application.LoadLevel ("KeyBindings");
+		}
+		
+		if (GUI.Button (new Rect ((Screen.width - Screen.width*.5f)/2.0f, Screen.height -Screen.height*.1f, Screen.width * .5f, Screen.height * .1f), backLabel)) {
+		
+			Application.LoadLevel("MainMenu");
+			clicked = false;
+		
 		}
 		
 	}
