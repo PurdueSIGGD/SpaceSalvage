@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
 			//print (PlayerPrefs.GetFloat("moverate"));
 		}
 		if (PlayerPrefs.HasKey ("emprechargetime")) {
-			print (PlayerPrefs.GetFloat("emprechargetime"));
+			//print (PlayerPrefs.GetFloat("emprechargetime"));
 			emprechargetime = PlayerPrefs.GetFloat("emprechargetime");
 		} else {
 			PlayerPrefs.SetFloat("emprechargetime", emprechargetime);

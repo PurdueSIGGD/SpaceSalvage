@@ -59,7 +59,7 @@ public class ItemHolder : MonoBehaviour {
 			(items[numpackages - 1]).collider2D.isTrigger = false;
 			items[numpackages - 1] = null;
 			numpackages--;
-			print(numpackages);
+			//print(numpackages);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
 			
 		}
