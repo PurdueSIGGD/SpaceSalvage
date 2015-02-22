@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour {
 	private static double RightAngle = 0;
 	public float emprechargetime = 10;
 	private float currentemptime;
+	public bool debugmode;
 
 	//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
 
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 			//print (PlayerPrefs.GetInt("moverate"));
 			//print (PlayerPrefs.GetFloat("moverate"));
 			moverate = PlayerPrefs.GetFloat("moverate");
-			moverate = 3;
+			if (debugmode) moverate = 3;
 			//print (moverate);
 		} else {
 			//print (PlayerPrefs.GetFloat("moverate"));

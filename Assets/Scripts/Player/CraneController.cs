@@ -16,10 +16,13 @@ public class CraneController : MonoBehaviour {
 	public float movespeed = .5f;
 	public float changedmovespeed;
 	public float cranelength = 2;
+	public float HarpoonSpeed;
+	private float lengthx, lengthy;
 	public bool grabbed = false;
 	private bool rot = false; 
 	public bool ended = false;
 	private bool heislettinggo = false;
+	private bool retracting;
 	private float thetaersnenig;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
@@ -28,6 +31,7 @@ public class CraneController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		if (PlayerPrefs.HasKey("movespeed")) {
 			movespeed = PlayerPrefs.GetFloat("movespeed");
 		} else {
@@ -39,6 +43,8 @@ public class CraneController : MonoBehaviour {
 			PlayerPrefs.SetFloat("cranelength", cranelength);
 		}
 		Player = GameObject.Find("Player");
+		Transform ending = transform.FindChild("Ending"); //sprite at the end 
+		//Physics2D.IgnoreCollision (Player.collider2D, ending.collider2D);
 		current = Player.transform.position;
 		changedmovespeed = movespeed;
 		lastTheta = Player.transform.rotation.z;
@@ -49,10 +55,11 @@ public class CraneController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		this.transform.position = Player.transform.position;
-		current = this.transform.position;
+		//current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
-		ending.position = current; //for now
 	
+		//ending.position = transform.position; //for now
+
 		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition); //the current mouse position
 		pz.z = 0;
 
@@ -65,39 +72,87 @@ public class CraneController : MonoBehaviour {
 			thetaersnenig+= Mathf.PI/2;
 		}
 		thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
-		//print	(thetaersnenig + "   " +  ending.rotation.eulerAngles.z);
-		SpriteRenderer ThrusterCW = (SpriteRenderer)GameObject.Find ("ThrusterCW").GetComponent ("SpriteRenderer");
-		SpriteRenderer ThrusterCCW = (SpriteRenderer)GameObject.Find ("ThrusterCCW").GetComponent ("SpriteRenderer");
-		//print (ThrusterCW.color.a);
-		if (Mathf.Abs (lastTheta - thetaersnenig) > 1) {
-			if (thetaersnenig < lastTheta) {
-				if (ThrusterCW.color.a < 1 && !deadThrusters)
-					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 10);
-				if (ThrusterCCW.color.a > 0)
-					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 10);
-				
-			} else {
-				if (ThrusterCW.color.a > 0)
-					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 10);
-				if (ThrusterCCW.color.a < 1 && !deadThrusters)
-					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a + Time.deltaTime * 10);
-			}
-		} else {
-			
-			if (ThrusterCW.color.a > 0) ThrusterCW.color = new Color(ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 8);
-			if (ThrusterCCW.color.a > 0) ThrusterCCW.color = new Color(ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 8);
-		}
+
 		lastDeltaTheta = thetaersnenig - lastTheta; //change in angles
 		lastTheta = thetaersnenig; //set the last angle
-		ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig)); //set the rotation for ending sprite
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
-		firing = Input.GetMouseButton(0);
+		float dist = Vector3.Magnitude (Player.transform.position - pz);
+		//print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime);
+		if (Input.GetMouseButton(0) && !grabbed) {
+			if (!firing) {
+				print("Initial force shot");
+				//print (40 * HarpoonSpeed * new Vector3(this.transform.position.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , this.transform.position.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
+				ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector3(Player.rigidbody2D.velocity.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , Player.rigidbody2D.velocity.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
+			}
+			firing = true;
+			//print ("pshhhh");
 
+			/*lengthx = lengthx + (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
+			lengthy = lengthy + (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
+			current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);*/
+		} else {
 
+			if (firing) {
+				print("Done firing");
+				firing = false;
+				retracting = true;
+			}
 
+			if (retracting) {
+				//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
+				//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
+				//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
+				ending.rigidbody2D.velocity = (this.transform.position - ending.position);
+				print("rectracting");
+				//print (this.transform.position);
+				//current =  (this.transform.position - current);
+				if (Mathf.Abs(this.transform.position.x - ending.position.x) < 1 && Mathf.Abs(this.transform.position.y - ending.position.y) < 1) {
+					print("back home");
+					retracting = false;
+					firing = false;
+				}
+			} 
+		} 
+		/*if (grabbed && Input.GetMouseButton(0)) {
+			focus.SendMessage("DestroyRope");
+		}*/
+		if (!firing && !retracting) {
+			ending.position = this.transform.position;
+			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
+		}
+		//ending.position = current;
+		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
+		l.SetPosition(0, Player.transform.position);
+		l.SetPosition(1, ending.position);
+		if (!grabbed && (firing || retracting)) {
+			Collider2D hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
+			if (hitCollider != null) {
+				if (hitCollider.GetComponent("ItemPickup") != null) {
+					print ("Got one");
+					focus = hitCollider.gameObject;
+					firing = false;
+					retracting = false;
+					ending.transform.position = Player.transform.position;
+					ending.transform.rigidbody2D.velocity = Vector2.zero;
+					grabbed = true;
+					LineRenderer lr = focus.gameObject.AddComponent<LineRenderer>();
+					lr.SetWidth(.05f,.05f);
+					lr.SetColors(new Color(255,255,255),new Color(255,255,255));
+					RopeScript2D rp = focus.gameObject.AddComponent<RopeScript2D>();
+					rp.target = Player.transform;
+					rp.resolution = 3;
+					rp.ropeDrag = 0.01f;
+					rp.ropeMass = .05f;
+					rp.ropeColRadius = 0.1f;
+					rp.SendMessage("BuildRope");
+				}
+			}
+		} else {
+
+			
+		}
 		/*
-		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		pz.z = 0;
+
 		if (Input.GetMouseButtonDown(0)) {
 			if (!grabbed) {
 				Collider2D hitCollider = Physics2D.OverlapCircle(current, .1f);
@@ -122,7 +177,7 @@ public class CraneController : MonoBehaviour {
 		if (playerdelta != Player.transform.position) { //keep it up with the player
 			current += (Player.transform.position - playerdelta);
 		}
-		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
+LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		float dist = Vector3.Magnitude (Player.transform.position - pz);
 		if (dist > cranelength) {
 		
@@ -232,6 +287,28 @@ public class CraneController : MonoBehaviour {
 
 		playerdelta = Player.transform.position;
 	*/
+		SpriteRenderer ThrusterCW = (SpriteRenderer)GameObject.Find ("ThrusterCW").GetComponent ("SpriteRenderer");
+		SpriteRenderer ThrusterCCW = (SpriteRenderer)GameObject.Find ("ThrusterCCW").GetComponent ("SpriteRenderer");
+		//print (ThrusterCW.color.a);
+
+		if (Mathf.Abs (lastTheta - thetaersnenig) > 1) {
+			if (thetaersnenig < lastTheta) {
+				if (ThrusterCW.color.a < 1 && !deadThrusters)
+					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 10);
+				if (ThrusterCCW.color.a > 0)
+					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 10);
+				
+			} else {
+				if (ThrusterCW.color.a > 0)
+					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 10);
+				if (ThrusterCCW.color.a < 1 && !deadThrusters)
+					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a + Time.deltaTime * 10);
+			}
+		} else {
+			
+			if (ThrusterCW.color.a > 0) ThrusterCW.color = new Color(ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 8);
+			if (ThrusterCCW.color.a > 0) ThrusterCCW.color = new Color(ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 8);
+		}
 	}
 	void I_am_letting_go_now () {
 		heislettinggo = true;
@@ -239,12 +316,7 @@ public class CraneController : MonoBehaviour {
 
 	}
 	void FixedUpdate () {
-		float dist = Vector3.Magnitude (Player.transform.position - pz);
 
-		if (firing) {
-			print ("pshhhh");
-			current = new Vector3(current.x + (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime), current.y + (Mathf.Sin(thetaersnenig) * dist * Time.deltaTime), current.z);
-		}
 		if (rot && grabbed) {
 
 			//print ("Rotate");

@@ -6,7 +6,8 @@ public class RopeScript2D : MonoBehaviour {
 	public float resolution;///0.5F;							  //  Sets the amount of joints there are in the rope (1 = 1 joint for every 1 unit)
 	public float ropeDrag = 0.1F;								 //  Sets each joints Drag
 	public float ropeMass = 0.1F;							//  Sets each joints Mass
-	public float ropeColRadius = 0.5F;					//  Sets the radius of the collider in the SphereCollider component
+	public float ropeColRadius = 0.5F;	//  Sets the radius of the collider in the SphereCollider component
+	//public float ropeseglength = .025f; 
 	//public float ropeBreakForce = 25.0F;					 //-------------- TODO (Hopefully will break the rope in half...
 	private Vector3[] segmentPos;			//  DONT MESS!	This is for the Line Renderer's Reference and to set up the positions of the gameObjects
 	private GameObject[] joints;			//  DONT MESS!	This is the actual joint objects that will be automatically created
@@ -30,23 +31,7 @@ public class RopeScript2D : MonoBehaviour {
 	
 	void Update()
 	{
-		// Put rope control here!
-		
-		/*if (!joints[0]) {
-			BuildRope();
-			return;
-		} else {
 
-		}
-		//Destroy Rope Test	(Example of how you can use the rope dynamically)*/
-		if(rope && Input.GetKeyDown("q"))
-		{
-			DestroyRope();	
-		}	
-		if(Input.GetKeyDown("z"))
-		{
-			BuildRope();
-		}
 	}
 	void LateUpdate()
 	{
@@ -69,24 +54,19 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void AddJointPhysics(int n)
 	{
-		print ("A new member has joined!");
+		//print ("A new member has joined!");
 		joints[n] = new GameObject("Joint_" + n);
 		joints[n].transform.parent = transform;
+		//joints [n].transform.position = new Vector3 (this.transform.position.x + (this.transform.position.x - target.position.x)/n, 0, 0);
 		Rigidbody2D rigid = joints[n].AddComponent<Rigidbody2D>();
 		CircleCollider2D col = joints[n].AddComponent<CircleCollider2D>();
-
 		HingeJoint2D ph = joints[n].AddComponent<HingeJoint2D>();
 		ph.collideConnected = false;
 		ph.useLimits = false;
-		//ph.breakForce = ropeBreakForce; <--------------- TODO
-		if (n == 1) {
-			ph.anchor = (1/(resolution * segments) * (joints[n].transform.position - transform.position));
-		} else {
-			ph.anchor = ( 1/(resolution * segments) * (joints[n].transform.position - joints[n - 1].transform.position));				
-			print("Another!");
-			
-		}
-		
+	
+		//ph.anchor = new Vector2(1/(resolution), 1/(resolution));
+		ph.anchor = new Vector2 (((this.transform.position.x - target.position.x))/segments, ((this.transform.position.y - target.position.y))/segments);
+		//print (ph.anchor);
 		
 		rigid.gravityScale = 0; 
 		joints[n].transform.position = segmentPos[n];
@@ -94,7 +74,7 @@ public class RopeScript2D : MonoBehaviour {
 		rigid.drag = ropeDrag;
 		rigid.mass = ropeMass;
 		col.radius = ropeColRadius;
-		print ("value: " + n + " and segments = "+segments);
+		//print ("value: " + n + " and segments = "+segments);
 		if(n==1){		
 			ph.connectedBody = transform.rigidbody2D;
 		} else
@@ -110,8 +90,8 @@ public class RopeScript2D : MonoBehaviour {
 		
 		// Find the amount of segments based on the distance and resolution
 		// Example: [resolution of 1.0 = 1 joint per unit of distance]
-		print("Distance = " + (Vector3.Distance(transform.position, target.position)*resolution));
-		segments = (int)(Vector3.Distance(transform.position , target.position)*resolution);
+		//print("Distance = " + (Vector3.Distance(transform.position, target.position)*resolution));
+		segments = (int)(Vector3.Magnitude(transform.position - target.position)*resolution ) + 1;
 		print ("segments = " + segments);
 		line.SetVertexCount(segments);
 		segmentPos = new Vector3[segments];
@@ -140,6 +120,7 @@ public class RopeScript2D : MonoBehaviour {
 		
 		// Attach the joints to the target object and parent it to this object	
 		HingeJoint2D end = target.gameObject.AddComponent<HingeJoint2D>();
+
 		end.connectedBody = joints[joints.Length-1].transform.rigidbody2D;
 		target.rigidbody2D.gravityScale = 0;
 
