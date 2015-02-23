@@ -8,7 +8,8 @@ public class RopeScript2D : MonoBehaviour {
 	public float ropeMass = 0.1F;							//  Sets each joints Mass
 	public float ropeColRadius = 0.5F;	//  Sets the radius of the collider in the SphereCollider component
 	//public float ropeseglength = .025f; 
-	//public float ropeBreakForce = 25.0F;					 //-------------- TODO (Hopefully will break the rope in half...
+	//public float ropeBreakForce = 25.0F;//-------------- TODO (Hopefully will break the rope in half...
+	private Vector3 collisionpoint;
 	private Vector3[] segmentPos;			//  DONT MESS!	This is for the Line Renderer's Reference and to set up the positions of the gameObjects
 	private GameObject[] joints;			//  DONT MESS!	This is the actual joint objects that will be automatically created
 	private LineRenderer line;							//  DONT MESS!	 The line renderer variable is set up when its assigned as a new component
@@ -42,7 +43,7 @@ public class RopeScript2D : MonoBehaviour {
 					line.SetPosition(i,transform.position);
 				} else
 				if(i == segments-1) {
-					line.SetPosition(i,target.transform.position);	
+					line.SetPosition(i,target.transform.position + collisionpoint);	
 				} else {
 					line.SetPosition(i,joints[i].transform.position);
 				}
@@ -115,6 +116,8 @@ public class RopeScript2D : MonoBehaviour {
 			Physics2D.IgnoreCollision(joints[s].collider2D, transform.collider2D);
 			if (s>1) {
 				Physics2D.IgnoreCollision(joints[s].collider2D, joints[s-1].collider2D);
+				Physics2D.IgnoreCollision(joints[s].collider2D, joints[1].collider2D);
+
 			}
 		}
 		
@@ -128,9 +131,10 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void DestroyRope()
 	{
+		GameObject.Find ("Crane").GetComponent<CraneController> ().grabbed = false;
 		// Stop Rendering Rope then Destroy all of its components
 		rope = false;
-		for(int dj=0;dj<joints.Length-1;dj++)
+		for(int dj=1;dj<joints.Length;dj++)
 		{
 			Destroy(joints[dj]);	
 		}
@@ -139,4 +143,10 @@ public class RopeScript2D : MonoBehaviour {
 		joints = new GameObject[0];
 		segments = 0;
 	}	
+	void SetTargetAnchor(Vector2 vec) {
+		print (this.transform.position);
+		print (vec);
+		//print (this.transform.position - (Vector3)vec);
+		//collisionpoint = (this.transform.position - (Vector3)vec);
+	}
 }

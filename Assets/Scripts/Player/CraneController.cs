@@ -24,6 +24,7 @@ public class CraneController : MonoBehaviour {
 	private bool heislettinggo = false;
 	private bool retracting;
 	private float thetaersnenig;
+	private bool releaseready;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -57,27 +58,30 @@ public class CraneController : MonoBehaviour {
 		this.transform.position = Player.transform.position;
 		//current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
-	
+		//print (ending.localPosition);
+		//print ("regular - " + ending.position);
 		//ending.position = transform.position; //for now
 
 		pz = Camera.main.ScreenToWorldPoint(Input.mousePosition); //the current mouse position
 		pz.z = 0;
+		if (!firing && !retracting) {
+			thetaersnenig = (Mathf.Atan( ((pz.y - Player.transform.position.y) /(pz.x - Player.transform.position.x)))); //angle from mouse to me, formatting later
+			thetaersnenig = thetaersnenig/2;
+			if (thetaersnenig < 0) {
+				thetaersnenig+= Mathf.PI/2;
+			}
+			if (pz.y - Player.transform.position.y < 0) {
+				thetaersnenig+= Mathf.PI/2;
+			}
+			thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
 
-		thetaersnenig = (Mathf.Atan( ((pz.y - Player.transform.position.y) /(pz.x - Player.transform.position.x)))); //angle from mouse to me, formatting later
-		thetaersnenig = thetaersnenig/2;
-		if (thetaersnenig < 0) {
-			thetaersnenig+= Mathf.PI/2;
+			lastDeltaTheta = thetaersnenig - lastTheta; //change in angles
+			lastTheta = thetaersnenig; //set the last angle
 		}
-		if (pz.y - Player.transform.position.y < 0) {
-			thetaersnenig+= Mathf.PI/2;
-		}
-		thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
-
-		lastDeltaTheta = thetaersnenig - lastTheta; //change in angles
-		lastTheta = thetaersnenig; //set the last angle
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Magnitude (Player.transform.position - pz);
 		//print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime);
+
 		if (Input.GetMouseButton(0) && !grabbed) {
 			if (!firing) {
 				print("Initial force shot");
@@ -102,22 +106,31 @@ public class CraneController : MonoBehaviour {
 				//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
-				ending.rigidbody2D.velocity = (this.transform.position - ending.position);
+				ending.rigidbody2D.velocity = ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 				print("rectracting");
 				//print (this.transform.position);
 				//current =  (this.transform.position - current);
-				if (Mathf.Abs(this.transform.position.x - ending.position.x) < 1 && Mathf.Abs(this.transform.position.y - ending.position.y) < 1) {
+				if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
 					print("back home");
 					retracting = false;
 					firing = false;
+
 				}
 			} 
+			if (!Input.GetMouseButton(0) && grabbed) {
+				releaseready = true;
+			}
+			if (grabbed && Input.GetMouseButton(0) && releaseready) {
+				focus.SendMessage("DestroyRope");
+			}
 		} 
 		/*if (grabbed && Input.GetMouseButton(0)) {
 			focus.SendMessage("DestroyRope");
 		}*/
 		if (!firing && !retracting) {
 			ending.position = this.transform.position;
+			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
+		} else {
 			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 		}
 		//ending.position = current;
@@ -128,6 +141,7 @@ public class CraneController : MonoBehaviour {
 			Collider2D hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
 			if (hitCollider != null) {
 				if (hitCollider.GetComponent("ItemPickup") != null) {
+					releaseready = false;
 					print ("Got one");
 					focus = hitCollider.gameObject;
 					firing = false;
@@ -135,16 +149,29 @@ public class CraneController : MonoBehaviour {
 					ending.transform.position = Player.transform.position;
 					ending.transform.rigidbody2D.velocity = Vector2.zero;
 					grabbed = true;
-					LineRenderer lr = focus.gameObject.AddComponent<LineRenderer>();
+
+					LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
+					if (lr == null) {
+						lr = focus.gameObject.AddComponent<LineRenderer>();
+					}
+
 					lr.SetWidth(.05f,.05f);
 					lr.SetColors(new Color(255,255,255),new Color(255,255,255));
-					RopeScript2D rp = focus.gameObject.AddComponent<RopeScript2D>();
+					lr.sortingLayerName = "Foreground";
+					RopeScript2D rp = focus.GetComponent<RopeScript2D>();
+					if (rp == null) {
+						rp = focus.gameObject.AddComponent<RopeScript2D>();
+					}
+
+
 					rp.target = Player.transform;
 					rp.resolution = 3;
 					rp.ropeDrag = 0.01f;
 					rp.ropeMass = .05f;
 					rp.ropeColRadius = 0.1f;
 					rp.SendMessage("BuildRope");
+
+					//rp.SendMessage("SetTargetAnchor",(Vector2)ending.localPosition);
 				}
 			}
 		} else {
