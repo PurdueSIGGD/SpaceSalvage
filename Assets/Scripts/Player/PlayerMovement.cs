@@ -182,32 +182,32 @@ public class PlayerMovement : MonoBehaviour {
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
-						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 10);
+						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 5);
 					}
 				} else {
 					if (BackThruster.color.a > 0) {
-						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
+						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 					}
 				}
 				//FrontAngle
 				//print ((FrontAngle + this.transform.rotation.eulerAngles.z + 180));
 				if (inRange(FrontAngle, rangestart, rangeend)|| inRangeLeft(FrontAngle, rangestart, rangeend)) {
 					if (FrontThruster.color.a < 1) {
-						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 10);
+						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 5);
 					}
 				} else {
 					if (FrontThruster.color.a > 0) {
-						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 10);
+						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
 					}
 				}
 				//LeftAngle
 				if (inRange(LeftAngle, rangestart, rangeend) || inRangeLeft(LeftAngle, rangestart, rangeend)) {
 					if (LeftThruster.color.a < 1) {
-						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 10);
+						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 5);
 					}
 				} else {
 					if (LeftThruster.color.a > 0) {
-						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 10);
+						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
 					}
 				}
 				//RightAngle
@@ -215,26 +215,26 @@ public class PlayerMovement : MonoBehaviour {
 				//print (((RightAngle + this.transform.rotation.eulerAngles.z + 180) % 360) + "           " + rangestart + "    " + rangeend);
 				if (inRange(RightAngle, rangestart, rangeend) || inRangeLeft(RightAngle, rangestart, rangeend)) {
 					if (RightThruster.color.a < 1) {
-						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 10);
+						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 5);
 					}
 				} else {
 					if (RightThruster.color.a > 0) {
-						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 10);
+						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 					}
 				}
 				
 			} else {
 				if (BackThruster.color.a > 0) {
-					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 10);
+					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 				}
 				if (FrontThruster.color.a > 0) {
-					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 10);
+					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
 				}
 				if (LeftThruster.color.a > 0) {
-					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 10);
+					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
 				}
 				if (RightThruster.color.a > 0) {
-					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 10);
+					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 				}
 			}
 		} else {
