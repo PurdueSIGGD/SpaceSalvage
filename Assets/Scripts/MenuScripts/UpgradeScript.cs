@@ -199,7 +199,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		yval1+= .08f;
-		if (cranelength == 1 || cranelength == startingcranelength) {
+		if (cranelength == 3 || cranelength == startingcranelength) {
 			GUI.Box (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.2");
 		} else {
 			if (GUI.Button (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.2")) {
@@ -210,7 +210,7 @@ public class UpgradeScript : MonoBehaviour {
 		}
 
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Crane Length = " + cranelength + "  ($40)");
-		if (cranelength == 4) { //4 being max time
+		if (cranelength == 6) { //6 being max length
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.25");
 		} else {
 			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.2")) {

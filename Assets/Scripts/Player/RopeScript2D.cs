@@ -32,18 +32,32 @@ public class RopeScript2D : MonoBehaviour {
 	
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.E)) {
+			segments++;
+			AddJointPhysics(segments);
+		}
+	}
+	void AddRope() {
+
+	}
+	void SubRope() {
 
 	}
 	void LateUpdate()
 	{
 		// Does rope exist? If so, update its position
 		if(rope) {
+			/*//print(collisionpoint);
+			if (collisionpoint != Vector3.zero) {
+				print("SEetting");
+				GameObject.Find("Joint_1").transform.position = collisionpoint;
+			}*/
 			for(int i=0;i<segments;i++) {
 				if(i == 0) {
-					line.SetPosition(i,transform.position);
+					line.SetPosition(i,this.transform.position);
 				} else
 				if(i == segments-1) {
-					line.SetPosition(i,target.transform.position + collisionpoint);	
+					line.SetPosition(i,target.transform.position);	
 				} else {
 					line.SetPosition(i,joints[i].transform.position);
 				}
@@ -55,6 +69,7 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void AddJointPhysics(int n)
 	{
+
 		//print ("A new member has joined!");
 		joints[n] = new GameObject("Joint_" + n);
 		joints[n].transform.parent = transform;
@@ -143,10 +158,10 @@ public class RopeScript2D : MonoBehaviour {
 		joints = new GameObject[0];
 		segments = 0;
 	}	
-	void SetTargetAnchor(Vector2 vec) {
+	void SetTargetAnchor(Vector3 vec) {
 		print (this.transform.position);
 		print (vec);
 		//print (this.transform.position - (Vector3)vec);
-		//collisionpoint = (this.transform.position - (Vector3)vec);
+		collisionpoint = (vec);
 	}
 }
