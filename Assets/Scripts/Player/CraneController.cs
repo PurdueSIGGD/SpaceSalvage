@@ -103,7 +103,7 @@ public class CraneController : MonoBehaviour {
 				//print("Initial force shot");
 				launchangle = thetaersnenig;
 				////print (40 * HarpoonSpeed * new Vector3(this.transform.position.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , this.transform.position.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
-				ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector3(Player.rigidbody2D.velocity.x + Mathf.Cos (Mathf.Deg2Rad * launchangle) , Player.rigidbody2D.velocity.y + Mathf.Sin (Mathf.Deg2Rad * launchangle), 0) - this.transform.position);
+				ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector3(/*Player.rigidbody2D.velocity.x*/ + Mathf.Cos (Mathf.Deg2Rad * launchangle) , /*Player.rigidbody2D.velocity.y*/ + Mathf.Sin (Mathf.Deg2Rad * launchangle), 0) - this.transform.position);
 			}
 			firing = true;
 			////print ("pshhhh");
@@ -126,7 +126,7 @@ public class CraneController : MonoBehaviour {
 				//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
-				ending.rigidbody2D.velocity = ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
+				ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 				//print("rectracting");
 				////print (this.transform.position);
 				//current =  (this.transform.position - current);
@@ -154,6 +154,8 @@ public class CraneController : MonoBehaviour {
 			ending.rotation = Quaternion.Euler(0,0,  (launchangle));
 		}
 		//ending.position = current;
+		//ending.rigidbody2D.velocity = Player.rigidbody2D.velocity;
+		//ending.transform.position += (Player.transform.position - this.transform.position);
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		l.SetPosition(0, Player.transform.position);
 		l.SetPosition(1, ending.position);
@@ -168,8 +170,8 @@ public class CraneController : MonoBehaviour {
 					focus = hitCollider.gameObject;
 					firing = false;
 					retracting = false;
-					ending.transform.position = Player.transform.position;
-					ending.transform.rigidbody2D.velocity = Vector2.zero;
+					//ending.transform.position = Player.transform.position;
+					//ending.transform.rigidbody2D.velocity = Vector2.zero;
 					grabbed = true;
 
 					LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
@@ -185,13 +187,14 @@ public class CraneController : MonoBehaviour {
 					RopeScript2D rp = focus.GetComponent<RopeScript2D>();
 					if (rp == null) {
 						rp = focus.gameObject.AddComponent<RopeScript2D>();
+
 					}
 
-
+					rp.ropeColRadius = 0.03f;
 					rp.target = Player.transform;
 					rp.resolution = 3;
 					rp.ropeDrag = 0.01f;
-					rp.ropeMass = .05f;
+					rp.ropeMass = .01f;
 					rp.ropeColRadius = 0.1f;
 					rp.SendMessage("BuildRope");
 
