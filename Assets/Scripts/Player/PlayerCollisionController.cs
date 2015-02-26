@@ -8,6 +8,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	private GameObject text;
 	public int wallet = 0;
 	private int startingwallet;
+	private bool ejected;
 
 	// Creating SpriteRender (and a LineRenderer) variables for the Fading Screen,
 	//the Player sprite,
@@ -16,7 +17,8 @@ public class PlayerCollisionController : MonoBehaviour {
 	private SpriteRenderer Fader;
 	private SpriteRenderer PlayerSprite,Arrow,Back,Front,Left,Right,Cw,Ccw;
 	private LineRenderer Crane;
-
+	
+	private float ejectcooldown;
 	private GameObject faderObject;
 
 
@@ -30,7 +32,7 @@ public class PlayerCollisionController : MonoBehaviour {
 			if (health < 0 || oxy < startingoxy) {
 				oxy -= Vector3.Magnitude(col.relativeVelocity);
 				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + 0;
-				((TubeController)this.GetComponent("TubeController")).SendMessage("DeathIsSoon");
+				((RopeScript2D)this.GetComponent("RopeScript2D")).SendMessage("DeathIsSoon");
 			} else {
 				health -= Vector3.Magnitude(col.relativeVelocity);
 				((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + health.ToString ("F2");
@@ -40,7 +42,17 @@ public class PlayerCollisionController : MonoBehaviour {
 		
 	}
 	void OnCollisionExit2D(Collision2D col) {}
-	void OnTriggerEnter2D(Collider2D col) {
+	void OnTriggerStay2D(Collider2D col) {
+		if (ejected) {
+
+			if (col.name.Equals("Connector")) {
+				if (ejectcooldown > 5) {
+					ejectcooldown = 0;
+					this.SendMessage("Connect");
+					print ("Connecting");
+				}
+			}
+		}
 		//abletopickup = true;
 	}
 	void OnTriggerExit2D(Collider2D col) {
@@ -97,12 +109,19 @@ public class PlayerCollisionController : MonoBehaviour {
 	// Update is called once per frame
 
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.M)) {
+			SendMessage("DeathIsSoon");
+		}
+		if (health < 0) {
+			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + 0;
+			((RopeScript2D)this.GetComponent("RopeScript2D")).SendMessage("DeathIsSoon");
+		}
 		//pickupkey = Input.GetKey (KeyCode.F);
- 
+		ejected = ((RopeScript2D)this.GetComponent("RopeScript2D")).ejected;
 		// Always setting the fading screen sprite's x/y coordinates to those of the player
 		Fader.transform.position = this.transform.position;
-		if (((TubeController)this.GetComponent("TubeController")).ejected) {
-
+		if (ejected) {
+			ejectcooldown += Time.deltaTime;
 			/*The following if-else statements ensure that the oxygen amount displayed on screen
 			 is never negative*/
 			if (oxy > 0){

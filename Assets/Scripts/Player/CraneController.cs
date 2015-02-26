@@ -4,6 +4,8 @@ using System.Collections;
 public class CraneController : MonoBehaviour {
 	public GameObject Player;
 	public GameObject focus;
+	public Material ropemat;
+	public PhysicsMaterial2D mate;
 	public Vector3 current;
 	public bool emp;
 	public float rotspeed = 300;
@@ -28,6 +30,7 @@ public class CraneController : MonoBehaviour {
 	private bool releaseready;
 	private float launchangle;
 	private float lastval;
+
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -161,6 +164,7 @@ public class CraneController : MonoBehaviour {
 		l.SetPosition(1, ending.position);
 		if (!grabbed && (firing || retracting)) {
 			Collider2D hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
+			Physics2D.IgnoreCollision(hitCollider, GameObject.Find("Ship").collider2D);
 			if (hitCollider != null && hitCollider.gameObject != Player && !hitCollider.isTrigger) {
 				retracting = true;
 				firing = false;
@@ -170,6 +174,7 @@ public class CraneController : MonoBehaviour {
 					focus = hitCollider.gameObject;
 					firing = false;
 					retracting = false;
+					focus.rigidbody2D.isKinematic = false;
 					//ending.transform.position = Player.transform.position;
 					//ending.transform.rigidbody2D.velocity = Vector2.zero;
 					grabbed = true;
@@ -189,7 +194,7 @@ public class CraneController : MonoBehaviour {
 						rp = focus.gameObject.AddComponent<RopeScript2D>();
 
 					}
-
+					rp.ropemat = this.ropemat;
 					rp.ropeColRadius = 0.03f;
 					rp.target = Player.transform;
 					rp.resolution = 3;
@@ -197,7 +202,7 @@ public class CraneController : MonoBehaviour {
 					rp.ropeMass = .01f;
 					rp.ropeColRadius = 0.1f;
 					rp.SendMessage("BuildRope");
-
+					rp.mate = mate;
 					rp.SendMessage("SetTargetAnchor",(Player.transform.position + ending.position));
 				}
 			}

@@ -19,22 +19,23 @@ public class ItemHolder : MonoBehaviour {
 		numpackages = 0;
 		items = new GameObject[maxnumpackages];
 	}
-	void OnCollisionEnter2D(Collision2D col) {
+	void OnTriggerEnter2D(Collider2D col) {
 		//go.guiText.text = "Whatever";
 		bool meh = false;
 		for (int i = 0; i < maxnumpackages; i++) {
 			itemnames[i] = "";
 		}
-		if (numpackages < maxnumpackages && col.collider.GetComponent<Loot>() && !meh) {
+		if (numpackages < maxnumpackages && col.GetComponent<Loot>() && !meh && col.GetComponent<Loot>().timesincekinematic > 8) {
+			col.rigidbody2D.isKinematic = true;
 			col.gameObject.SendMessage("DestroyRope");
-			col.collider.isTrigger = true;
+			//col.isTrigger = true;
 			items[numpackages] = col.gameObject;
-			//print (numpackages + "   " + col.collider.GetComponent<Loot>().itemtype);
-			itemnames[numpackages] = col.collider.GetComponent<Loot>().itemtype;
-			col.collider.rigidbody2D.velocity = new Vector2(0,0);
-			col.collider.rigidbody2D.angularVelocity = 0;
+			//print (numpackages + "   " + col.GetComponent<Loot>().itemtype);
+			itemnames[numpackages] = col.GetComponent<Loot>().itemtype;
+			col.rigidbody2D.velocity = new Vector2(0,0);
+			col.rigidbody2D.angularVelocity = 0;
 			col.transform.rotation = Quaternion.Euler(0,0,0);
-			//Physics2D.IgnoreCollision(this.collider2D, col.collider);
+			//Physics2D.IgnoreCollision(this.collider2D, col);
 
 
 
@@ -57,9 +58,12 @@ public class ItemHolder : MonoBehaviour {
 	}
 	void OnTriggerExit2D(Collider2D col) {
 		if (col.GetComponent<Loot>()) {// && !((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed) {
-			(items[numpackages - 1]).collider2D.isTrigger = false;
-			items[numpackages - 1] = null;
-			numpackages--;
+			if (items[numpackages - 1] != null) {
+				(items[numpackages - 1]).collider2D.isTrigger = false;
+				items[numpackages - 1] = null;
+				numpackages--;
+
+			}
 			//print(numpackages);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);
 			
