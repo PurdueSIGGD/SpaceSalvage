@@ -89,6 +89,7 @@ public class RopeScript2D : MonoBehaviour {
 					segmentPos.Add (target.position);
 					// Attach the joints to the target object and parent it to this object	
 					SpringJoint2D end = target.gameObject.AddComponent<SpringJoint2D>();
+
 					end.distance = ((this.transform.position.x - target.position.x))/segments;
 					
 					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
@@ -212,6 +213,7 @@ public class RopeScript2D : MonoBehaviour {
 		Rigidbody2D rigid = ((GameObject)joints[n - 1]).AddComponent<Rigidbody2D>();
 		CircleCollider2D col = ((GameObject)joints[n - 1]).AddComponent<CircleCollider2D>();
 		SpringJoint2D ph = ((GameObject)joints[n - 1]).AddComponent<SpringJoint2D>();
+		((GameObject)joints[n-1]).AddComponent<RigidIgnorer>();
 		ph.collideConnected = false;
 		ph.frequency = frequency;
 		ph.dampingRatio = 2;
@@ -228,7 +230,7 @@ public class RopeScript2D : MonoBehaviour {
 
 		//segmentPos.
 
-		rigid.drag = ropeDrag;
+		//rigid.drag = ropeDrag;
 		rigid.mass = ropeMass;
 		col.radius = .03f;
 		col.sharedMaterial = mate;
@@ -268,7 +270,11 @@ public class RopeScript2D : MonoBehaviour {
 		//if (this.GetComponent<ItemHolder>() == null) Physics2D.IgnoreCollision(this.collider2D, target.collider2D);
 		isgenerating = true;
 		indexovertime = 1;
-		this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs + 1 ;
+		if (this.GetComponent<RopeTubeController>() != null) {
+
+			this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs + 1 ;
+
+		}
 		//target.parent = transform;
 	}
 	void CreateRopeOverTime() {
@@ -290,10 +296,10 @@ public class RopeScript2D : MonoBehaviour {
 		segments = 0;
 	}	
 	void SetTargetAnchor(Vector3 vec) {
-		print (this.transform.position);
+		/*print (this.transform.position);
 		print (vec);
 		//print (this.transform.position - (Vector3)vec);
-		collisionpoint = (vec);
+		collisionpoint = (vec);*/
 	}
 	void Eject() {
 		if (!ejected) {
@@ -302,6 +308,7 @@ public class RopeScript2D : MonoBehaviour {
 			Rigidbody2D rg = connector.AddComponent<Rigidbody2D>();
 			CircleCollider2D cc = connector.AddComponent<CircleCollider2D>();
 			SpriteRenderer sp = connector.AddComponent<SpriteRenderer>();
+			connector.AddComponent<RigidIgnorer>();
 			rg.gravityScale = 0;
 			cc.isTrigger = true;
 			//connector.transform.parent = transform;	
