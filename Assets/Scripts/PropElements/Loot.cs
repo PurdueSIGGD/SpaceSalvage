@@ -9,7 +9,7 @@ public class Loot : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (itemtype == null) {
+		if (itemtype == null || itemtype.Equals("")) {
 			itemtype = "Medical Supplies";
 		}
 	}

@@ -7,7 +7,9 @@ public class RigidIgnorer : MonoBehaviour {
 	void Start () {
 		Rigidbody2D[] rigids = GameObject.FindObjectsOfType<Rigidbody2D>();
 		foreach (Rigidbody2D d in rigids) {
-			Physics2D.IgnoreCollision(d.collider2D, this.rigidbody2D.collider2D);
+			if (d.GetComponent<RopeCrusher>() == null) {
+				Physics2D.IgnoreCollision(d.collider2D, this.rigidbody2D.collider2D);
+			}
 		}
 
 
@@ -18,5 +20,11 @@ public class RigidIgnorer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	void IgnoreMe(Collider2D col) {
+		Physics2D.IgnoreCollision(col, this.collider2D);
+	}
+	void RememberMe(Collider2D col) {
+		Physics2D.IgnoreCollision(col, this.collider2D, false);
 	}
 }

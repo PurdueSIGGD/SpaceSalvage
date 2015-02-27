@@ -308,7 +308,7 @@ public class RopeScript2D : MonoBehaviour {
 			Rigidbody2D rg = connector.AddComponent<Rigidbody2D>();
 			CircleCollider2D cc = connector.AddComponent<CircleCollider2D>();
 			SpriteRenderer sp = connector.AddComponent<SpriteRenderer>();
-			connector.AddComponent<RigidIgnorer>();
+
 			rg.gravityScale = 0;
 			cc.isTrigger = true;
 			//connector.transform.parent = transform;	

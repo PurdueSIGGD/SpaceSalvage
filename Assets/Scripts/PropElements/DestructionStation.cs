@@ -29,7 +29,7 @@ public class DestructionStation : MonoBehaviour {
 
 			/*When the health is greater than 0, the oxygen only decreases when the player is attached
 			 to the tube*/
-			if(Player.GetComponent<TubeController>().ejected)
+			if(Player.GetComponent<RopeTubeController>().ejected)
 				Player.GetComponent<PlayerCollisionController> ().oxy -= Time.deltaTime*10;
 	
 		}
@@ -40,8 +40,8 @@ public class DestructionStation : MonoBehaviour {
 
 
 			/*the "DeathIsSoon" message is not sent when the player is not connected to the tube controller*/
-			if(Player.GetComponent<TubeController>().ejected == false){
-				Player.GetComponent<TubeController>().SendMessage("DeathIsSoon");
+			if(Player.GetComponent<RopeTubeController>().ejected == false){
+				Player.GetComponent<RopeTubeController>().SendMessage("DeathIsSoon");
 			}
 		}
 	}

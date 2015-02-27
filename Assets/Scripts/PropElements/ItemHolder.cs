@@ -27,8 +27,9 @@ public class ItemHolder : MonoBehaviour {
 		}
 		if (numpackages < maxnumpackages && col.GetComponent<Loot>() && !meh && col.GetComponent<Loot>().timesincekinematic > 8) {
 			col.rigidbody2D.isKinematic = true;
-			col.gameObject.SendMessage("DestroyRope");
-			//col.isTrigger = true;
+			if (col.GetComponent<RopeScript2D>() != null) col.gameObject.SendMessage("DestroyRope");
+
+			col.isTrigger = true;
 			items[numpackages] = col.gameObject;
 			//print (numpackages + "   " + col.GetComponent<Loot>().itemtype);
 			itemnames[numpackages] = col.GetComponent<Loot>().itemtype;

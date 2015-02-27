@@ -32,7 +32,7 @@ public class OxygenStation : MonoBehaviour {
 			// and his oxygen must be lower than max
 			// and the station must not have run out of its oxygen supply
 		// all in order for the Oxygen Station  to actually do anything.
-			if(((TubeController)(ctrl).GetComponent("TubeController")).ejected && ctrl.oxy < ctrl.startingoxy && oxygenAmt > 0){
+			if(((RopeTubeController)(ctrl).GetComponent("RopeTubeController")).ejected && ctrl.oxy < ctrl.startingoxy && oxygenAmt > 0){
 
 				// store the delta of the time in one variable
 				float d = Time.deltaTime*5;

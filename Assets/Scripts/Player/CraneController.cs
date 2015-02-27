@@ -163,53 +163,60 @@ public class CraneController : MonoBehaviour {
 		l.SetPosition(0, Player.transform.position);
 		l.SetPosition(1, ending.position);
 		if (!grabbed && (firing || retracting)) {
-			Collider2D hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
-			Physics2D.IgnoreCollision(hitCollider, GameObject.Find("Ship").collider2D);
-			if (hitCollider != null && hitCollider.gameObject != Player && !hitCollider.isTrigger) {
-				retracting = true;
-				firing = false;
-				if (hitCollider.GetComponent("ItemPickup") != null) {
-					releaseready = false;
-					//print ("Got one");
-					focus = hitCollider.gameObject;
+			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
+			foreach (Collider2D c in hitColliders) {
+				if (c != null && c.gameObject != Player && !c.isTrigger) {
+					retracting = true;
 					firing = false;
-					retracting = false;
-					focus.rigidbody2D.isKinematic = false;
-					//ending.transform.position = Player.transform.position;
-					//ending.transform.rigidbody2D.velocity = Vector2.zero;
-					grabbed = true;
-
-					LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
-					if (lr == null) {
-						lr = focus.gameObject.AddComponent<LineRenderer>();
+					if (c.GetComponent("ItemPickup") != null) {
+						releaseready = false;
+						//print ("Got one");
+						focus = c.gameObject;
+						firing = false;
+						retracting = false;
+						focus.rigidbody2D.isKinematic = false;
+						//ending.transform.position = Player.transform.position;
+						//ending.transform.rigidbody2D.velocity = Vector2.zero;
+						grabbed = true;
+						
+						LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
+						if (lr == null) {
+							lr = focus.gameObject.AddComponent<LineRenderer>();
+						}
+						
+						lr.SetWidth(.05f,.05f);
+						
+						//lr.material = new Material(Resources.Load<Material>("/Sprites/Materials/Tubemat.mat"));
+						lr.SetColors(new Color(0,0,0),new Color(0,0,0));
+						lr.sortingLayerName = "Foreground";
+						RopeScript2D rp = focus.GetComponent<RopeScript2D>();
+						if (rp == null) {
+							rp = focus.gameObject.AddComponent<RopeScript2D>();
+						}
+						/*RigidIgnorer ri = focus.gameObject.GetComponent<RigidIgnorer>();
+						if (ri == null) {
+							focus.gameObject.AddComponent<RigidIgnorer>();
+						}*/
+						rp.ropemat = this.ropemat;
+						rp.ropeColRadius = 0.03f;
+						rp.target = Player.transform;
+						rp.resolution = 3;
+						rp.ropeDrag = 0.01f;
+						rp.ropeMass = .01f;
+						rp.ropeColRadius = 0.1f;
+						rp.SendMessage("BuildRope");
+						rp.mate = mate;
+						rp.SendMessage("SetTargetAnchor",(Player.transform.position + ending.position));
 					}
-
-					lr.SetWidth(.05f,.05f);
-
-					//lr.material = new Material(Resources.Load<Material>("/Sprites/Materials/Tubemat.mat"));
-					lr.SetColors(new Color(0,0,0),new Color(0,0,0));
-					lr.sortingLayerName = "Foreground";
-					RopeScript2D rp = focus.GetComponent<RopeScript2D>();
-					if (rp == null) {
-						rp = focus.gameObject.AddComponent<RopeScript2D>();
-
-					}
-					rp.ropemat = this.ropemat;
-					rp.ropeColRadius = 0.03f;
-					rp.target = Player.transform;
-					rp.resolution = 3;
-					rp.ropeDrag = 0.01f;
-					rp.ropeMass = .01f;
-					rp.ropeColRadius = 0.1f;
-					rp.SendMessage("BuildRope");
-					rp.mate = mate;
-					rp.SendMessage("SetTargetAnchor",(Player.transform.position + ending.position));
 				}
-			}
-		} else {
 
-			
-		}
+
+			}
+			//Collider2D hitCollider = Physics2D.OverlapCircle(Vector2.zero,0);
+			//Physics2D.IgnoreCollision(hitCollider, GameObject.Find("Ship").collider2D);
+			//hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
+
+		} 
 		/*
 
 		if (Input.GetMouseButtonDown(0)) {
