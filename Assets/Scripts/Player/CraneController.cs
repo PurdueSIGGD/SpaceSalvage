@@ -8,6 +8,7 @@ public class CraneController : MonoBehaviour {
 	public PhysicsMaterial2D mate;
 	public Vector3 current;
 	public bool emp;
+	public bool debugmode;
 	public float rotspeed = 300;
 	private bool firing;
 	private Vector3 pz;
@@ -24,7 +25,7 @@ public class CraneController : MonoBehaviour {
 	public bool grabbed = false;
 	private bool rot = false; 
 	public bool ended = false;
-	private bool heislettinggo = false;
+
 	private bool retracting;
 	private float thetaersnenig;
 	private bool releaseready;
@@ -46,6 +47,10 @@ public class CraneController : MonoBehaviour {
 		}
 		if (PlayerPrefs.HasKey ("cranelength")) {
 			cranelength = PlayerPrefs.GetFloat("cranelength");
+			if (debugmode) {
+				cranelength = 3;
+
+			}
 		} else {
 			PlayerPrefs.SetFloat("cranelength", cranelength);
 		}
@@ -98,8 +103,8 @@ public class CraneController : MonoBehaviour {
 		}
 		lastval = val;*/
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
-		float dist = Vector3.Magnitude (Player.transform.position - ending.position);
-		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime);
+		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
+		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime)
 
 		if (Input.GetMouseButton(0) && !grabbed && !retracting) {
 			if (!firing) {
@@ -110,7 +115,7 @@ public class CraneController : MonoBehaviour {
 			}
 			firing = true;
 			////print ("pshhhh");
-			//print (dist);
+			print (dist);
 			if (dist > cranelength) {
 				retracting = true;
 			}
@@ -151,7 +156,7 @@ public class CraneController : MonoBehaviour {
 			focus.SendMessage("DestroyRope");
 		}*/
 		if (!firing && !retracting) {
-			ending.position = this.transform.position;
+			ending.position = this.transform.position + (2 * Vector3.back);
 			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 		} else {
 			ending.rotation = Quaternion.Euler(0,0,  (launchangle));
@@ -161,11 +166,12 @@ public class CraneController : MonoBehaviour {
 		//ending.transform.position += (Player.transform.position - this.transform.position);
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		l.SetPosition(0, Player.transform.position);
-		l.SetPosition(1, ending.position);
+		l.SetPosition(1, ending.position);	
 		if (!grabbed && (firing || retracting)) {
 			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 			foreach (Collider2D c in hitColliders) {
-				if (c != null && c.gameObject != Player && !c.isTrigger) {
+				//print(c);
+				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponentInParent<RopeScript2D>() == null) {
 					retracting = true;
 					firing = false;
 					if (c.GetComponent("ItemPickup") != null) {
@@ -378,11 +384,7 @@ LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		}
 		lastTheta = thetaersnenig;
 	}
-	void I_am_letting_go_now () {
-		heislettinggo = true;
 
-
-	}
 	void FixedUpdate () {
 
 		if (rot && grabbed) {

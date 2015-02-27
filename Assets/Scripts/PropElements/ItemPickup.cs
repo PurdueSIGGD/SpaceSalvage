@@ -7,6 +7,7 @@ public class ItemPickup : MonoBehaviour {
 	private Vector3 delta;
 	private Vector3 difference;
 	public bool colliding;
+	public bool YELLING;
 	// Use this for initialization
 	void Start () {
 		colliding = false;
@@ -48,6 +49,9 @@ public class ItemPickup : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		delta = transform.position;
+		if (YELLING) {
+			print(delta);
+		}
 		if (((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
 
 

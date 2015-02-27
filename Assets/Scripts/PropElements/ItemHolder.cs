@@ -25,11 +25,11 @@ public class ItemHolder : MonoBehaviour {
 		for (int i = 0; i < maxnumpackages; i++) {
 			itemnames[i] = "";
 		}
-		if (numpackages < maxnumpackages && col.GetComponent<Loot>() && !meh && col.GetComponent<Loot>().timesincekinematic > 8) {
+		if (numpackages < maxnumpackages && !col.rigidbody2D.isKinematic && col.GetComponent<Loot>() && !meh && col.GetComponent<Loot>().timesincekinematic > 8) {
+			col.transform.position = new Vector3(packagearea.x + this.transform.position.x, this.transform.position.y + packagearea.y + (1 * numpackages),-1);
 			col.rigidbody2D.isKinematic = true;
 			if (col.GetComponent<RopeScript2D>() != null) col.gameObject.SendMessage("DestroyRope");
-
-			col.isTrigger = true;
+			//col.isTrigger = true;
 			items[numpackages] = col.gameObject;
 			//print (numpackages + "   " + col.GetComponent<Loot>().itemtype);
 			itemnames[numpackages] = col.GetComponent<Loot>().itemtype;
@@ -43,10 +43,8 @@ public class ItemHolder : MonoBehaviour {
 
 
 			numpackages++;
-			//print(numpackages);
-			col.transform.position = new Vector3(packagearea.x, packagearea.y + 1 * numpackages,-1);
+			print(new Vector3(packagearea.x + this.transform.position.x, this.transform.position.y + packagearea.y + (1 * numpackages),-1));
 
-			GameObject.Find("Player").GetComponentInChildren<CraneController>().SendMessage("I_am_letting_go_now");
 			((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed = false;
 
 

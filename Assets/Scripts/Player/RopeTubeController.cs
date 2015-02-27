@@ -29,7 +29,7 @@ public class RopeTubeController : MonoBehaviour {
 			this.SendMessage("Eject");
 			print ("eject");
 		}
-		print(tubesleft);
+		//print(tubesleft);
 
 
 		timepassed += Time.deltaTime;
