@@ -25,7 +25,7 @@ public class CraneController : MonoBehaviour {
 	public bool grabbed = false;
 	private bool rot = false; 
 	public bool ended = false;
-
+	//private Vector3 lastending;
 	private bool retracting;
 	private float thetaersnenig;
 	private bool releaseready;
@@ -69,7 +69,7 @@ public class CraneController : MonoBehaviour {
 		this.transform.position = Player.transform.position;
 		//current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
-		//////print (ending.localPosition);
+		//print (ending.position);
 		////print ("regular - " + ending.position);
 		//ending.position = transform.position; //for now
 
@@ -115,7 +115,7 @@ public class CraneController : MonoBehaviour {
 			}
 			firing = true;
 			////print ("pshhhh");
-			print (dist);
+			//print (dist);
 			if (dist > cranelength) {
 				retracting = true;
 			}
@@ -149,7 +149,7 @@ public class CraneController : MonoBehaviour {
 				releaseready = true;
 			}
 			if (grabbed && Input.GetMouseButton(0) && releaseready) {
-				focus.SendMessage("DestroyRope");
+				focus.BroadcastMessage("DestroyRope");
 			}
 		} 
 		/*if (grabbed && Input.GetMouseButton(0)) {
@@ -159,6 +159,7 @@ public class CraneController : MonoBehaviour {
 			ending.position = this.transform.position + (2 * Vector3.back);
 			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 		} else {
+			//lastending = ending.position;
 			ending.rotation = Quaternion.Euler(0,0,  (launchangle));
 		}
 		//ending.position = current;
@@ -171,7 +172,7 @@ public class CraneController : MonoBehaviour {
 			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 			foreach (Collider2D c in hitColliders) {
 				//print(c);
-				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponentInParent<RopeScript2D>() == null) {
+				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null) {
 					retracting = true;
 					firing = false;
 					if (c.GetComponent("ItemPickup") != null) {
@@ -184,7 +185,14 @@ public class CraneController : MonoBehaviour {
 						//ending.transform.position = Player.transform.position;
 						//ending.transform.rigidbody2D.velocity = Vector2.zero;
 						grabbed = true;
-						
+						//GameObject child = new GameObject("Connector");
+
+						//focus.transform.parent = focus.transform;
+
+						//print (Player.transform.position);
+						//print(ending.transform.localPosition);
+						//print("Crane : " + ending.transform.position + "  sent coords: " + child.transform.position);
+
 						LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
 						if (lr == null) {
 							lr = focus.gameObject.AddComponent<LineRenderer>();
@@ -197,8 +205,17 @@ public class CraneController : MonoBehaviour {
 						lr.sortingLayerName = "Foreground";
 						RopeScript2D rp = focus.GetComponent<RopeScript2D>();
 						if (rp == null) {
+
 							rp = focus.gameObject.AddComponent<RopeScript2D>();
+
+
 						}
+						Rigidbody2D rg = focus.GetComponent<Rigidbody2D>();
+						if (rg == null) {
+							rg = focus.gameObject.AddComponent<Rigidbody2D>();
+						}
+						rg.gravityScale = 0;
+						//rg.isKinematic = true;
 						/*RigidIgnorer ri = focus.gameObject.GetComponent<RigidIgnorer>();
 						if (ri == null) {
 							focus.gameObject.AddComponent<RigidIgnorer>();
@@ -206,13 +223,17 @@ public class CraneController : MonoBehaviour {
 						rp.ropemat = this.ropemat;
 						rp.ropeColRadius = 0.03f;
 						rp.target = Player.transform;
+						rp.frequency = 2;
+						rp.dampening = 10;
 						rp.resolution = 3;
 						rp.ropeDrag = 0.01f;
 						rp.ropeMass = .01f;
 						rp.ropeColRadius = 0.1f;
+						//print(ending.position);
+						rp.SendMessage("SetTargetAnchor",(ending.position));
 						rp.SendMessage("BuildRope");
 						rp.mate = mate;
-						rp.SendMessage("SetTargetAnchor",(Player.transform.position + ending.position));
+
 					}
 				}
 

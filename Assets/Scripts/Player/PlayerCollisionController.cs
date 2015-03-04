@@ -128,18 +128,25 @@ public class PlayerCollisionController : MonoBehaviour {
 				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = " + oxy.ToString ("F2") + "\nCash: " + wallet;
 			}
 			else{
-				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = 0.00 + " + "\nCash: " + wallet;
+				((GUIText)text.GetComponent("GUIText")).text = "Oxygen Left = 0.00 " + "\nCash: " + wallet;
+				//print(Fader.color.a);
+				if (Fader.color.a >= 1) {
+
+					print("Dead");
+					Application.LoadLevel("GameOver");
+					
+				}
 			}
 			oxy -= Time.deltaTime;
 			if (oxy <= 0) {
 
 				/*  When the player ship dies, it stops moving */
-				GameObject.Find ("Player").rigidbody2D.velocity = new Vector2(0,0);
+				//GameObject.Find ("Player").rigidbody2D.velocity = new Vector2(0,0);
 				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
-
+				this.SendMessage("EMP");
 				/*Here is where, during the 'GAME OVER' stage,
 				 * the entire ship disappears (by _immediately_ becoming transparent)*/
-				PlayerSprite.color = new Color(PlayerSprite.color.r, PlayerSprite.color.g, PlayerSprite.color.b, 0);
+				//PlayerSprite.color = new Color(PlayerSprite.color.r, PlayerSprite.color.g, PlayerSprite.color.b, 0);
 				Arrow.color = new Color(Arrow.color.r, Arrow.color.g, Arrow.color.b, 0);
 				Front.color = new Color(Front.color.r, Front.color.g, Front.color.b, 0);
 				Back.color = new Color(Back.color.r, Back.color.g, Back.color.b, 0);
@@ -157,8 +164,14 @@ public class PlayerCollisionController : MonoBehaviour {
 				 player ship finally destroys itself*/
 				if(Fader.color.a < 255) Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime);
 				else {
-					PlayerPrefs.Save();
-					GameObject.Destroy (this.gameObject);
+
+					//GameObject.Destroy (this.gameObject);
+				}
+
+				if (Fader.color.a <= 0) {
+					print("Dead");
+					Application.LoadLevel("GameOver");
+					
 				}
 			}
 		} else {
