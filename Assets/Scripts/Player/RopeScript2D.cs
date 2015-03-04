@@ -34,11 +34,13 @@ public class RopeScript2D : MonoBehaviour {
 	public bool ejected;
 	private bool death;
 	private bool increasing;
+	public bool shiprope =  false;
 	private GameObject connector;
+	private GameObject hinger;
 	private float lightintensity;
 	private Vector2 lastvel;
 	private Vector3 relativestartpos;
-	private Vector3 vec;
+	public Vector3 vec; //where our cable starts
 
 
 	void Start() {
@@ -54,26 +56,6 @@ public class RopeScript2D : MonoBehaviour {
 			BuildRope();
 		}
 	}
-
-	/*void Awake()
-	{
-		BuildRope();
-	}*/
-	/*void FixedUpdate() {
-		if (rope) { 
-			if (this.transform.parent != null) {
-				if (this.rigidbody2D.velocity - lastvel != Vector2.zero) { //this is to ensure all forces applied get sent to the parent
-
-					this.transform.parent.rigidbody2D.AddForceAtPosition(this.rigidbody2D.velocity, this.transform.localPosition);
-
-					this.transform.localPosition = this.relativestartpos;
-				}
-				lastvel = this.rigidbody2D.velocity;
-			}
-		}
-
-
-	}*/
 	void Update()
 	{
 
@@ -84,20 +66,45 @@ public class RopeScript2D : MonoBehaviour {
 		timepassed += Time.deltaTime;
 		if (isgenerating) { //if it is in the progress of generating
 			var segs = segments-1;
-			var seperation = ((target.position - vec)/segs);
+			var seperation = new Vector3();
+			if (shiprope) {
+				seperation = ((this.transform.position - vec)/segs);
+			} else {
+				seperation = ((target.position - vec)/segs);
+			}
 
+			seperation.z = 0;
 			//for(int s=1;s < segments;s++)
 			float timepercalc = .000005f; //value for now, no visible difference in between .000005f and .005
 			if (timepassed > indexovertime * (timepercalc)) //if the time passed so far is enough for this "for" loop
 			{
 
 				// Find the each segments position using the slope from above
-				Vector3 vector = (seperation*indexovertime) + new Vector3(vec.x, vec.y, 0);	
+				Vector3 vector = (seperation*indexovertime) + vec;	
+				//print("segements: " + segments + " index: " + indexovertime + "position: " + vector);
+				//print(vec);
 				if (indexovertime==1) {
+					hinger = new GameObject("Hinger");
+					Vector3 newvec = collisionpoint + this.transform.position;
+					//newvec = Quaternion.AngleAxis(this.transform.eulerAngles.z, Vector3.forward) * newvec;
+					//Vector3.RotateTowards(newvec, this.transform.position, this.transform.eulerAngles.z, 0);
+					hinger.transform.position = newvec;
+					//print(collisionpoint);
+					hinger.transform.parent = transform;
+					DistanceJoint2D dj = hinger.AddComponent<DistanceJoint2D>();
+					hinger.GetComponent<Rigidbody2D>().gravityScale = 0;
+					print("Hinger pos: " + hinger.transform.position);
+					dj.connectedBody = this.rigidbody2D;
+					dj.maxDistanceOnly = true;
+					dj.distance = 0;
+
+					dj.connectedAnchor = new Vector2(this.collisionpoint.x/this.transform.localScale.x,this.collisionpoint.y/this.transform.localScale.y);
+					SpriteRenderer sp = hinger.AddComponent<SpriteRenderer>();
+					sp.sprite = this.spriteconnector;
 					//print (segs);
 					//print(vector + "   " + this.transform.position);
 				}
-
+				//fix this
 				segmentPos.Add (vector);
 				
 				//Add Physics to the segments
@@ -118,29 +125,21 @@ public class RopeScript2D : MonoBehaviour {
 
 					// Attach the joints to the target object and parent it to this object	
 					SpringJoint2D end = target.gameObject.AddComponent<SpringJoint2D>();
-
-					end.distance = ((vec.x - target.position.x))/segments;
-					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
-					if (startmade) {
-						//hinger.transform.parent = target.transform;
+					if (shiprope) {
+						end.distance = ((vec.x - this.transform.position.x))/segments;
 					} else {
-						GameObject hinger = new GameObject("Hinger");
-						hinger.transform.position = collisionpoint + this.transform.position;
-						print(collisionpoint);
-						hinger.transform.parent = transform;
-						DistanceJoint2D dj = hinger.AddComponent<DistanceJoint2D>();
-						hinger.GetComponent<Rigidbody2D>().gravityScale = 0;
-						((GameObject)joints[0]).GetComponent<SpringJoint2D>().connectedBody = dj.rigidbody2D;
-						dj.connectedBody = this.rigidbody2D;
-						dj.maxDistanceOnly = true;
+						end.distance = ((vec.x - target.position.x))/segments;
+					}
 
-						dj.connectedAnchor = new Vector2(this.collisionpoint.x/this.transform.localScale.x,this.collisionpoint.y/this.transform.localScale.y);
-						dj.distance = 0;
+
+					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
+
+						((GameObject)joints[0]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
 						for (int s = 1; s < segments; s++) {
 							((GameObject)joints[s]).transform.position =  (seperation*s) + vec;
 						}
 						//dj.distance = Vector2.Distance(new Vector2(this.collisionpoint.x/this.transform.localScale.x,this.collisionpoint.y/this.transform.localScale.y), Vector2.zero);
-					}
+					
 
 					/*SpringJoint2D myend = this.gameObject.AddComponent<SpringJoint2D>();
 					end.distance = ((this.transform.position.x - target.position.x))/segments;
@@ -225,8 +224,12 @@ public class RopeScript2D : MonoBehaviour {
 						line.SetPosition(i,connector.transform.position);
 					}
 					else {
+						if (shiprope) {
+							line.SetPosition(i, this.transform.position);
+						} else {
+							line.SetPosition(i, hinger.transform.position);
+						}
 
-						line.SetPosition(i, this.transform.position);
 
 					}
 
@@ -256,9 +259,10 @@ public class RopeScript2D : MonoBehaviour {
 		//print ("A new member has joined!");
 		joints.Add (new GameObject("Joint_" + n));
 		//print("Joint added");
-		if (startmade){ 
+		if (this.shiprope){ 
 
-			((GameObject)joints[n - 1]).transform.parent = target.parent;
+			((GameObject)joints[n - 1]).transform.parent = target.transform;
+			//print("I am target");
 		} else {
 			((GameObject)joints[n - 1]).transform.parent = transform;
 		}
@@ -274,7 +278,12 @@ public class RopeScript2D : MonoBehaviour {
 		ph.dampingRatio = dampening;
 		rigid.isKinematic = false;
 		//ph.useLimits = false;
-		ph.distance = ((vec.x - target.position.x))/segments;
+		if (shiprope) {
+			ph.distance = ((vec.x - this.transform.position.x))/segments;
+		} else {
+			ph.distance = ((vec.x - target.position.x))/segments;
+		}
+
 		//ph.anchor = new Vector2(1/(resolution), 1/(resolution));
 		//ph.anchor = new Vector2 (((this.transform.position.x - target.position.x))/segments, ((this.transform.position.y - target.position.y))/segments);
 		//print (ph.anchor);
@@ -306,12 +315,26 @@ public class RopeScript2D : MonoBehaviour {
 		line = gameObject.GetComponent<LineRenderer>();
 		segmentPos = new ArrayList();
 		joints = new ArrayList();
+		if (vec.Equals(Vector3.zero)){
+			//print(vec);
+			vec = this.transform.position;
+		}
 		// Find the amount of segments based on the distance and resolution
 		// Example: [resolution of 1.0 = 1 joint per unit of distance]
 		//print("Distance = " + (Vector3.Distance(transform.position, target.position)*resolution));
 		//print(Vector3.Magnitude(this.transform.position + target.position));
-		segments = (int)(Vector3.Magnitude(Vector3.zero.z * (vec + target.position))*resolution ) + 1;
-		segments = 20;
+
+
+
+		if (shiprope) {
+
+			segments = (int)(Vector3.Distance(vec , this.transform.position)*resolution ) + 1;
+			//segments = 5;
+		} else {
+			segments = (int)(Vector3.Distance( vec , target.position)*resolution ) + 1;
+		}
+		//print(vec);
+		//segments = 20;
 		
 		//print ("segments " + segments);
 		line.SetVertexCount(segments);
@@ -321,7 +344,13 @@ public class RopeScript2D : MonoBehaviour {
 		
 		// Find the distance between each segment
 		var segs = segments-1;
-		var seperation = ((target.position - vec)/segs);
+		var seperation = new Vector3();
+		if (shiprope) {
+			 seperation = ((this.transform.position - vec)/segs);
+		} else {
+			 seperation = ((target.position - vec)/segs);
+		}
+		//print(seperation);
 		//if (this.GetComponent<ItemHolder>() == null) Physics2D.IgnoreCollision(this.collider2D, target.collider2D);
 		isgenerating = true;
 		indexovertime = 1;
@@ -340,7 +369,7 @@ public class RopeScript2D : MonoBehaviour {
 		isgenerating = false;
 		GameObject.Find ("Crane").GetComponent<CraneController> ().grabbed = false;
 		// Stop Rendering Rope then Destroy all of its components
-
+		Destroy(hinger);
 		rope = false;
 		for(int dj=0;dj<joints.Count;dj++)
 		{
@@ -358,7 +387,7 @@ public class RopeScript2D : MonoBehaviour {
 		//print (vec);
 		this.vec = vec;
 		collisionpoint = (vec - this.transform.position);
-		//print(this.collisionpoint);
+		print("Sent vector: " + vec);
 		relativestartpos = new Vector3(this.collisionpoint.x/this.transform.localScale.x,this.collisionpoint.y/this.transform.localScale.y, this.collisionpoint.z/this.transform.localScale.z);
 		//new Vector3(this.collisionpoint.x/this.transform.localScale.x,this.collisionpoint.y/this.transform.localScale.y, this.collisionpoint.z/this.transform.localScale.z);
 		

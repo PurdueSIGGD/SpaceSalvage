@@ -106,7 +106,7 @@ public class CraneController : MonoBehaviour {
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime)
 
-		if (Input.GetMouseButton(0) && !grabbed && !retracting) {
+		if (Input.GetMouseButton(0) && !grabbed && !retracting && !emp) {
 			if (!firing) {
 				//print("Initial force shot");
 				launchangle = thetaersnenig;
@@ -225,7 +225,7 @@ public class CraneController : MonoBehaviour {
 						rp.target = Player.transform;
 						rp.frequency = 2;
 						rp.dampening = 10;
-						rp.resolution = 3;
+						rp.resolution = 5;
 						rp.ropeDrag = 0.01f;
 						rp.ropeMass = .01f;
 						rp.ropeColRadius = 0.1f;
