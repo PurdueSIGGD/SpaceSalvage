@@ -7,7 +7,7 @@ public class CraneController : MonoBehaviour {
 	public Material ropemat;
 	public PhysicsMaterial2D mate;
 	public Vector3 current;
-	public bool emp;
+	public bool emp; 
 	public bool debugmode;
 	public float rotspeed = 300;
 	private bool firing;
@@ -66,6 +66,7 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 		this.transform.position = Player.transform.position;
 		//current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
@@ -207,9 +208,10 @@ public class CraneController : MonoBehaviour {
 						if (rp == null) {
 
 							rp = focus.gameObject.AddComponent<RopeScript2D>();
-
+							rp.parent = this.transform;
 
 						}
+
 						Rigidbody2D rg = focus.GetComponent<Rigidbody2D>();
 						if (rg == null) {
 							rg = focus.gameObject.AddComponent<Rigidbody2D>();
@@ -223,11 +225,11 @@ public class CraneController : MonoBehaviour {
 						rp.ropemat = this.ropemat;
 						rp.ropeColRadius = 0.03f;
 						rp.target = Player.transform;
-						rp.frequency = 2;
+						rp.frequency = .5f;
 						rp.dampening = 10;
-						rp.resolution = 5;
+						rp.resolution = 2;
 						rp.ropeDrag = 0.01f;
-						rp.ropeMass = .01f;
+						rp.ropeMass = .5f;
 						rp.ropeColRadius = 0.1f;
 						//print(ending.position);
 						rp.SendMessage("SetTargetAnchor",(ending.position));
