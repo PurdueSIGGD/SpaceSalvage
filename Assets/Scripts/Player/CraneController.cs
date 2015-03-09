@@ -29,8 +29,9 @@ public class CraneController : MonoBehaviour {
 	private bool retracting;
 	private float thetaersnenig;
 	private bool releaseready;
+	private bool phisretract;
 	private float launchangle;
-	private float lastval;
+	private float lastendingangle;
 
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
@@ -91,18 +92,7 @@ public class CraneController : MonoBehaviour {
 			//lastTheta = thetaersnenig; //set the last angle
 		}
 		float newangle = Player.transform.eulerAngles.z;
-		//print ((((newangle % 360) - (thetaersnenig % 360)) % 360) + 360);
-		/*float val = (((newangle % 360) - (thetaersnenig % 360)) % 360) + 360;
-		if ( !(val < 451 && val > 449) && !(val < 91 && val > 89)) {
-			if ( val < lastval) {
-				newangle += rotspeed * 120 *  Time.deltaTime;
-				//print ("adding");
-			} else {
-				newangle -= rotspeed * 120 *  Time.deltaTime;
-				//print ("subtracting");
-			}
-		}
-		lastval = val;*/
+
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime)
@@ -141,6 +131,7 @@ public class CraneController : MonoBehaviour {
 				//current =  (this.transform.position - current);
 				if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
 					//print("back home");
+					releaseready = false;
 					retracting = false;
 					firing = false;
 
@@ -150,22 +141,35 @@ public class CraneController : MonoBehaviour {
 				releaseready = true;
 			}
 			if (grabbed && Input.GetMouseButton(0) && releaseready) {
+				// release grip
+				grabbed = false;
+				firing = false;
+				retracting = true;
 				focus.BroadcastMessage("DestroyRope");
+
 			}
 		} 
-		/*if (grabbed && Input.GetMouseButton(0)) {
-			focus.SendMessage("DestroyRope");
-		}*/
-		if (!firing && !retracting) {
+
+		if (!firing && !retracting && !grabbed) {
+			//print("Coming Back");
 			ending.position = this.transform.position + (2 * Vector3.back);
 			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 		} else {
+			if (grabbed) {
+				if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
+
+					ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
+					ending.eulerAngles = new Vector3(0,0, focus.transform.eulerAngles.z + this.lastendingangle);
+					print(lastendingangle);
+				}
+			} else {
+				ending.rotation = Quaternion.Euler(0,0,Vector3.Angle(Player.transform.position, ending.transform.position));
+				print(Vector3.Angle(Player.transform.position, ending.transform.position));
+
+			}
 			//lastending = ending.position;
-			ending.rotation = Quaternion.Euler(0,0,  (launchangle));
 		}
-		//ending.position = current;
-		//ending.rigidbody2D.velocity = Player.rigidbody2D.velocity;
-		//ending.transform.position += (Player.transform.position - this.transform.position);
+
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		l.SetPosition(0, Player.transform.position);
 		l.SetPosition(1, ending.position);	
@@ -173,7 +177,7 @@ public class CraneController : MonoBehaviour {
 			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 			foreach (Collider2D c in hitColliders) {
 				//print(c);
-				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null) {
+				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 					retracting = true;
 					firing = false;
 					if (c.GetComponent("ItemPickup") != null) {
@@ -186,6 +190,7 @@ public class CraneController : MonoBehaviour {
 						//ending.transform.position = Player.transform.position;
 						//ending.transform.rigidbody2D.velocity = Vector2.zero;
 						grabbed = true;
+						this.lastendingangle = ending.eulerAngles.z;
 						//GameObject child = new GameObject("Connector");
 
 						//focus.transform.parent = focus.transform;

@@ -39,12 +39,14 @@ public class RopeScript2D : MonoBehaviour {
 	private bool increasing;
 	public bool shiprope =  false;
 	private GameObject connector;
-	private GameObject hinger;
+	public GameObject hinger;
 	private GameObject lastnew;
 	private float lightintensity;
 	private Vector2 lastvel;
 	private Vector3 relativestartpos;
 	public Vector3 vec; //where our cable starts
+	private Transform Ending;
+	private Transform theparent;
 
 
 	void Start() {
@@ -225,8 +227,10 @@ public class RopeScript2D : MonoBehaviour {
 		}
 
 	}
+
 	void SubRope() {
 		if (segments > 3) {
+
 			Destroy(((GameObject)joints[segments - 1]));
 			target.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).rigidbody2D;
 			joints.RemoveAt(segments-1);
@@ -339,8 +343,10 @@ public class RopeScript2D : MonoBehaviour {
 
 		return newie;
 	}
+
 	void BuildRope()
 	{
+
 		rope = true;
 		line = parent.GetComponent<LineRenderer>();
 		segmentPos = new ArrayList();
@@ -390,6 +396,9 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void DestroyRope()
 	{
+		if (Ending != null) {
+			Ending.parent = theparent;
+		}
 		isgenerating = false;
 		GameObject.Find ("Crane").GetComponent<CraneController> ().grabbed = false;
 		// Stop Rendering Rope then Destroy all of its components
@@ -454,7 +463,5 @@ public class RopeScript2D : MonoBehaviour {
 		Eject();
 		death = true;
 	}
-	void UpdateFocus() { //so rope can ignore the item that is being carried (some weird glitch happens which makes it ridiculously bouncy) 	
 
-	}
 }
