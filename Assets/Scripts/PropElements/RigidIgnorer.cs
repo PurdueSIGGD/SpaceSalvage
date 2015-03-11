@@ -7,7 +7,7 @@ public class RigidIgnorer : MonoBehaviour {
 	void Start () {
 		Rigidbody2D[] rigids = GameObject.FindObjectsOfType<Rigidbody2D>();
 		foreach (Rigidbody2D d in rigids) {
-			if (d.GetComponent<RopeCrusher>() == null) {
+			if (d.GetComponent<RopeCrusher>() == null) { //add the exceptions here
 				Physics2D.IgnoreCollision(d.collider2D, this.rigidbody2D.collider2D);
 			}
 		}

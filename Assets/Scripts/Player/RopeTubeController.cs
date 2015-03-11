@@ -54,4 +54,7 @@ public class RopeTubeController : MonoBehaviour {
 	void DeathIsSoon() {
 
 	}
+	void BrokenRope() {
+
+	}
 }

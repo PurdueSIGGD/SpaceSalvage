@@ -5,8 +5,10 @@ public class JointScript : MonoBehaviour {
 	private LineRenderer lr;
 	private SpringJoint2D sp;
 	private bool broken;
+	public bool severed;
 	// Use this for initialization
 	void Start () {
+		severed = false;
 		lr = this.GetComponent<LineRenderer>();
 		sp = this.GetComponent<SpringJoint2D>();
 		lr.SetVertexCount(2);
@@ -21,9 +23,13 @@ public class JointScript : MonoBehaviour {
 		}
 	}
 	void BrokenJoint() {
+
 		Destroy(this.GetComponent<SpringJoint2D>());
 		lr.SetVertexCount(0);
 		broken = true;
+		if (!severed) {
+			//GameObject.Find ("Ship").BroadcastMessage ("BrokenRope");
+		}
 
 	}
 	void ReconnectJoint(Rigidbody2D r) {

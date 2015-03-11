@@ -33,7 +33,7 @@ public class CraneController : MonoBehaviour {
 	private float launchangle;
 	private float lastendingangle;
 	private float firstfocusangle;
-
+	public float linewidth;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -126,6 +126,7 @@ public class CraneController : MonoBehaviour {
 				//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
 				//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
+				this.GetComponent<LineRenderer>().enabled = true;
 				ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 				//print("rectracting");
 				////print (this.transform.position);
@@ -219,7 +220,7 @@ public class CraneController : MonoBehaviour {
 							rp.parent = this.transform;
 
 						}
-
+						rp.linewidth = this.linewidth;
 						Rigidbody2D rg = focus.GetComponent<Rigidbody2D>();
 						if (rg == null) {
 							rg = focus.gameObject.AddComponent<Rigidbody2D>();

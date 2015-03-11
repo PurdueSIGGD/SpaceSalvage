@@ -13,6 +13,9 @@ public class DestructionStation : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D col){
+		if (col.GetComponent<JointScript> () != null) {
+			col.SendMessage("BrokenJoint");
+		}
 		if (col.gameObject == Player)
 						attack ();
 	}
