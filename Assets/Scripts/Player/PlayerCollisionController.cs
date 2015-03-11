@@ -115,7 +115,8 @@ public class PlayerCollisionController : MonoBehaviour {
 			((RopeScript2D)this.GetComponent("RopeScript2D")).SendMessage("DeathIsSoon");
 		}
 		//pickupkey = Input.GetKey (KeyCode.F);
-		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected;
+		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
+
 		// Always setting the fading screen sprite's x/y coordinates to those of the player
 		Fader.transform.position = this.transform.position;
 		if (ejected) {

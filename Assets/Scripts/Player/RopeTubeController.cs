@@ -25,7 +25,7 @@ public class RopeTubeController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		ejected = ((RopeScript2D)this.GetComponent("RopeScript2D")).ejected;
-		if (Input.GetKeyDown (KeyCode.G) && !emp) {
+		if (Input.GetKeyDown (KeyCode.G) && !emp && !ejected) {
 			GameObject.Find("Ship").SendMessage("Eject");
 			print ("eject");
 		}

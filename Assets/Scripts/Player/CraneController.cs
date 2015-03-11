@@ -139,10 +139,10 @@ public class CraneController : MonoBehaviour {
 
 				}
 			} 
-			if (!Input.GetMouseButton(0) && grabbed) {
+			if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
 				releaseready = true;
 			}
-			if (grabbed && Input.GetMouseButton(0) && releaseready) {
+			if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 				// release grip
 				grabbed = false;
 				firing = false;
@@ -172,10 +172,15 @@ public class CraneController : MonoBehaviour {
 			}
 			//lastending = ending.position;
 		}
-
+		
 		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-		l.SetPosition(0, Player.transform.position);
-		l.SetPosition(1, ending.position);	
+		if (!grabbed) {
+			l.enabled = true;
+			l.SetPosition(0, Player.transform.position);
+			l.SetPosition(1, ending.position);	
+		} else {
+			l.enabled = false;
+		}
 		if (!grabbed && (firing || retracting)) {
 			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 			foreach (Collider2D c in hitColliders) {
@@ -207,9 +212,9 @@ public class CraneController : MonoBehaviour {
 						if (lr == null) {
 							lr = focus.gameObject.AddComponent<LineRenderer>();
 						}
-						
-						lr.SetWidth(.05f,.05f);
-						
+
+						lr.SetWidth(linewidth,linewidth);
+						lr.material = this.ropemat;
 						//lr.material = new Material(Resources.Load<Material>("/Sprites/Materials/Tubemat.mat"));
 						lr.SetColors(new Color(0,0,0),new Color(0,0,0));
 						lr.sortingLayerName = "Foreground";
@@ -231,6 +236,8 @@ public class CraneController : MonoBehaviour {
 						if (ri == null) {
 							focus.gameObject.AddComponent<RigidIgnorer>();
 						}*/
+						rp.iscrane = true;
+
 						rp.ropemat = this.ropemat;
 						rp.ropeColRadius = 0.03f;
 						rp.target = Player.transform;
@@ -244,6 +251,7 @@ public class CraneController : MonoBehaviour {
 						rp.SendMessage("SetTargetAnchor",(ending.position));
 						rp.SendMessage("BuildRope");
 						rp.mate = mate;
+						lr.enabled = false;
 
 					}
 				}
