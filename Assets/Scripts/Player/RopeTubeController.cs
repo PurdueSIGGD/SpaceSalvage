@@ -26,7 +26,7 @@ public class RopeTubeController : MonoBehaviour {
 	void Update () {
 		ejected = ((RopeScript2D)this.GetComponent("RopeScript2D")).ejected;
 		if (Input.GetKeyDown (KeyCode.G) && !emp) {
-			this.SendMessage("Eject");
+			GameObject.Find("Ship").SendMessage("Eject");
 			print ("eject");
 		}
 		//print(tubesleft);

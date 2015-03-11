@@ -48,7 +48,7 @@ public class PlayerCollisionController : MonoBehaviour {
 			if (col.name.Equals("Connector")) {
 				if (ejectcooldown > 5) {
 					ejectcooldown = 0;
-					this.SendMessage("Connect");
+					GameObject.Find("Ship").BroadcastMessage("Connect");
 					print ("Connecting");
 				}
 			}
@@ -109,15 +109,13 @@ public class PlayerCollisionController : MonoBehaviour {
 	// Update is called once per frame
 
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.M)) {
-			SendMessage("DeathIsSoon");
-		}
+
 		if (health < 0) {
 			((GUIText)text.GetComponent("GUIText")).text = "Suit Integrity = " + 0;
 			((RopeScript2D)this.GetComponent("RopeScript2D")).SendMessage("DeathIsSoon");
 		}
 		//pickupkey = Input.GetKey (KeyCode.F);
-		ejected = ((RopeScript2D)this.GetComponent("RopeScript2D")).ejected;
+		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected;
 		// Always setting the fading screen sprite's x/y coordinates to those of the player
 		Fader.transform.position = this.transform.position;
 		if (ejected) {

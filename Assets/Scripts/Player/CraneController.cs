@@ -32,6 +32,7 @@ public class CraneController : MonoBehaviour {
 	private bool phisretract;
 	private float launchangle;
 	private float lastendingangle;
+	private float firstfocusangle;
 
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
@@ -159,12 +160,13 @@ public class CraneController : MonoBehaviour {
 				if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
 
 					ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
-					ending.eulerAngles = new Vector3(0,0, focus.transform.eulerAngles.z + this.lastendingangle);
-					print(lastendingangle);
+					ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+					//print(lastendingangle);
 				}
 			} else {
-				ending.rotation = Quaternion.Euler(0,0,Vector3.Angle(Player.transform.position, ending.transform.position));
-				print(Vector3.Angle(Player.transform.position, ending.transform.position));
+				//ending.rotation = Quaternion.Euler(0,0,45 + Vector3.Angle(Player.transform.position, ending.transform.position));
+				ending.eulerAngles = new Vector3(0,0,launchangle);
+				//print(Vector3.Angle(Player.transform.position, ending.transform.position));
 
 			}
 			//lastending = ending.position;
@@ -191,6 +193,7 @@ public class CraneController : MonoBehaviour {
 						//ending.transform.rigidbody2D.velocity = Vector2.zero;
 						grabbed = true;
 						this.lastendingangle = ending.eulerAngles.z;
+						firstfocusangle = focus.transform.eulerAngles.z;
 						//GameObject child = new GameObject("Connector");
 
 						//focus.transform.parent = focus.transform;
