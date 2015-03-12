@@ -154,7 +154,7 @@ public class CraneController : MonoBehaviour {
 
 		if (!firing && !retracting && !grabbed) {
 			//print("Coming Back");
-			ending.position = this.transform.position + (2 * Vector3.back);
+			ending.position = this.transform.position + (2 * Vector3.forward);
 			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 		} else {
 			if (grabbed) {

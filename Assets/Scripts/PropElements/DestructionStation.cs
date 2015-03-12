@@ -51,6 +51,6 @@ public class DestructionStation : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + 5);
 	}
 }
