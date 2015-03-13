@@ -21,6 +21,7 @@ public class ItemHolder : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		//go.guiText.text = "Whatever";
+		print("oh heloooo");
 		bool meh = false;
 		for (int i = 0; i < maxnumpackages; i++) {
 			itemnames[i] = "";

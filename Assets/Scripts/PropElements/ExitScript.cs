@@ -40,13 +40,14 @@ public class ExitScript : MonoBehaviour {
 		}
 		if (exiting) {
 			if (col.name.Equals("Player")) {
-
+				col.SendMessage("StopDoingThat"); //stop the health detriments
 				col.SendMessage("EMP");
 				col.transform.position = playerseat;
 				col.transform.rotation = Quaternion.Euler(0,0,180);
 				col.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
 			}
 			if (Fader.color.a < 1) {
+			
 				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
 				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
 				

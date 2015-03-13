@@ -30,7 +30,7 @@ public class UpgradeScript : MonoBehaviour {
 	private int startingcapacity;
 	void Start() {
 		capacity = PlayerPrefs.GetInt("capacity");
-		cash = PlayerPrefs.GetInt("wallet");
+		cash = PlayerPrefs.GetInt("wallet") - 20;
 		suitintegrity = PlayerPrefs.GetFloat("health");
 		startingoxy = PlayerPrefs.GetFloat("startingoxy");
 		thrustermoverate = PlayerPrefs.GetFloat("moverate");
@@ -90,7 +90,7 @@ public class UpgradeScript : MonoBehaviour {
 		suitintegrity = (Mathf.Round(suitintegrity * 100f) / 100f); //round that stuff
 
 		//for health
-		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Health = " + suitintegrity + " ($5)");
+		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Suit Integrity:  = " + suitintegrity + " ($5)");
 		if (suitintegrity >= 100) {
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 5");
 		} else {

@@ -497,6 +497,7 @@ public class RopeScript2D : MonoBehaviour {
 				lr.SetPosition(0,target.transform.position);
 				lr.SetPosition(1,lastnew.transform.position);
 				target.gameObject.AddComponent<JointScript>().SendMessage("ReconnectJoint");
+				target.SendMessage("GiveFocus",this.gameObject);						
 			} 
 
 		}

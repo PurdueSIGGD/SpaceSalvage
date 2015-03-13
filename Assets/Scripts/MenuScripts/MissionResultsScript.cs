@@ -80,7 +80,7 @@ public class MissionResultsScript : MonoBehaviour {
 		} 
 		float healththing = (Mathf.Round(PlayerPrefs.GetFloat ("health") * 100f) / 100f); //round that stuff
 		string value = ((healththing <= 100) ? ("" + healththing) : ("100, Armor: " + (healththing - 100)));
-		GUI.Box (new Rect (Screen.width * allPlacementX, Screen.height * healthPlacementY, Screen.width * .40f, Screen.height * .08f), ("Health left: "  +  value));
+		GUI.Box (new Rect (Screen.width * allPlacementX, Screen.height * healthPlacementY, Screen.width * .40f, Screen.height * .08f), ("Suit Integrity left: "  +  value));
 
 		GUI.Box (new Rect (Screen.width * allPlacementX, Screen.height * walletPlacementY, Screen.width * .40f, Screen.height * .08f), "Starting Cash: $ " + PlayerPrefs.GetInt ("startingwallet"));
 		GUI.Box (new Rect (Screen.width * allPlacementX, Screen.height * .25f, Screen.width * .40f, Screen.height * .08f), "Collected Cash: $ " + collected);
@@ -107,8 +107,9 @@ public class MissionResultsScript : MonoBehaviour {
 			GUI.Box (new Rect (Screen.width * allPlacementX, Screen.height * (.45f + (f * .1f)), Screen.width * .40f, Screen.height * .08f), fooditems + " Food Crate" + s + " for $" + cost + " each");
 			f++;
 		}
-		
-		GUI.Box (new Rect (Screen.width * .2f, Screen.height * .80f, Screen.width * .60f, Screen.height * .08f), "Total Cash: $" + ( wallet));
+		GUI.Box (new Rect (Screen.width * .35f, Screen.height * .7f, Screen.width * .30f, Screen.height * .08f), "Travel Expenses: $20");
+
+		GUI.Box (new Rect (Screen.width * .2f, Screen.height * .80f, Screen.width * .60f, Screen.height * .08f), "Total Cash: $" + ( wallet - 20));
 
 		/*if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Controls")) {
 			

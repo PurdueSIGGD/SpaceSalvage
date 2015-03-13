@@ -17,8 +17,7 @@ public class ItemDissolve : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col) {
 		
 		if(col.gameObject == Player){
-
-			((PlayerCollisionController)Player.GetComponent ("PlayerCollisionController")).wallet++;
+			col.SendMessage("changeWallet", 1);
 			DestroyObject(this.gameObject);
 
 		}

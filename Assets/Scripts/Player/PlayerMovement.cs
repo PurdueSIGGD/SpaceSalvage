@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour {
 	void EMP() {
 		currentemptime = 0;
 		emp = true;
-		this.GetComponent<RopeTubeController>().emp = true;
+		GameObject.Find("Ship").GetComponent<RopeTubeController>().emp = true;
 		GameObject.Find ("Crane").GetComponent<CraneController>().emp = true;
 
 	}

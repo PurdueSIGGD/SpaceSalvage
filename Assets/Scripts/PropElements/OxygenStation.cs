@@ -4,60 +4,52 @@ using System.Collections;
 public class OxygenStation : MonoBehaviour {
 
 	public float oxygenAmt = 50;
+	private float startingoxy;
 	private GameObject Player;
+	private GameObject child;
+
+	public Sprite sprite;
 
 	// Use this for initialization
 	void Start () {
 
+		startingoxy = oxygenAmt;
+		child = new GameObject("Gauge");
+		child.transform.position = this.transform.position;
+		child.transform.parent = this.transform;
+		SpriteRenderer sp = child.AddComponent<SpriteRenderer>();
+		sp.sprite = sprite;
 		//Recognize the player in the game
 		Player = GameObject.Find("Player"); 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		SpriteRenderer sp = child.GetComponent<SpriteRenderer>();
+		//print(255 * (1 - oxygenAmt/startingoxy));
+		//sp.color = new Color(0, 1,0, 1);
+		sp.color = new Color(1 - oxygenAmt/startingoxy, oxygenAmt/startingoxy, 0 , sp.color.a);
+		child.transform.position = new Vector3(this.transform.position.x + 1.5f, this.transform.position.y, this.transform.position.z);
+		if (oxygenAmt > .2f) {
+			child.transform.localScale = new Vector2(1/this.transform.localScale.x,10 *(1-(oxygenAmt))/(startingoxy * this.transform.localScale.y));
+
+		} else {
+			child.transform.localScale = new Vector3(.2f,.2f,.2f);
+		}
+
 	}
 
 
 	void OnTriggerStay2D(Collider2D col){
+		if (col.gameObject.Equals(Player)){
 
-		if(col.gameObject == Player){
+			if(Player.GetComponent<HealthController>().acceptingOxy && oxygenAmt > 0) {
+				oxygenAmt -= 3 * Time.deltaTime;
+				col.SendMessage("changeOxy", 10 * Time.deltaTime);
 
-
-			// variable ctrl is the CollisionController component of Player
-			PlayerCollisionController ctrl = (PlayerCollisionController)Player.GetComponent ("PlayerCollisionController");
-
-
-			// The player has to be disconnected from the tube controller (and losing oxygen)
-			// and his oxygen must be lower than max
-			// and the station must not have run out of its oxygen supply
-		// all in order for the Oxygen Station  to actually do anything.
-			if(((RopeTubeController)(ctrl).GetComponent("RopeTubeController")).ejected && ctrl.oxy < ctrl.startingoxy && oxygenAmt > 0){
-
-				// store the delta of the time in one variable
-				float d = Time.deltaTime*5;
-
-				// in both if-statements, the amount of oxygen stored in the Station 
-				// decreases upon use
-
-				if(d + ctrl.oxy > ctrl.startingoxy){
-					oxygenAmt -= ctrl.startingoxy - ctrl.oxy;
-					ctrl.oxy = ctrl.startingoxy;
-				}
-
-				else{
-					
-					oxygenAmt -= d;
-					ctrl.oxy += d;
-
-				}
-
-			}
-
+			} 
 
 		}
-
-
 
 	}
 }
