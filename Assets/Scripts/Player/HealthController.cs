@@ -10,11 +10,12 @@ public class HealthController : MonoBehaviour {
 	private int wallet;
 	private int startingwallet;
 	private float startinghealth;
-	private bool oxywarning, suitwarning, medwarning;
+	private bool oxywarning, suitwarning, medwarning, cranewarning;
 	private static string okmessage = "All systems operational";
 	private static string oxymessage = "WARNING: LOW OXYGEN\n";
 	private static string suitmessage = "WARNING: LOW SUIT INTEGRITY\n";
 	private static string medmessage = "WARNING: VITAL SIGNS ARE DECREASING\n";
+	private static string cranemessage = "WARNING: CRANE IS DESTROYED\n";
 	private bool ejected;
 	private bool emergency, on;
 	private float timesince;
@@ -60,7 +61,7 @@ public class HealthController : MonoBehaviour {
 				
 			}
 		}
-		if (!(medwarning || oxywarning || suitwarning)) {
+		if (!(medwarning || oxywarning || suitwarning || cranewarning)) {
 			emergency = false;
 			words += okmessage;
 		} else {
@@ -68,6 +69,7 @@ public class HealthController : MonoBehaviour {
 			if (suitwarning) words += suitmessage;
 			if (oxywarning) words += oxymessage;
 			if (medwarning) words += medmessage;
+			if (cranewarning) words += cranemessage;
 		}
 		if (emergency) { //flashing lights
 
@@ -89,6 +91,7 @@ public class HealthController : MonoBehaviour {
 		}
 		medwarning = (med < 35);
 		suitwarning = (health < 20);
+		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 		if (ejected) { //change oxygen from being ejected
 			if ((health < 50 && health > 1 )|| health == 0) {

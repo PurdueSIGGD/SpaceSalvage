@@ -24,7 +24,9 @@ public class JointScript : MonoBehaviour {
 			lr.SetVertexCount(2);
 			lr.SetPosition(0,this.transform.position);
 			lr.SetPosition(1,new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y, this.transform.position.z));
+
 		}
+
 	}
 	void BrokenJoint() {
 

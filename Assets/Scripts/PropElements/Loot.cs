@@ -9,6 +9,7 @@ public class Loot : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		timesincekinematic = 8;
 		if (itemtype == null || itemtype.Equals("")) {
 			itemtype = "Medical Supplies";
 		}

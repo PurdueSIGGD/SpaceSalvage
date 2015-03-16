@@ -71,7 +71,6 @@ public class UpgradeScript : MonoBehaviour {
 			//startingoxy = 30;
 			//cash = 0;
 			//cranelength = 1;
-			print (suitintegrity + "   " + armor);
 			PlayerPrefs.SetInt("capacity",capacity);
 			PlayerPrefs.SetInt("wallet", cash);
 			PlayerPrefs.SetFloat("health", suitintegrity + armor);
@@ -203,20 +202,37 @@ public class UpgradeScript : MonoBehaviour {
 			GUI.Box (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.2");
 		} else {
 			if (GUI.Button (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.2")) {
-				cranelength -= 0.2f;
-				cash += 40;
+				if (startingcranelength == 0 && cranelength == 1) {
+					cranelength -= 1;
+					cash += 40;
+				} else {
+					cranelength -= 0.2f;
+					cash += 40;
+				}
+
+
 			}
 			
 		}
-
-		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Crane Length = " + cranelength + "  ($40)");
+		string cranesucks;
+		if (cranelength == 0 && startingcranelength == 0) {
+			cranesucks = "Crane is broken";
+		} else {
+			cranesucks = "Crane length = " + cranelength;
+		}
+		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), cranesucks + "  ($40)");
 		if (cranelength == 6) { //6 being max length
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.25");
 		} else {
 			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.2")) {
-				cranelength += 0.2f;
-				cash -= 40;
-			}
+				if (startingcranelength == 0 && cranelength == 0) {
+					cranelength += 1;
+					cash -= 40;
+				} else {
+					cranelength += 0.2f;
+					cash -= 40;
+				}
+			} 
 			
 		}
 		yval1+= .08f;

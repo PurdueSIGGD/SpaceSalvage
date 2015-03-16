@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/* The purpose for this script is to 
+ * ignore all rigidbody2D containing items
+ * within the game. This is primarily intended for
+ * ropescript joints, since they have been making
+ * strange, large jumps while hitting any
+ * free rigidbody2D objects. 
+ * 
+ * Not necessarily gameplay breaking, but may be bugfixed in the future.
+ * */
 public class RigidIgnorer : MonoBehaviour {
 	private float time;
 	// Use this for initialization

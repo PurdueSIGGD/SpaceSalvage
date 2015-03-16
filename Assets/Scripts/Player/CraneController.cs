@@ -27,6 +27,7 @@ public class CraneController : MonoBehaviour {
 	public bool ended = false;
 	//private Vector3 lastending;
 	private bool retracting;
+	public bool broken;
 	private float thetaersnenig;
 	private bool releaseready;
 	private bool phisretract;
@@ -68,7 +69,11 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		if (focus != null) {
+			if (focus.GetComponent<RopeScript2D>() != null) {
+				broken = (focus.GetComponent<RopeScript2D>().brokenrope);
+			}
+		}
 		this.transform.position = Player.transform.position;
 		//current = this.transform.position;
 		Transform ending = transform.FindChild("Ending"); //sprite at the end 
@@ -97,172 +102,191 @@ public class CraneController : MonoBehaviour {
 		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime)
+		if (!broken) {
+			if (Input.GetMouseButton(0) && !grabbed && !retracting && !emp) {
+				if (!firing) {
+					//print("Initial force shot");
+					launchangle = thetaersnenig;
+					////print (40 * HarpoonSpeed * new Vector3(this.transform.position.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , this.transform.position.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
+					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(this.transform.parent.rigidbody2D.velocity.x/3 + Mathf.Cos (Mathf.Deg2Rad * launchangle) , this.transform.parent.rigidbody2D.velocity.y/3 +  Mathf.Sin (Mathf.Deg2Rad * launchangle)) /* this.transform.parent.rigidbody2D.velocity*/);
+				}
+				firing = true;
+				////print ("pshhhh");
+				//print (dist);
+				if (dist > cranelength) {
+					retracting = true;
+				}
+				/*lengthx = lengthx + (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
+				lengthy = lengthy + (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
+				current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);*/
+			} else {
 
-		if (Input.GetMouseButton(0) && !grabbed && !retracting && !emp) {
-			if (!firing) {
-				//print("Initial force shot");
-				launchangle = thetaersnenig;
-				////print (40 * HarpoonSpeed * new Vector3(this.transform.position.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , this.transform.position.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
-				ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector3(/*Player.rigidbody2D.velocity.x*/ + Mathf.Cos (Mathf.Deg2Rad * launchangle) , /*Player.rigidbody2D.velocity.y*/ + Mathf.Sin (Mathf.Deg2Rad * launchangle), 0) - this.transform.position);
-			}
-			firing = true;
-			////print ("pshhhh");
-			//print (dist);
-			if (dist > cranelength) {
-				retracting = true;
-			}
-			/*lengthx = lengthx + (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
-			lengthy = lengthy + (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * HarpoonSpeed * Time.deltaTime);
-			current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);*/
-		} else {
-
-			if (firing) {
-				//print("Done firing");
-				firing = false;
-				retracting = true;
-			}
-
-			if (retracting) {
-				//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
-				//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
-				//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
-				this.GetComponent<LineRenderer>().enabled = true;
-				ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
-				//print("rectracting");
-				////print (this.transform.position);
-				//current =  (this.transform.position - current);
-				if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
-					//print("back home");
-					releaseready = false;
-					retracting = false;
+				if (firing) {
+					//print("Done firing");
 					firing = false;
+					retracting = true;
+				}
+
+				if (retracting) {
+					//lengthx = lengthx - (Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
+					//lengthy = lengthy - (Mathf.Sin (Mathf.Deg2Rad * thetaersnenig) * 5 * HarpoonSpeed * Time.deltaTime);
+					//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
+					this.GetComponent<LineRenderer>().enabled = true;
+					ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
+					//print("rectracting");
+					////print (this.transform.position);
+					//current =  (this.transform.position - current);
+					if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
+						//print("back home");
+						releaseready = false;
+						retracting = false;
+						firing = false;
+
+					}
+				} 
+				if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
+					releaseready = true;
+				}
+				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
+					// release grip
+					grabbed = false;
+					firing = false;
+					retracting = true;
+					focus.BroadcastMessage("DestroyRope");
 
 				}
 			} 
-			if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
-				releaseready = true;
-			}
-			if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
-				// release grip
-				grabbed = false;
-				firing = false;
-				retracting = true;
-				focus.BroadcastMessage("DestroyRope");
 
-			}
-		} 
-
-		if (!firing && !retracting && !grabbed) {
-			//print("Coming Back");
-			ending.position = this.transform.position + (2 * Vector3.forward);
-			ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
-		} else {
-			if (grabbed) {
-				if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
-
-					ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
-					ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
-					//print(lastendingangle);
-				}
+			if (!firing && !retracting && !grabbed) {
+				//print("Coming Back");
+				ending.position = this.transform.position + (.05f * Vector3.forward);
+				ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 			} else {
-				//ending.rotation = Quaternion.Euler(0,0,45 + Vector3.Angle(Player.transform.position, ending.transform.position));
-				ending.eulerAngles = new Vector3(0,0,launchangle);
-				//print(Vector3.Angle(Player.transform.position, ending.transform.position));
+				if (grabbed) {
+					if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
 
-			}
-			//lastending = ending.position;
-		}
-		
-		LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
-		if (!grabbed) {
-			l.enabled = true;
-			l.SetPosition(0, Player.transform.position);
-			l.SetPosition(1, ending.position);	
-		} else {
-			l.enabled = false;
-		}
-		if (!grabbed && (firing || retracting)) {
-			Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
-			foreach (Collider2D c in hitColliders) {
-				//print(c);
-				if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
-					retracting = true;
-					firing = false;
-					if (c.GetComponent("ItemPickup") != null) {
-						releaseready = false;
-						//print ("Got one");
-						focus = c.gameObject;
-						firing = false;
-						retracting = false;
-						focus.rigidbody2D.isKinematic = false;
-						//ending.transform.position = Player.transform.position;
-						//ending.transform.rigidbody2D.velocity = Vector2.zero;
-						grabbed = true;
-						this.lastendingangle = ending.eulerAngles.z;
-						firstfocusangle = focus.transform.eulerAngles.z;
-						//GameObject child = new GameObject("Connector");
-
-						//focus.transform.parent = focus.transform;
-
-						//print (Player.transform.position);
-						//print(ending.transform.localPosition);
-						//print("Crane : " + ending.transform.position + "  sent coords: " + child.transform.position);
-
-						LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
-						if (lr == null) {
-							lr = focus.gameObject.AddComponent<LineRenderer>();
-						}
-
-						lr.SetWidth(linewidth,linewidth);
-						lr.material = this.ropemat;
-						//lr.material = new Material(Resources.Load<Material>("/Sprites/Materials/Tubemat.mat"));
-						lr.SetColors(new Color(0,0,0),new Color(0,0,0));
-						lr.sortingLayerName = "Foreground";
-						RopeScript2D rp = focus.GetComponent<RopeScript2D>();
-						if (rp == null) {
-
-							rp = focus.gameObject.AddComponent<RopeScript2D>();
-							rp.parent = this.transform;
-
-						}
-						rp.linewidth = this.linewidth;
-						Rigidbody2D rg = focus.GetComponent<Rigidbody2D>();
-						if (rg == null) {
-							rg = focus.gameObject.AddComponent<Rigidbody2D>();
-						}
-						rg.gravityScale = 0;
-						//rg.isKinematic = true;
-						/*RigidIgnorer ri = focus.gameObject.GetComponent<RigidIgnorer>();
-						if (ri == null) {
-							focus.gameObject.AddComponent<RigidIgnorer>();
-						}*/
-						rp.iscrane = true;
-
-						rp.ropemat = this.ropemat;
-						rp.ropeColRadius = 0.03f;
-						rp.target = Player.transform;
-						rp.frequency = .5f;
-						rp.dampening = 10;
-						rp.resolution = 2;
-						rp.ropeDrag = 0.01f;
-						rp.ropeMass = .5f;
-						rp.ropeColRadius = 0.1f;
-						//print(ending.position);
-						rp.SendMessage("SetTargetAnchor",(ending.position));
-						rp.SendMessage("BuildRope");
-						rp.mate = mate;
-						lr.enabled = false;
-
+						ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
+						ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+						//print(lastendingangle);
 					}
+				} else {
+					//ending.rotation = Quaternion.Euler(0,0,45 + Vector3.Angle(Player.transform.position, ending.transform.position));
+					ending.eulerAngles = new Vector3(0,0,launchangle);
+					//print(Vector3.Angle(Player.transform.position, ending.transform.position));
+
 				}
-
-
+				//lastending = ending.position;
 			}
-			//Collider2D hitCollider = Physics2D.OverlapCircle(Vector2.zero,0);
-			//Physics2D.IgnoreCollision(hitCollider, GameObject.Find("Ship").collider2D);
-			//hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
+			
+			LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
+			if (!grabbed) {
+				Player.GetComponent<LineRenderer>().SetWidth(GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth, GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth);
+				l.enabled = true;
+				l.SetPosition(0, Player.transform.position);
+				l.SetPosition(1, ending.position);	
+			} else {
+				l.enabled = false;
+			}
+			if (!grabbed && (firing || retracting)) {
+				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
+				foreach (Collider2D c in hitColliders) {
+					//print(c);
+					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
+						retracting = true;
+						firing = false;
+						if (c.GetComponent("ItemPickup") != null) {
+							releaseready = false;
+							//print ("Got one");
+							focus = c.gameObject;
+							firing = false;
+							retracting = false;
+							focus.rigidbody2D.isKinematic = false;
+							//ending.transform.position = Player.transform.position;
+							//ending.transform.rigidbody2D.velocity = Vector2.zero;
+							grabbed = true;
+							this.lastendingangle = ending.eulerAngles.z;
+							firstfocusangle = focus.transform.eulerAngles.z;
+							//GameObject child = new GameObject("Connector");
 
-		} 
+							//focus.transform.parent = focus.transform;
+
+							//print (Player.transform.position);
+							//print(ending.transform.localPosition);
+							//print("Crane : " + ending.transform.position + "  sent coords: " + child.transform.position);
+
+							LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
+							if (lr == null) {
+								lr = focus.gameObject.AddComponent<LineRenderer>();
+							}
+
+							lr.SetWidth(linewidth,linewidth);
+							lr.material = this.ropemat;
+							//lr.material = new Material(Resources.Load<Material>("/Sprites/Materials/Tubemat.mat"));
+							lr.SetColors(new Color(0,0,0),new Color(0,0,0));
+							lr.sortingLayerName = "Foreground";
+							RopeScript2D rp = focus.GetComponent<RopeScript2D>();
+							if (rp == null) {
+
+								rp = focus.gameObject.AddComponent<RopeScript2D>();
+								rp.parent = this.transform;
+
+							}
+							rp.linewidth = this.linewidth;
+							Rigidbody2D rg = focus.GetComponent<Rigidbody2D>();
+							if (rg == null) {
+								rg = focus.gameObject.AddComponent<Rigidbody2D>();
+							}
+							rg.gravityScale = 0;
+							//rg.isKinematic = true;
+							/*RigidIgnorer ri = focus.gameObject.GetComponent<RigidIgnorer>();
+							if (ri == null) {
+								focus.gameObject.AddComponent<RigidIgnorer>();
+							}*/
+							rp.iscrane = true;
+
+							rp.ropemat = this.ropemat;
+							rp.ropeColRadius = 0.03f;
+							rp.target = Player.transform;
+							rp.frequency = .5f;
+							rp.dampening = 10;
+							rp.resolution = 2;
+							rp.ropeDrag = 0.01f;
+							rp.ropeMass = .5f;
+							rp.ropeColRadius = 0.1f;
+							//print(ending.position);
+							rp.SendMessage("SetTargetAnchor",(ending.position));
+							rp.SendMessage("BuildRope");
+							rp.mate = mate;
+							lr.enabled = false;
+
+						}
+					} else {
+						if (c.isTrigger && c.GetComponent<DestructionStation>() != null) {
+							cranelength = 0;
+							broken = true;
+							firing = false;
+							retracting = false;
+							LineRenderer lr = this.GetComponent<LineRenderer>();
+							lr.SetVertexCount(0);
+						}
+					}
+
+
+				}
+				//Collider2D hitCollider = Physics2D.OverlapCircle(Vector2.zero,0);
+				//Physics2D.IgnoreCollision(hitCollider, GameObject.Find("Ship").collider2D);
+				//hitCollider = Physics2D.OverlapCircle(ending.transform.position, .1f);
+
+			} 
+		} else {
+			if (focus != null && focus.GetComponent<RopeScript2D>() != null) {
+				ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
+				ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+			
+			} else {
+				ending.transform.position = Player.transform.position;
+			}
+		}
 		/*
 
 		if (Input.GetMouseButtonDown(0)) {
@@ -425,18 +449,11 @@ LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		lastTheta = thetaersnenig;
 	}
 
-	void FixedUpdate () {
-
-		if (rot && grabbed) {
-
-			////print ("Rotate");
-			//focus.transform.rotation = new Quaternion(0,0,Time.DeltaTime,0);
-			focus.transform.Rotate(Time.deltaTime * 40 * Vector3.back);
-			//focus.transform.RotateAround(Vector3.zero, current, Time.deltaTime * 50);
-		}
-	
+	void Im_Leaving() {
 		
+		//print ("wallet: " + wallet);
+		//print ("startingwallet: " + startingwallet);
 
-
+		PlayerPrefs.SetFloat ("cranelength", cranelength);
 	}
 }

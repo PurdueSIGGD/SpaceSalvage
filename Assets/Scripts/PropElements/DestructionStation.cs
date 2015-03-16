@@ -13,7 +13,7 @@ public class DestructionStation : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D col){
-
+		// create particles at col.OverlapPoint
 		if (col.gameObject == Player) {
 			attack ();
 			return;

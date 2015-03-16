@@ -5,11 +5,13 @@ public class ExitScript : MonoBehaviour {
 	//private GameObject display;
 	// Use this for initialization
 	private bool exiting;
-	private GameObject go;
 	private GameObject faderObject;
 	private SpriteRenderer Fader;
+	private GameObject Player;
+	public string usestring = "exit map";
 	public Vector3 playerseat;
 	void Start () {
+		Player = GameObject.Find ("Player");
 		if (playerseat == Vector3.zero) {
 			playerseat = this.transform.position;
 		}
@@ -20,34 +22,44 @@ public class ExitScript : MonoBehaviour {
 		//go.AddComponent("GUIText");
 
 	}
-	void OnCollisionEnter2D(Collision2D col) {
 
+
+	void Use() {
+		if (!exiting) {
+			exiting = true;
+		}
 	}
-
 	void OnTriggerExit2D (Collider2D col) {
-		//Physics2D.IgnoreCollision(this.collider2D, col);
-		//go.guiText.text = "";
+		if (col.GetComponent<InteractController>() != null) {
+			col.SendMessage("GetMessage", "");
+		}
+	}
+	void OnTriggerEnter2D(Collider2D col) {
+		if (col.GetComponent<InteractController>() != null) {
+			col.SendMessage("GetMessage", this.usestring);
+			col.SendMessage("GetGO", this.gameObject);
+
+		}
 	}
 	void OnTriggerStay2D(Collider2D col) {
-		//go.transform.position = new Vector3 (col.transform.position.x, col.transform.position.y + 40, col.transform.position.z);
-		//print ("hi");
-
-
-		if (Input.GetKey (KeyCode.F) && col.name.Equals("Player") && !exiting) {
-
-			exiting = true;
-			print ("Loading new level");
+		if (exiting && col.GetComponent<InteractController>() != null) {
+			col.SendMessage("GetMessage", "");
 		}
+
+	}
+	// Update is called once per frame
+	void Update () {
+
 		if (exiting) {
-			if (col.name.Equals("Player")) {
-				col.SendMessage("StopDoingThat"); //stop the health detriments
-				col.SendMessage("EMP");
-				col.transform.position = playerseat;
-				col.transform.rotation = Quaternion.Euler(0,0,180);
-				col.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
-			}
-			if (Fader.color.a < 1) {
+				
+			Player.SendMessage("StopDoingThat"); //stop the health and oxy loss
+			Player.SendMessage("EMP");
+			Player.transform.position = playerseat + Vector3.back;
+			Player.transform.rotation = Quaternion.Euler(0,0,180);
+			Player.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
 			
+			if (Fader.color.a < 1) {
+				
 				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
 				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
 				
@@ -57,16 +69,12 @@ public class ExitScript : MonoBehaviour {
 					go.SendMessage("Im_Leaving");
 				}
 				PlayerPrefs.Save();*/
-				GameObject.Find("Ship").SendMessage("Im_Leaving");
-				GameObject.Find("Player").SendMessage("Im_Leaving");
-
-
+				GameObject.Find("Ship").BroadcastMessage("Im_Leaving");
+				GameObject.Find("Player").BroadcastMessage("Im_Leaving");
+				
+				
 				Application.LoadLevel("MissionResults");
 			}
 		}
-	}
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
