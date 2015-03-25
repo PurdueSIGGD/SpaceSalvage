@@ -46,7 +46,7 @@ public class InteractController : MonoBehaviour {
 		target = g;
 	}
 	void Update () {
-		if (target != null && Input.GetKey(KeyCode.F)) {
+		if (target != null && Input.GetKeyDown(KeyCode.F)) {
 			target.SendMessage("Use");
 		}
 

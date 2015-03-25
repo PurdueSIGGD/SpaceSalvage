@@ -3,12 +3,10 @@ using System.Collections;
 
 public class Button : MonoBehaviour {
 	string usestring = "open door";
-	private GameObject door;
 	private bool on;
 	// Use this for initialization
 	void Start () {
 		on = false;
-		door = transform.FindChild("Door").gameObject;
 
 
 	}
@@ -20,9 +18,9 @@ public class Button : MonoBehaviour {
 	void Use() {
 		on = !on;
 		if (on) {
-			door.SendMessage("Open");
+			BroadcastMessage("Open");
 		} else {
-			door.SendMessage("Close");
+			BroadcastMessage("Close");
 		}
 		//do whatever you want your code to do if the player "uses" it
 	}
@@ -37,6 +35,14 @@ public class Button : MonoBehaviour {
 			col.SendMessage("GetMessage", this.usestring);
 			col.SendMessage("GetGO", this.gameObject);
 		}
+	}
+	void OnTriggerStay2D(Collider2D col) {
+		if (col.GetComponent<InteractController>() != null) {
+			col.SendMessage("GetMessage", this.usestring);
+		}
+	}
+	void ChangeWord(string s) {
+		usestring = s;
 	}
 
 }

@@ -17,12 +17,17 @@ public class Door : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		time+=Time.deltaTime;
-		if (opened) { //make it relative, add each time Time.deltaTime *  moverate * (pos1.x - pos2.x)
-			if (this.transform.position.y > open.y + .1f || this.transform.position.y < open.y - .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + Time.deltaTime, this.transform.position.z);
-			if (this.transform.position.y > open.x + .1f || this.transform.position.x < open.x - .1f) this.transform.position = new Vector3(this.transform.position.x + Time.deltaTime, this.transform.position.y, this.transform.position.z);
+
+		if (!opened) { //make it relative, add each time Time.deltaTime *  moverate * (pos1.x - pos2.x)
+			//print("Closing");
+			this.SendMessageUpwards("ChangeWord", "open door");
+			if (Mathf.Abs(this.transform.position.y - close.y) > .02f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (open.y - close.y)), this.transform.position.z);
+			if (Mathf.Abs(this.transform.position.x - close.x) > .02) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (close.x - open.x)), this.transform.position.y, this.transform.position.z);
 		} else {
-			if (this.transform.position.y > close.y + .1f || this.transform.position.y < close.y - .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + Time.deltaTime, this.transform.position.z);
-			if (this.transform.position.y > close.x + .1f || this.transform.position.x < close.x - .1f) this.transform.position = new Vector3(this.transform.position.x + Time.deltaTime, this.transform.position.y, this.transform.position.z);
+			this.SendMessageUpwards("ChangeWord", "close door");
+			//print("Opening");
+			if (Mathf.Abs(this.transform.position.y - open.y) > .02f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (close.y - open.y)), this.transform.position.z);
+			if (Mathf.Abs(this.transform.position.x - open.x) > .02f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (open.x - close.x)), this.transform.position.y, this.transform.position.z);
 
 		}
 	}
