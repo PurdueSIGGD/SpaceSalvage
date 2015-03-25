@@ -2,26 +2,26 @@ Initialize engine version: 4.6.1f1 (d1db7a1b5196)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce GTX 760 (ID=0x1187)
-    Vendor:   NVIDIA
-    VRAM:     1990 MB
+    Renderer: Intel(R) HD Graphics 4000 (ID=0x166)
+    Vendor:   Intel
+    VRAM:     128 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.039 seconds
-desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.249 seconds
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-Platform assembly: C:\Users\Lonsway\Documents\GitHub\NewSpaceGame\Executables\Exe1_Data\Managed\System.Core.dll (this message is harmless)
-UnloadTime: 0.549938 ms
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\System.Core.dll (this message is harmless)
+UnloadTime: 0.408150 ms
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 206.
-Total: 1.288410 ms (FindLiveObjects: 0.026503 ms CreateObjectMapping: 0.023190 ms MarkObjects: 0.222565 ms  DeleteObjects: 0.018371 ms)
+Total: 1.051165 ms (FindLiveObjects: 0.019736 ms CreateObjectMapping: 0.016578 ms MarkObjects: 0.169733 ms  DeleteObjects: 0.014210 ms)
 
 10
  
@@ -43,11 +43,11 @@ The referenced script on this Behaviour is missing!
  
 (Filename:  Line: 1788)
 
-UnloadTime: 0.797802 ms
+UnloadTime: 0.599199 ms
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 109.
-Total: 1.252269 ms (FindLiveObjects: 0.022286 ms CreateObjectMapping: 0.022587 ms MarkObjects: 0.206603 ms  DeleteObjects: 0.058427 ms)
+Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 115.
+Total: 1.076428 ms (FindLiveObjects: 0.017368 ms CreateObjectMapping: 0.015394 ms MarkObjects: 0.163418 ms  DeleteObjects: 0.043420 ms)
 
 The referenced script on this Behaviour is missing!
  
@@ -61,29 +61,11 @@ The referenced script on this Behaviour is missing!
  
 (Filename:  Line: 1788)
 
-UnloadTime: 0.521628 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 107.
-Total: 1.221851 ms (FindLiveObjects: 0.015660 ms CreateObjectMapping: 0.021383 ms MarkObjects: 0.201182 ms  DeleteObjects: 0.009035 ms)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-UnloadTime: 0.524338 ms
+UnloadTime: 0.404598 ms
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 107.
-Total: 1.197456 ms (FindLiveObjects: 0.015660 ms CreateObjectMapping: 0.021081 ms MarkObjects: 0.207506 ms  DeleteObjects: 0.007228 ms)
+Total: 0.984061 ms (FindLiveObjects: 0.011052 ms CreateObjectMapping: 0.014999 ms MarkObjects: 0.170918 ms  DeleteObjects: 0.005131 ms)
 
 The referenced script on this Behaviour is missing!
  
@@ -97,23 +79,9 @@ The referenced script on this Behaviour is missing!
  
 (Filename:  Line: 1788)
 
-UnloadTime: 0.531265 ms
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 117.
-Total: 1.378159 ms (FindLiveObjects: 0.016263 ms CreateObjectMapping: 0.021081 ms MarkObjects: 0.210217 ms  DeleteObjects: 0.016564 ms)
-
-100   40
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-UnloadTime: 0.537891 ms
+UnloadTime: 0.385651 ms
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 223.
-Total: 1.255582 ms (FindLiveObjects: 0.031020 ms CreateObjectMapping: 0.023792 ms MarkObjects: 0.239129 ms  DeleteObjects: 0.016564 ms)
-
-10
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 107.
+Total: 0.983666 ms (FindLiveObjects: 0.011447 ms CreateObjectMapping: 0.014210 ms MarkObjects: 0.167365 ms  DeleteObjects: 0.005131 ms)
 

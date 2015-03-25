@@ -22,7 +22,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
-			this.SendMessage("changeHealth",-1 * col.relativeVelocity);
+			this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
 
 
 		}
@@ -77,7 +77,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 
 		// Always setting the fading screen sprite's x/y coordinates to those of the player
-		Fader.transform.position = this.transform.position;
+		Fader.transform.position = new Vector3(GameObject.Find("Main Camera").transform.position.x,GameObject.Find("Main Camera").transform.position.y,GameObject.Find("Main Camera").transform.position.z + 7);
 		if (ejected) {
 			ejectcooldown += Time.deltaTime;
 

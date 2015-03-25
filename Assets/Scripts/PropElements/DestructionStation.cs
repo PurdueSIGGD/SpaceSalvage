@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DestructionStation : MonoBehaviour {
-	
+	public float damagerate = 1;	
 	private GameObject Player;
 
 	// Use this for initialization
@@ -28,7 +28,7 @@ public class DestructionStation : MonoBehaviour {
 	}
 
 	void attack(){
-		Player.SendMessage("changeHealth", 10 *  Time.deltaTime * -1);
+		Player.SendMessage("changeHealth", 10 *  Time.deltaTime * -1 * damagerate);
 	}
 
 	// Update is called once per frame

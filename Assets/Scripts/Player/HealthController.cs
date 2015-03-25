@@ -54,11 +54,10 @@ public class HealthController : MonoBehaviour {
 		string words = "";
 		if (timesincelastdamage >= 0) {
 			timesincelastdamage += Time.deltaTime;
-			if (timesincelastdamage > 5 && med < 100) {
-				if (med > 1) med +=  Time.deltaTime/health;
-				if (med <= 1) med +=  Time.deltaTime;
+			if (timesincelastdamage > 5 && med < 100) { //regen health
 
-				
+				if (med > 1) med +=  (8 * Time.deltaTime)/med;
+				if (med <= 1) med +=  Time.deltaTime;
 			}
 		}
 		if (!(medwarning || oxywarning || suitwarning || cranewarning)) {
