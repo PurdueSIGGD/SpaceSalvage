@@ -11,6 +11,7 @@ public class RopeTubeController : MonoBehaviour {
 	private int startingtubes;
 	// Use this for initialization
 	void Start () {
+
 		if (PlayerPrefs.HasKey("tubesleft")) {
 			tubesleft = PlayerPrefs.GetInt("tubesleft");
 			startingtubes = tubesleft;
@@ -21,16 +22,22 @@ public class RopeTubeController : MonoBehaviour {
 		}
 
 	}
-	
+	void GiveTubesLeft(int i) {
+		PlayerPrefs.SetInt ("tubesleft",i + tubesleft);
+		//print(i+tubesleft);
+
+
+	}
 	// Update is called once per frame
 	void Update () {
 		ejected = (((RopeScript2D)this.GetComponent("RopeScript2D")).ejected);
 		if (Input.GetKeyDown (KeyCode.G) && !emp && !ejected) {
 			GameObject.Find("Ship").SendMessage("Eject");
-			print ("eject");
 		}
 		//print(tubesleft);
+		if (ejected) {
 
+		}
 
 		timepassed += Time.deltaTime;
 		add = (Input.GetKey(KeyCode.E));
@@ -42,7 +49,7 @@ public class RopeTubeController : MonoBehaviour {
 			timepassed = 0;
 			tubesleft--;
 		}
-		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes) {
+		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes - 1) {
 			SendMessage("SubRope");
 			timepassed = 0;
 			tubesleft++;

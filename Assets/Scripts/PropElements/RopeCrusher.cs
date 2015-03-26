@@ -29,11 +29,11 @@ public class RopeCrusher : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		/*if (isclosed) {
+		if (isclosed) {
 			this.rigidbody2D.isKinematic = true;
 		} else {
 			this.rigidbody2D.isKinematic = false;
-		}*/
+		}
 	}
 	void Opening() {
 		isclosing = false;

@@ -31,7 +31,7 @@ public class MissionResultsScript : MonoBehaviour {
 		healthPlacementY = .05f;
 		walletPlacementY = .15f;
 		items = new string[50];
-		if (PlayerPrefsX.GetStringArray("Items")[0] != null){
+		if (((string[])PlayerPrefsX.GetStringArray("Items")).Length != 0){
 			items = PlayerPrefsX.GetStringArray("Items");
 		} else {
 			items[0] = "No packages returned this mission";

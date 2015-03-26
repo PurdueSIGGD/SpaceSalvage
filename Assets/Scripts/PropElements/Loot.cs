@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Loot : MonoBehaviour {
 	//Just to show that this item is loot
+	public bool isbelonging = false;
 	public string itemtype;
 	public float timesincekinematic;
 

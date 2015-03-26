@@ -35,8 +35,8 @@ public class WallTurret : MonoBehaviour {
 				thetaersnenig+= Mathf.PI/2;
 			}
 			thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
-			print(thetaersnenig);
-			print( new Vector2(Mathf.Cos(Mathf.Deg2Rad * (thetaersnenig+180)),Mathf.Sin(Mathf.Deg2Rad * (thetaersnenig+180))));
+			//print(thetaersnenig);
+			//print( new Vector2(Mathf.Cos(Mathf.Deg2Rad * (thetaersnenig+180)),Mathf.Sin(Mathf.Deg2Rad * (thetaersnenig+180))));
 		
 			/*if (barrel.transform.eulerAngles.z != thetaersnenig) {
 				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+Time.deltaTime);

@@ -191,10 +191,12 @@ public class CraneController : MonoBehaviour {
 				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 				foreach (Collider2D c in hitColliders) {
 					//print(c);
+
 					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 						retracting = true;
 						firing = false;
 						if (c.GetComponent("ItemPickup") != null) {
+					
 							releaseready = false;
 							//print ("Got one");
 							focus = c.gameObject;
@@ -258,6 +260,7 @@ public class CraneController : MonoBehaviour {
 							rp.SendMessage("BuildRope");
 							rp.mate = mate;
 							lr.enabled = false;
+							break;
 
 						}
 					} else {

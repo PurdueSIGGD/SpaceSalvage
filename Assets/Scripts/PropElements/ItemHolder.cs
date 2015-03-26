@@ -33,7 +33,7 @@ public class ItemHolder : MonoBehaviour {
 				//items[numpackages] = col.gameObject;
 				//print (numpackages + "   " + col.GetComponent<Loot>().itemtype);
 				//itemnames[numpackages] = col.GetComponent<Loot>().itemtype;
-
+				col.GetComponent<Loot>().isbelonging = true;
 				col.rigidbody2D.velocity = new Vector2(0,0);
 				col.rigidbody2D.angularVelocity = 0;
 				col.transform.rotation = Quaternion.Euler(0,0,0);
@@ -59,9 +59,12 @@ public class ItemHolder : MonoBehaviour {
 
 	}
 	void OnTriggerExit2D(Collider2D col) {
-		if (col.GetComponent<Loot>()) {// && !((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed) {
-			if (numpackages > 0) {
-				numpackages--;
+		if (col.GetComponent<Loot>() != null) {// && !((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed) {
+			if (col.GetComponent<Loot>().isbelonging) {
+				col.GetComponent<Loot>().isbelonging = false;
+				if (numpackages > 0) {
+						numpackages--;
+					}
 			}
 			//print(numpackages);
 			//Physics2D.IgnoreCollision(this.collider2D, col.collider, false);

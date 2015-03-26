@@ -93,12 +93,14 @@ public class HealthController : MonoBehaviour {
 		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 		if (ejected) { //change oxygen from being ejected
+			//this.GetComponent<LineRenderer>().enabled = false;
 			if ((health < 50 && health > 1 )|| health == 0) {
 				changeOxy(-1 * Time.deltaTime * (50 - health)/10 );
 			} else {
 				changeOxy(-1 * Time.deltaTime);
 			}
 		} else {
+			//this.GetComponent<LineRenderer>().enabled = true;
 			changeOxy(3 * 	Time.deltaTime);
 		}
 

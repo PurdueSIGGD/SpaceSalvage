@@ -50,11 +50,13 @@ public class RopeScript2D : MonoBehaviour {
 	public float linewidth;
 	public bool brokenrope;
 	public bool iscrane;
+	public bool retract_on_death;
+	private int retractindex;
 	private Vector3 endingpos;
 	private GameObject firstjoint;
 
 	void Start() {
-
+		retractindex = 0;
 		lightintensity = 0;
 		if (parent.GetComponent<RopeTubeController>() != null) {
 			istube = true;
@@ -68,7 +70,25 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void Update()
 	{
+		if (retract_on_death && brokenrope) {
+			if (timepassed > .8f) {
+				if (joints[retractindex+1]!= null) {
+					if (((GameObject)joints[retractindex+1]).GetComponent<SpringJoint2D>() != null) {
+						timepassed = 0;
+						((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
+						Destroy((GameObject)joints[retractindex]);
+						retractindex++;
+					} else {
+						Destroy((GameObject)joints[retractindex]); 
+						if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
+						retract_on_death = false;
+					}
+				} else {
+					retract_on_death = false;
+				}
+			}
 
+		}
 
 
 
@@ -396,8 +416,8 @@ public class RopeScript2D : MonoBehaviour {
 		isgenerating = true;
 		indexovertime = 1;
 		if (this.GetComponent<RopeTubeController>() != null) {
-
-			this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs + 1 ;
+			//print("segs = " + segs);
+			this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs - 1 ;
 
 		}
 		//target.parent = transform;
