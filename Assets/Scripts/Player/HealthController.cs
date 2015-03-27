@@ -16,12 +16,16 @@ public class HealthController : MonoBehaviour {
 	private static string suitmessage = "WARNING: LOW SUIT INTEGRITY\n";
 	private static string medmessage = "WARNING: VITAL SIGNS ARE DECREASING\n";
 	private static string cranemessage = "WARNING: CRANE IS DESTROYED\n";
+	private static string empmessage = "WARNING: EMP DETECTED\n";
+	private static string empmessage2 = "TIME UNTIL SYSTEM REBOOT: ";
 	private bool ejected;
 	private bool emergency, on;
 	private float timesince;
 	private float timesincelastdamage;
+	private float rechargetime;
 	private bool pause;
-	public bool acceptingOxy; //is oxy less than startingoxy?
+	public bool acceptingOxy, emp = false; //is oxy less than startingoxy?
+	public float emptime = 0;
 	// Use this for initialization
 	void Start () {
 		timesincelastdamage = -1;
@@ -42,6 +46,12 @@ public class HealthController : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetFloat("health", health);
 		}	
+		if (PlayerPrefs.HasKey ("emprechargetime")) {
+			//print (PlayerPrefs.GetFloat("emprechargetime"));
+			rechargetime = PlayerPrefs.GetFloat("emprechargetime");
+		} else {
+			PlayerPrefs.SetFloat("emprechargetime", 10);
+		}
 		timesince = 0;
 		startinghealth = health;
 		oxy = startingoxy;
@@ -60,22 +70,29 @@ public class HealthController : MonoBehaviour {
 				if (med <= 1) med +=  Time.deltaTime;
 			}
 		}
-		if (!(medwarning || oxywarning || suitwarning || cranewarning)) {
+		if (!(medwarning || oxywarning || suitwarning || cranewarning || emp)) {
 			emergency = false;
 			words += okmessage;
+
 		} else {
 			emergency = true;
+			if (emp) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
 			if (suitwarning) words += suitmessage;
 			if (oxywarning) words += oxymessage;
 			if (medwarning) words += medmessage;
 			if (cranewarning) words += cranemessage;
+
 		}
 		if (emergency) { //flashing lights
 
 			timesince+=Time.deltaTime;
 			if (timesince > .25f) {
 				if (timesince > .5f) timesince = 0;
-				words = "";
+				if (emp) {
+					words = empmessage2 + (rechargetime - emptime).ToString("F2") + "\n";
+				} else {
+					words = "";
+				}
 			}
 		}
 		((GUIText)text.GetComponent("GUIText")).text = 
@@ -115,7 +132,7 @@ public class HealthController : MonoBehaviour {
 
 	void changeHealth(float f) { //not actual health, this is just the suit itegrity
 		if (!pause) {
-			if (health > 1) {
+			if (health > 1 && health + f > 0) {
 				if (med >= 3*f/health) { //your health can be damaged by attacks, but your suit works like armor
 					med += 3*f/health;
 				} else {

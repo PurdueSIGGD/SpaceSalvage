@@ -25,7 +25,7 @@ public class RopeScript2D : MonoBehaviour {
 	private ArrayList joints;
 	private LineRenderer line;							//  DONT MESS!	 The line renderer variable is set up when its assigned as a new component
 	private int segments = 0;					//  DONT MESS!	The number of segments is calculated based off of your distance * resolution
-	private bool rope = false;						 //  DONT MESS!	This is to keep errors out of your debug window! Keeps the rope from rendering when it doesnt exist...
+	public bool rope;						 //  DONT MESS!	This is to keep errors out of your debug window! Keeps the rope from rendering when it doesnt exist...
 	private int indexovertime;
 	private float timepassed;
 	public bool isgenerating;
@@ -56,6 +56,7 @@ public class RopeScript2D : MonoBehaviour {
 	private GameObject firstjoint;
 
 	void Start() {
+		rope = true;
 		retractindex = 0;
 		lightintensity = 0;
 		if (parent.GetComponent<RopeTubeController>() != null) {
@@ -72,19 +73,21 @@ public class RopeScript2D : MonoBehaviour {
 	{
 		if (retract_on_death && brokenrope) {
 			if (timepassed > .8f) {
+				if (joints != null) {
 				if (joints[retractindex+1]!= null) {
-					if (((GameObject)joints[retractindex+1]).GetComponent<SpringJoint2D>() != null) {
-						timepassed = 0;
-						((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
-						Destroy((GameObject)joints[retractindex]);
-						retractindex++;
+						if (((GameObject)joints[retractindex+1]).GetComponent<SpringJoint2D>() != null) {
+							timepassed = 0;
+							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
+							Destroy((GameObject)joints[retractindex]);
+							retractindex++;
+						} else {
+							Destroy((GameObject)joints[retractindex]); 
+							if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
+							retract_on_death = false;
+						}
 					} else {
-						Destroy((GameObject)joints[retractindex]); 
-						if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
 						retract_on_death = false;
 					}
-				} else {
-					retract_on_death = false;
 				}
 			}
 
@@ -378,47 +381,48 @@ public class RopeScript2D : MonoBehaviour {
 	void BuildRope()
 	{
 
-		rope = true;
-		//line = parent.GetComponent<LineRenderer>();
-		segmentPos = new ArrayList();
-		joints = new ArrayList();
-		if (vec.Equals(Vector3.zero)){
+		if (rope) {
+			//line = parent.GetComponent<LineRenderer>();
+			segmentPos = new ArrayList();
+			joints = new ArrayList();
+			if (vec.Equals(Vector3.zero)){
+				//print(vec);
+				vec = this.transform.position;
+			}
+			// Find the amount of segments based on the distance and resolution
+			// Example: [resolution of 1.0 = 1 joint per unit of distance]
+			//print("Distance = " + (Vector3.Distance(transform.position, target.position)*resolution));
+			//print(Vector3.Magnitude(this.transform.position + target.position));
+
+
+
+
+			segments = (int)(Vector3.Distance( vec , target.position)*resolution ) + 1;
+
 			//print(vec);
-			vec = this.transform.position;
-		}
-		// Find the amount of segments based on the distance and resolution
-		// Example: [resolution of 1.0 = 1 joint per unit of distance]
-		//print("Distance = " + (Vector3.Distance(transform.position, target.position)*resolution));
-		//print(Vector3.Magnitude(this.transform.position + target.position));
+			//segments = 20;
+			
+			//print ("segments " + segments);
+			//line.SetVertexCount(segments);
+			//line.material = ropemat;
+			segmentPos.Add(vec);
 
-
-
-
-		segments = (int)(Vector3.Distance( vec , target.position)*resolution ) + 1;
-
-		//print(vec);
-		//segments = 20;
+			
+			// Find the distance between each segment
+			var segs = segments-1;
+			var seperation = ((target.position - vec)/segs);
 		
-		//print ("segments " + segments);
-		//line.SetVertexCount(segments);
-		//line.material = ropemat;
-		segmentPos.Add(vec);
-
-		
-		// Find the distance between each segment
-		var segs = segments-1;
-		var seperation = ((target.position - vec)/segs);
 
 
+			//print(seperation);
+			//if (this.GetComponent<ItemHolder>() == null) Physics2D.IgnoreCollision(this.collider2D, target.collider2D);
+			isgenerating = true;
+			indexovertime = 1;
+			if (this.GetComponent<RopeTubeController>() != null) {
+				//print("segs = " + segs);
+				this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs - 1 ;
 
-		//print(seperation);
-		//if (this.GetComponent<ItemHolder>() == null) Physics2D.IgnoreCollision(this.collider2D, target.collider2D);
-		isgenerating = true;
-		indexovertime = 1;
-		if (this.GetComponent<RopeTubeController>() != null) {
-			//print("segs = " + segs);
-			this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs - 1 ;
-
+			}
 		}
 		//target.parent = transform;
 	}
@@ -427,6 +431,7 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	void DestroyRope()
 	{
+
 		if (Ending != null) {
 			Ending.parent = theparent;
 		}
@@ -523,8 +528,10 @@ public class RopeScript2D : MonoBehaviour {
 		}
 	}
 	void DeathIsSoon() {
+		brokenrope = true;
 		Eject();
 		death = true;
+		//brokenrope = true;
 	}
 	void BrokenRope() {
 		brokenrope = true;

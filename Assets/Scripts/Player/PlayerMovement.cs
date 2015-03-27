@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour {
 		emp = true;
 		GameObject.Find("Ship").GetComponent<RopeTubeController>().emp = true;
 		GameObject.Find ("Crane").GetComponent<CraneController>().emp = true;
-
+		this.GetComponent<HealthController>().emp = true;
 	}
 	private bool up;
 	private bool down;
@@ -70,9 +70,12 @@ public class PlayerMovement : MonoBehaviour {
 			currentemptime+= Time.deltaTime;
 			if (currentemptime > emprechargetime) {
 				emp = false;
-				this.GetComponent<TubeController>().emp = false;
+				GameObject.Find("Ship").GetComponent<RopeTubeController>().emp = false;
 				GameObject.Find ("Crane").GetComponent<CraneController>().emp = false;
+				this.GetComponent<HealthController>().emp = false;
+
 			}
+			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
 		up = Input.GetKey (KeyCode.W);
 		down = Input.GetKey (KeyCode.S);

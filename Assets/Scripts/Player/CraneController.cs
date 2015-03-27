@@ -73,6 +73,14 @@ public class CraneController : MonoBehaviour {
 			if (focus.GetComponent<RopeScript2D>() != null) {
 				broken = (focus.GetComponent<RopeScript2D>().brokenrope);
 			}
+		} else {
+			// release grip
+			if (grabbed) {
+				grabbed = false;
+				firing = false;
+				retracting = true;
+			}	
+
 		}
 		this.transform.position = Player.transform.position;
 		//current = this.transform.position;
@@ -98,8 +106,7 @@ public class CraneController : MonoBehaviour {
 			//lastTheta = thetaersnenig; //set the last angle
 		}
 		float newangle = Player.transform.eulerAngles.z;
-
-		Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
+		if (!emp) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 		////print (Mathf.Cos(thetaersnenig) * dist * Time.deltaTime)
 		if (!broken) {
@@ -108,7 +115,7 @@ public class CraneController : MonoBehaviour {
 					//print("Initial force shot");
 					launchangle = thetaersnenig;
 					////print (40 * HarpoonSpeed * new Vector3(this.transform.position.x + Mathf.Cos (Mathf.Deg2Rad * thetaersnenig) , this.transform.position.y + Mathf.Sin (Mathf.Deg2Rad * thetaersnenig), 0) - this.transform.position);
-					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(this.transform.parent.rigidbody2D.velocity.x/3 + Mathf.Cos (Mathf.Deg2Rad * launchangle) , this.transform.parent.rigidbody2D.velocity.y/3 +  Mathf.Sin (Mathf.Deg2Rad * launchangle)) /* this.transform.parent.rigidbody2D.velocity*/);
+					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(/*this.transform.parent.rigidbody2D.velocity.x/3 +*/ Mathf.Cos (Mathf.Deg2Rad * launchangle) ,/* this.transform.parent.rigidbody2D.velocity.y/3 +*/  Mathf.Sin (Mathf.Deg2Rad * launchangle)) /* this.transform.parent.rigidbody2D.velocity*/);
 				}
 				firing = true;
 				////print ("pshhhh");
@@ -133,6 +140,7 @@ public class CraneController : MonoBehaviour {
 					//current = new Vector3(ending.position.x + lengthx,ending.position.y+lengthy, ending.position.z);
 					this.GetComponent<LineRenderer>().enabled = true;
 					ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
+					//ending.rigidbody2D.velocity =
 					//print("rectracting");
 					////print (this.transform.position);
 					//current =  (this.transform.position - current);
@@ -144,8 +152,10 @@ public class CraneController : MonoBehaviour {
 
 					}
 				} 
-				if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
-					releaseready = true;
+				if (focus != null) {
+					if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
+						releaseready = true;
+					}
 				}
 				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					// release grip
@@ -190,7 +200,7 @@ public class CraneController : MonoBehaviour {
 			if (!grabbed && (firing || retracting)) {
 				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
 				foreach (Collider2D c in hitColliders) {
-					//print(c);
+
 
 					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 						retracting = true;
@@ -198,7 +208,7 @@ public class CraneController : MonoBehaviour {
 						if (c.GetComponent("ItemPickup") != null) {
 					
 							releaseready = false;
-							//print ("Got one");
+							print ("Got one");
 							focus = c.gameObject;
 							firing = false;
 							retracting = false;
@@ -257,7 +267,9 @@ public class CraneController : MonoBehaviour {
 							rp.ropeColRadius = 0.1f;
 							//print(ending.position);
 							rp.SendMessage("SetTargetAnchor",(ending.position));
+							rp.rope = true;
 							rp.SendMessage("BuildRope");
+
 							rp.mate = mate;
 							lr.enabled = false;
 							break;
@@ -458,5 +470,14 @@ LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 		//print ("startingwallet: " + startingwallet);
 
 		PlayerPrefs.SetFloat ("cranelength", cranelength);
+	}
+	void destroyMyRope(SpringJoint2D sp) {
+
+		if (sp != null && sp.connectedBody != null) {
+			print(sp.gameObject.name);
+			SpringJoint2D spee = sp.connectedBody.GetComponent<SpringJoint2D>();
+			Destroy(sp.gameObject);
+			this.destroyMyRope(spee);
+		}
 	}
 }

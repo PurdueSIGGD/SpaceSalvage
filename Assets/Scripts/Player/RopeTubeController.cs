@@ -19,11 +19,19 @@ public class RopeTubeController : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetInt("tubesleft",tubesleft);
 			startingtubes = tubesleft;
+
+		}
+		if (tubesleft == 0)  {
+			//this.gameObject.GetComponent<RopeScript2D>().SendMessage("DestroyRope");
+			this.gameObject.GetComponent<RopeScript2D>().SendMessage("DeathIsSoon");
+		} else {
+
 		}
 
 	}
 	void GiveTubesLeft(int i) {
-		PlayerPrefs.SetInt ("tubesleft",i + tubesleft);
+		if (i + tubesleft > 0) PlayerPrefs.SetInt ("tubesleft",i + tubesleft);
+		else PlayerPrefs.SetInt("tubesleft",0);
 		//print(i+tubesleft);
 
 
