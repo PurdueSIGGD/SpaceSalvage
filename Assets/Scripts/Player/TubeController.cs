@@ -82,24 +82,6 @@ public class TubeController : MonoBehaviour {
 			}
 			
 		}
-		/*for (int i = 1; i < tubecount; i++) { //line bending
-			if (returnkey && !ejectkey) {
-				if (Vector3.Magnitude(tubes[i] - tubes[i + 1]) < 2.5 && Vector3.Magnitude(tubes[i] - tubes[i - 1]) < 2.5 && !(tubecount == 2)) {
-					print ("moooooooove");
-					tubes[i] += (tubes[i + 1] - tubes[i]) / 20;
-				}
-
-			} else {
-				if (Vector3.Magnitude(tubes[i] - tubes[i + 1]) > 2 && Vector3.Magnitude(tubes[i] - tubes[i - 1]) > 2 && !(tubecount == 2)) {
-					print ("returnnnnnnn");
-					tubes[i] += (tubes[i - 1] - tubes[i]) / 20;
-				}
-			}
-
-			//tubes[i] = tubes[i] + tubevelocity[i];
-			l.SetPosition(i, tubes[i]);
-		}*/
-
 		if (ejected) {
 			ejectcooldown += Time.fixedDeltaTime;
 			if (!death && ejectcooldown >= 4 && (Math.Abs(this.transform.position.x - ((Vector3)tubes [tubecount - 1]).x) < .6) && (Math.Abs (this.transform.position.y - ((Vector3)tubes [tubecount - 1]).y) < .6 )) {

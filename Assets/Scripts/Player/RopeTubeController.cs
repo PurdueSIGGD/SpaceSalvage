@@ -15,14 +15,12 @@ public class RopeTubeController : MonoBehaviour {
 		if (PlayerPrefs.HasKey("tubesleft")) {
 			tubesleft = PlayerPrefs.GetInt("tubesleft");
 			startingtubes = tubesleft;
-			//PlayerPrefs.SetInt("tubesleft",50);
 		} else {
 			PlayerPrefs.SetInt("tubesleft",tubesleft);
 			startingtubes = tubesleft;
 
 		}
 		if (tubesleft == 0)  {
-			//this.gameObject.GetComponent<RopeScript2D>().SendMessage("DestroyRope");
 			this.gameObject.GetComponent<RopeScript2D>().SendMessage("DeathIsSoon");
 		} else {
 
@@ -32,7 +30,6 @@ public class RopeTubeController : MonoBehaviour {
 	void GiveTubesLeft(int i) {
 		if (i + tubesleft > 0) PlayerPrefs.SetInt ("tubesleft",i + tubesleft);
 		else PlayerPrefs.SetInt("tubesleft",0);
-		//print(i+tubesleft);
 
 
 	}
@@ -42,7 +39,6 @@ public class RopeTubeController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.G) && !emp && !ejected) {
 			GameObject.Find("Ship").SendMessage("Eject");
 		}
-		//print(tubesleft);
 		if (ejected) {
 
 		}

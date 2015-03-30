@@ -5,16 +5,19 @@ public class WallTurret : MonoBehaviour {
 	private GameObject barrel, Player;
 	public GameObject ammo;
 	public bool empshooty = false; //false if damage, true if emp	
+	public bool homig;
+	public float shotsperburst = 3;
+	public float firingspeed = 1.5f;
 	private bool focused, emp;
 	private float timebetweenshots;
 	private float shots;
 	private float emprecharge;
 	// Use this for initialization
 	void Start () {
+		if (homig) shotsperburst = 1;
 		focused = false;
 		barrel = this.transform.FindChild("Barrel").gameObject;
 		Player = GameObject.Find("Player");
-		//Physics2D.IgnoreCollision(Player.collider2D,this.collider2D,false);
 	}
 
 	void Focus(bool b) {
@@ -40,20 +43,14 @@ public class WallTurret : MonoBehaviour {
 					thetaersnenig+= Mathf.PI/2;
 				}
 				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
-
-				//print(thetaersnenig);
-				//print( new Vector2(Mathf.Cos(Mathf.Deg2Rad * (thetaersnenig+180)),Mathf.Sin(Mathf.Deg2Rad * (thetaersnenig+180))));
-			
-				/*if ((barrel.transform.eulerAngles.z > thetaersnenig && barrel.transform.eulerAngles.z - thetaersnenig < 180) || (barrel.transform.eulerAngles.z) ) {
-					barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+Time.deltaTime);
-				}*/
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
-				if ((timebetweenshots >= .75f && shots < 3)|| (timebetweenshots > 1.5f)) {
+				if ((timebetweenshots >= .75f && shots < shotsperburst)|| (timebetweenshots > firingspeed)) {
 					if (timebetweenshots > 1.5f) shots = 0;
 					timebetweenshots = 0;
 					shots++;
 					GameObject thingy = (GameObject)Instantiate(ammo, barrel.transform.FindChild("OtherBarrel").transform.position, Quaternion.identity);
 					thingy.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z + 180);
+					if (homig) thingy.SendMessage("GetTarget",Player);
 					Physics2D.IgnoreCollision(this.collider2D, thingy.collider2D);
 					if (!ammo.name.Equals("Missile")) {
 

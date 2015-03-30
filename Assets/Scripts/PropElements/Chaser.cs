@@ -33,12 +33,7 @@ public class Chaser : MonoBehaviour {
 					thetaersnenig+= Mathf.PI/2;
 				}
 				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
-				//print(thetaersnenig);
-				//print( new Vector2(Mathf.Cos(Mathf.Deg2Rad * (thetaersnenig+180)),Mathf.Sin(Mathf.Deg2Rad * (thetaersnenig+180))));
-				
-				/*if (barrel.transform.eulerAngles.z != thetaersnenig) {
-					barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+Time.deltaTime);
-				}*/
+			
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
 				this.rigidbody2D.AddForce(6 * Time.deltaTime * (Player.transform.position - this.transform.position) * Vector3.Distance(Player.transform.position, this.transform.position));
 			} else {

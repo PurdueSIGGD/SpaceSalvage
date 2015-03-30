@@ -27,8 +27,7 @@ public class JointScript : MonoBehaviour {
 				lr.SetPosition(1,new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y, this.transform.position.z));
 				SpringJoint2D attempt;
 				if ((attempt = sp.connectedBody.GetComponent<SpringJoint2D>()) != null) {
-					if (attempt.connectedBody != null) {
-						//print("I am " + this.name + "Name of third is: " + attempt.name);
+					if (attempt.connectedBody != null && attempt.connectedBody.gameObject != focus) {
 						lr.SetVertexCount(3);
 						lr.SetPosition(2, attempt.connectedBody.transform.position);
 					}
@@ -52,7 +51,5 @@ public class JointScript : MonoBehaviour {
 	}
 	void ReconnectJoint() {
 		broken = false;
-		//SpringJoint2D end = this.gameObject.AddComponent<SpringJoint2D>();
-
 	}
 }

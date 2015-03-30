@@ -31,14 +31,9 @@ public class InteractController : MonoBehaviour {
 		GUIText gu = go.AddComponent<GUIText>();
 		gu.text = "";
 		message = "";
-		//gu.font = new Font("Arial");
-		//gu.fontSize = 15;
 		gu.color = new Color(1,1,1);
 		gu.pixelOffset = new Vector2(Screen.width / 2, Screen.height/2);
 	}
-
-
-	// Update is called once per frame
 	void GetMessage(string s) {
 		message = s;
 	}

@@ -7,7 +7,9 @@ public class Button : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		on = false;
-
+		print(this.transform.parent);
+		if (this.transform.parent != null) 
+			if (this.transform.parent.name.Equals("Airlock")) usestring = "use airlock";
 
 	}
 	
@@ -18,9 +20,11 @@ public class Button : MonoBehaviour {
 	void Use() {
 		on = !on;
 		if (on) {
-			BroadcastMessage("Open");
+			if (this.transform.parent != null) this.transform.parent.SendMessage("Open");
+			else BroadcastMessage("Open");
 		} else {
-			BroadcastMessage("Close");
+			if (this.transform.parent != null) this.transform.parent.SendMessage("Close");
+			else BroadcastMessage("Close");
 		}
 		//do whatever you want your code to do if the player "uses" it
 	}

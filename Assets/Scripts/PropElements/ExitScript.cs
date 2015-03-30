@@ -17,9 +17,6 @@ public class ExitScript : MonoBehaviour {
 		}
 		faderObject = GameObject.Find ("Fader");
 		Fader = faderObject.GetComponent<SpriteRenderer> ();
-		//go = new GameObject("Return");
-		//display = GameObject.Find ("display");
-		//go.AddComponent("GUIText");
 
 	}
 
@@ -64,11 +61,8 @@ public class ExitScript : MonoBehaviour {
 				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
 				
 			} else {
-				/*GameObject[] gos = (GameObject[])GameObject.FindObjectsOfType(typeof(GameObject));
-				foreach (GameObject go in gos) {
-					go.SendMessage("Im_Leaving");
-				}
-				PlayerPrefs.Save();*/
+			
+				PlayerPrefs.Save(); 
 				GameObject.Find("Ship").BroadcastMessage("Im_Leaving");
 				GameObject.Find("Player").BroadcastMessage("Im_Leaving");
 				

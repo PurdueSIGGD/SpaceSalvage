@@ -10,17 +10,19 @@ public class HealthController : MonoBehaviour {
 	private int wallet;
 	private int startingwallet;
 	private float startinghealth;
-	private bool oxywarning, suitwarning, medwarning, cranewarning;
+	private bool oxywarning, oxyerror, suitwarning, suiterror, medwarning, cranewarning;
 	private static string okmessage = "All systems operational";
 	private static string oxymessage = "WARNING: LOW OXYGEN\n";
+	private static string oxymessagegone = "WARNING: NO OXYGEN\n";
 	private static string suitmessage = "WARNING: LOW SUIT INTEGRITY\n";
-	private static string medmessage = "WARNING: VITAL SIGNS ARE DECREASING\n";
+	private static string suitmessagegone = "WARNING: SUIT LOST\n";
+	private static string medmessage = "WARNING: VITAL SIGNS ARE LOW\n";
 	private static string cranemessage = "WARNING: CRANE IS DESTROYED\n";
 	private static string empmessage = "WARNING: EMP DETECTED\n";
 	private static string empmessage2 = "TIME UNTIL SYSTEM REBOOT: ";
 	private bool ejected;
 	private bool emergency, on;
-	private float timesince;
+	private float timesince, timeerror;
 	private float timesincelastdamage;
 	private float rechargetime;
 	private bool pause;
@@ -60,6 +62,7 @@ public class HealthController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		acceptingOxy = (oxy < startingoxy);
 		string words = "";
 		if (timesincelastdamage >= 0) {
@@ -70,15 +73,17 @@ public class HealthController : MonoBehaviour {
 				if (med <= 1) med +=  Time.deltaTime;
 			}
 		}
-		if (!(medwarning || oxywarning || suitwarning || cranewarning || emp)) {
+		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || emp)) {
 			emergency = false;
 			words += okmessage;
 
 		} else {
-			emergency = true;
+ 			emergency = true;
 			if (emp) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
 			if (suitwarning) words += suitmessage;
+			if (suiterror) words += suitmessagegone;
 			if (oxywarning) words += oxymessage;
+			if (oxyerror) words += oxymessagegone;
 			if (medwarning) words += medmessage;
 			if (cranewarning) words += cranemessage;
 
@@ -90,34 +95,37 @@ public class HealthController : MonoBehaviour {
 				if (timesince > .5f) timesince = 0;
 				if (emp) {
 					words = empmessage2 + (rechargetime - emptime).ToString("F2") + "\n";
+
 				} else {
 					words = "";
 				}
 			}
 		}
-		((GUIText)text.GetComponent("GUIText")).text = 
+		string final = 
 			"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +
 				"Oxygen Levels: " + oxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
-			"Health: " + med.ToString("F2") + "/100.00\n" +
-			"Cash: " + wallet + "\n" + 
+				"Health: " + med.ToString("F2") + "/100.00\n" +
+				"Cash: " + wallet + "\n" + 
 				words;
+		((GUIText)text.GetComponent("GUIText")).text = final;
 
 		if (med != 100 && !pause) {
 			this.SendMessage("FaderTime",med/100);
 		}
 		medwarning = (med < 35);
-		suitwarning = (health < 20);
+		suitwarning = (health < 20 && health > 0);
+		suiterror = (health <= 0);
+		oxyerror  = (oxy <= 0);
+		if (emp && med <= 0) emp = false;
 		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 		if (ejected) { //change oxygen from being ejected
-			//this.GetComponent<LineRenderer>().enabled = false;
 			if ((health < 50 && health > 1 )|| health == 0) {
 				changeOxy(-1 * Time.deltaTime * (50 - health)/10 );
 			} else {
 				changeOxy(-1 * Time.deltaTime);
 			}
 		} else {
-			//this.GetComponent<LineRenderer>().enabled = true;
 			changeOxy(3 * 	Time.deltaTime);
 		}
 
@@ -177,9 +185,6 @@ public class HealthController : MonoBehaviour {
 		pause = true;
 	}
 	void Im_Leaving() {
-
-		//print ("wallet: " + wallet);
-		//print ("startingwallet: " + startingwallet);
 		PlayerPrefs.SetInt ("wallet", wallet);
 		PlayerPrefs.SetFloat ("health", health);
 		PlayerPrefs.SetInt ("startingwallet", startingwallet);

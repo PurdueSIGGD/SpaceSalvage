@@ -26,8 +26,6 @@ public class OxygenStation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		SpriteRenderer sp = child.GetComponent<SpriteRenderer>();
-		//print(255 * (1 - oxygenAmt/startingoxy));
-		//sp.color = new Color(0, 1,0, 1);
 		sp.color = new Color(1 - oxygenAmt/startingoxy, oxygenAmt/startingoxy, 0 , sp.color.a);
 		child.transform.position = new Vector3(this.transform.position.x + 1.5f, this.transform.position.y, this.transform.position.z);
 		if (oxygenAmt > .2f) {

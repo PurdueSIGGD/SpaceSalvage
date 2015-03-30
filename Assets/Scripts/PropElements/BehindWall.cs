@@ -10,7 +10,6 @@ public class BehindWall : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col) {
 		exiting = false;
 
-		//((SpriteRenderer)this.GetComponent("SpriteRenderer")).color = new Color(((SpriteRenderer)this.GetComponent("SpriteRenderer")).color.r, ((SpriteRenderer)this.GetComponent("SpriteRenderer")).color.g, ((SpriteRenderer)this.GetComponent("SpriteRenderer")).color.b, )
 	}
 	void OnTriggerStay2D(Collider2D col) {
 

@@ -2,13 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
-	//public float health = 100;
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
 	public float moverate = 1;
 	public bool emp;
-	private bool twoways;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
 	private SpriteRenderer LeftThruster;
@@ -21,23 +19,16 @@ public class PlayerMovement : MonoBehaviour {
 	private float currentemptime;
 	public bool debugmode;
 
-	//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false);
 
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey("moverate")) {
-			//print (PlayerPrefs.GetInt("moverate"));
-			//print (PlayerPrefs.GetFloat("moverate"));
 			moverate = PlayerPrefs.GetFloat("moverate");
 			if (debugmode) moverate = 3;
-			//print (moverate);
 		} else {
-			//print (PlayerPrefs.GetFloat("moverate"));
 			PlayerPrefs.SetFloat("moverate", moverate);
-			//print (PlayerPrefs.GetFloat("moverate"));
 		}
 		if (PlayerPrefs.HasKey ("emprechargetime")) {
-			//print (PlayerPrefs.GetFloat("emprechargetime"));
 			emprechargetime = PlayerPrefs.GetFloat("emprechargetime");
 		} else {
 			PlayerPrefs.SetFloat("emprechargetime", emprechargetime);
@@ -47,8 +38,6 @@ public class PlayerMovement : MonoBehaviour {
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
 		RightThruster = GameObject.Find ("RightThruster").GetComponent<SpriteRenderer> ();
 		currentemptime = 0;
-		twoways = false;
-		//emp = false;
 	}
 	void EMP() {
 		currentemptime = 0;
@@ -65,7 +54,6 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 
 	void Update() {
-		//AudioClip move = AudioClip.Create ("Meow", 100000, 2, 44100, true, false); //overflow eventually
 		if (emp) {
 			currentemptime+= Time.deltaTime;
 			if (currentemptime > emprechargetime) {
@@ -81,38 +69,17 @@ public class PlayerMovement : MonoBehaviour {
 		down = Input.GetKey (KeyCode.S);
 		right = Input.GetKey (KeyCode.D);
 		left = Input.GetKey (KeyCode.A);
-
-		/*if (right) {
-			//audio.clip = move;
-			audio.PlayOneShot(move, 0.7);
-		}
-		if (left) {
-			//audio.clip = move;
-			audio.PlayOneShot(move, 0.7);
-		}
-		if (up) {
-			//audio.clip = move;
-			audio.PlayOneShot(move, 0.7);
-		}
-		if (down) {
-			//audio.clip = move;
-			audio.PlayOneShot(move, 0.7);
-		}
-		*/
 	}
 	bool inRange(double d, double rangestart, double rangeend) {
 		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
 	}
 	bool inRangeLeft(double d, double rangestart, double rangeend) {
-		//return false;
-		//if 0 < theta < 90
 		bool arg1 = (d + this.transform.rotation.eulerAngles.z + 180 + 360)  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend;
-		//if 270 < theta < 0
 		bool arg2 = (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend + 360;
 
 		return ( left && (arg1 || arg2));
 	}
-	//Handles physics and stuff
+	//Handles movement and stuff
 	void FixedUpdate () {
 		if (!emp) {
 			double rangestart = 0;
@@ -136,7 +103,6 @@ public class PlayerMovement : MonoBehaviour {
 			{
 				this.rigidbody2D.AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
 				if (flying) {
-					twoways = true;
 					if (right) {
 						rangestart = 125;
 						rangeend = 315;
@@ -148,7 +114,6 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				
 				} else {
-					twoways = false;
 					// ("Only up");
 					rangestart = 190;
 					rangeend = 350;
@@ -161,7 +126,6 @@ public class PlayerMovement : MonoBehaviour {
 				this.rigidbody2D.AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
 				if (flying) {
 					if (right) {
-						twoways = true;
 						rangestart = 10;
 						rangeend = 260;
 					}
@@ -171,17 +135,15 @@ public class PlayerMovement : MonoBehaviour {
 					}
 					
 				} else {
-					twoways = false;
 					rangestart = 10;
 					rangeend = 170;
 				}
 				flying = true;
 			}
-			//print ((BackAngle + this.transform.rotation.eulerAngles.z + 360 - 180) % 360);
-			//print(rangestart + "   " + rangeend);
+
 
 			if (flying) {
-				//print (rangestart + "     " + rangeend);
+
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
@@ -193,7 +155,6 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				}
 				//FrontAngle
-				//print ((FrontAngle + this.transform.rotation.eulerAngles.z + 180));
 				if (inRange(FrontAngle, rangestart, rangeend)|| inRangeLeft(FrontAngle, rangestart, rangeend)) {
 					if (FrontThruster.color.a < 1) {
 						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 5);
@@ -214,8 +175,6 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				}
 				//RightAngle
-				//print (((BackAngle + this.transform.rotation.eulerAngles.z + 180) % 360) + "           " + rangestart + "    " + rangeend);
-				//print (((RightAngle + this.transform.rotation.eulerAngles.z + 180) % 360) + "           " + rangestart + "    " + rangeend);
 				if (inRange(RightAngle, rangestart, rangeend) || inRangeLeft(RightAngle, rangestart, rangeend)) {
 					if (RightThruster.color.a < 1) {
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 5);

@@ -24,7 +24,6 @@ public class UpgradeScript : MonoBehaviour {
 	private float startingemprechargetime;
 	private int startingtubesleft;
 	private float startingarmor;
-	private float startingcranemovespeed;
 	private float startingcranelength;
 	private int capacity;
 	private int startingcapacity;
@@ -43,7 +42,6 @@ public class UpgradeScript : MonoBehaviour {
 		startingthrustermoverate = thrustermoverate;
 		startingemprechargetime = emprechargetime;
 		startingtubesleft = tubesleft;
-		startingcranemovespeed = cranemovespeed;
 		startingcranelength = cranelength;
 
 		if (suitintegrity > 100) {

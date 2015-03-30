@@ -7,11 +7,12 @@ public class ExplosionScript : MonoBehaviour {
 	public float damage = 3;
 	public Color cee;
 	public bool damageoremp = true; //true for damage, false for emp
+	public float radius = 1;
 	// Use this for initialization
 	void Start () {
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		if (!damageoremp) sp.color = cee;
-		Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 1); 
+		Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius); 
 		foreach (Collider2D c in hitColliders) {
 			if (damageoremp) {
 
@@ -22,7 +23,7 @@ public class ExplosionScript : MonoBehaviour {
 				//break
 				if (c.GetComponent<JointScript>() != null) c.SendMessage("BrokenJoint");
 				//explode
-				if (c.GetComponent<MissileScript>() != null) c.SendMessage("Explode");
+				if (c.GetComponent<MissileScript>() != null)  c.SendMessage("explode");
 			} else {
 				if (c.name.Equals("Player") || c.GetComponent<WallTurret>() != null || c.GetComponent<Chaser>()) c.SendMessage("EMP");
 			}
@@ -32,7 +33,6 @@ public class ExplosionScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		time += Time.deltaTime;
-		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		if (time <  .5f/speed) {
 			this.transform.localScale = new Vector3(this.transform.localScale.x + 6 * Time.deltaTime, this.transform.localScale.y + 6 * Time.deltaTime, 1);
 		} else if (time < 1.5f/speed) {
