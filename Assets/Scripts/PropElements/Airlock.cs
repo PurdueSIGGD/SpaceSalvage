@@ -93,6 +93,7 @@ public class Airlock : MonoBehaviour {
 		if (timesincestart >= .5f && timesincestart <=1) closed = startingclosed; 
 		if (timesincestart >= 1 && timesincestart < 1.5f) leftside = !startingleftside; 
 		if (timesincestart >= 1.5f && timesincestart < 2) leftside = startingleftside;
+		if (timesincestart >= 2) warmup = false; 
 
 		
 
@@ -101,22 +102,15 @@ public class Airlock : MonoBehaviour {
 
 				Door1left.velocity = (Time.deltaTime * 20 * ((Vector2)Door2left.position - Door1left.position));
 				Door2left.velocity = (Time.deltaTime * 20 * ((Vector2)Door1left.position - Door2left.position));
+				Door1right.velocity =(Time.deltaTime * 20 * ((Vector2)Door2right.position - Door1right.position));
+				Door2right.velocity =(Time.deltaTime * 20 * ((Vector2)Door1right.position - Door2right.position));
 
 
-				if (time > 10) {
-					leftside = false;
-					time = 0;
-					cooldowntime = 0;
-					closed = false;
-				} else {
-					if (time > 3 && time < 8) {
-						this.particletime+= Time.deltaTime;
-						if (this.particletime > .2f) {
-							GameObject thingy = (GameObject)Instantiate(particle, spawner1.position, Quaternion.identity);
-							GameObject thingy2 = (GameObject)Instantiate(particle, spawner2.position, Quaternion.identity);
-							thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,0)));
-							thingy2.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-0,50)));
-
+				Door1left.SendMessage("Closing");
+				Door2left.SendMessage("Closing");
+				Door1right.SendMessage("Closing");
+				Door2right.SendMessage("Closing");
+			
 				if (leftside) {
 
 
