@@ -7,7 +7,6 @@ public class Button : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		on = false;
-		print(this.transform.parent);
 		if (this.transform.parent != null) 
 			if (this.transform.parent.name.Equals("Airlock")) usestring = "use airlock";
 

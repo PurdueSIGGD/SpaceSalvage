@@ -7,6 +7,7 @@ public class JointScript : MonoBehaviour {
 	private bool broken;
 	public bool severed;
 	private GameObject focus;
+	private GameObject connected;
 	// Use this for initialization
 	void Start () {
 		severed = false;
@@ -21,6 +22,10 @@ public class JointScript : MonoBehaviour {
 		if (!broken) {
 			lr = this.GetComponent<LineRenderer>();
 			sp = this.GetComponent<SpringJoint2D>();
+		//	EdgeCollider2D col = this.GetComponent<EdgeCollider2D>(); //remove if rolling back
+			//if (connected != null) {
+		//		col.points = new Vector2[2] {new Vector2(0,0), ((Vector2)(this.transform.position - connected.transform.position))}; //remove if rolling back
+		//	}
 			lr.SetVertexCount(2);
 			lr.SetPosition(0,this.transform.position);
 			if (sp.connectedBody != null) {
@@ -48,6 +53,9 @@ public class JointScript : MonoBehaviour {
 	}
 	void GiveFocus(GameObject g) {
 		focus = g;
+	}
+	void GiveConnected(GameObject g) {
+		connected = g;
 	}
 	void ReconnectJoint() {
 		broken = false;

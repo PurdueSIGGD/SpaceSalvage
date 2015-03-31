@@ -64,8 +64,8 @@ public class RopeScript2D : MonoBehaviour {
 		if (retract_on_death && brokenrope) {
 			if (timepassed > .8f) {
 				if (joints != null) {
-				if (joints[retractindex+1]!= null) {
-						if (((GameObject)joints[retractindex+1]).GetComponent<SpringJoint2D>() != null) {
+					if (joints[retractindex]!= null) {
+						if (joints.Count > retractindex + 1 && ((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>() != null && ((GameObject)joints[retractindex]).GetComponent<SpringJoint2D>().connectedBody != null) {
 							timepassed = 0;
 							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
 							Destroy((GameObject)joints[retractindex]);
@@ -250,14 +250,15 @@ public class RopeScript2D : MonoBehaviour {
 		lastnew = newie;
 		Rigidbody2D rigid = newie.AddComponent<Rigidbody2D>();
 		CircleCollider2D col = newie.AddComponent<CircleCollider2D>();
+		//EdgeCollider2D col = newie.AddComponent<EdgeCollider2D>();
 		SpringJoint2D ph = newie.AddComponent<SpringJoint2D>();
 		LineRenderer ln = newie.AddComponent<LineRenderer>();
 		JointScript js = newie.gameObject.AddComponent<JointScript>();
-		js.SendMessage("GiveFocus",this.gameObject);
+		js.SendMessage("GiveFocus",this.gameObject); 
 		line = parent.GetComponent<LineRenderer> ();
 		ln.material = line.material;
 		ln.SetWidth(linewidth,linewidth);
-
+		col.radius = .03f;
 		if (debugmode) {
 			SpriteRenderer sp = newie.AddComponent<SpriteRenderer>();
 			sp.sprite = spriteconnector;
@@ -271,16 +272,22 @@ public class RopeScript2D : MonoBehaviour {
 		rigid.gravityScale = 0; 
 		rigid.mass = ropeMass;
 
-		newie.transform.position = new Vector3(((Vector3)segmentPos[n]).x, ((Vector3)segmentPos[n]).y, target.transform.position.z);
 
-		col.radius = .03f;
+		newie.transform.position = new Vector3(((Vector3)segmentPos[n]).x, ((Vector3)segmentPos[n]).y, target.transform.position.z);
 		col.sharedMaterial = mate;
 		if(n==1){		
 			this.firstjoint = newie;
 			ph.connectedBody = this.transform.rigidbody2D;
+			//js.SendMessage("GiveConnected",this.gameObject); //remove if rolling back
+			//col.points = new Vector2[2] {new Vector2(0,0), (Vector2)(this.transform.position - newie.transform.position)}; //remove if rolling back
+
 		} else
 		{
 			ph.connectedBody = ((GameObject)joints[n-2]).rigidbody2D;	
+			//js.SendMessage("GiveConnected",((GameObject)joints[n-2])); //remove if rolling back
+			//col.points = new Vector2[2] {new Vector2(0,0), (Vector2)(this.transform.position - ((GameObject)joints[n-2]).transform.position)}; //remove if rolling back
+
+
 		}
 		ln.SetVertexCount(2);
 		ln.SetPosition(0,newie.transform.position);

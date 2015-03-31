@@ -131,7 +131,7 @@ public class HealthController : MonoBehaviour {
 
 		if (oxy < 15) {
 			changeMed(-1 * Time.deltaTime * (15-oxy)/3);
-			oxywarning = true;
+			oxywarning = (!oxyerror);
 		} else {
 			oxywarning = false;
 		}
