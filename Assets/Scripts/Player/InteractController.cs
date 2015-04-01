@@ -46,7 +46,7 @@ public class InteractController : MonoBehaviour {
 		}
 
 		if (message != "") {
-			go.GetComponent<GUIText>().text = "Press 'f' to " + message;
+			go.GetComponent<GUIText>().text = message;
 		} else {
 			go.GetComponent<GUIText>().text = "";
 		}

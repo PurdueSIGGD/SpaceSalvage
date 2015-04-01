@@ -46,7 +46,7 @@ public class JointScript : MonoBehaviour {
 		Destroy(this.GetComponent<SpringJoint2D>());
 		lr.SetVertexCount(0);
 		broken = true;
-		if (!severed && focus != null) {
+		if (!severed && focus != null && focus.GetComponent<RopeScript2D>() != null) {
 			focus.BroadcastMessage ("BrokenRope");
 		}
 

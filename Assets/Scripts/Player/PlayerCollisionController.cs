@@ -72,7 +72,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 
 		// Always setting the fading screen sprite's x/y coordinates to those of the player
-		Fader.transform.position = new Vector3(GameObject.Find("Main Camera").transform.position.x,GameObject.Find("Main Camera").transform.position.y,GameObject.Find("Main Camera").transform.position.z + 7);
+		Fader.transform.position = new Vector3(GameObject.Find("Camera").transform.position.x,GameObject.Find("Camera").transform.position.y,GameObject.Find("Camera").transform.position.z + 7);
 		if (ejected) {
 			ejectcooldown += Time.deltaTime;
 

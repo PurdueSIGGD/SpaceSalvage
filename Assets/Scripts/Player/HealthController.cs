@@ -8,7 +8,7 @@ public class HealthController : MonoBehaviour {
 	private float oxy;
 	private GameObject text;
 	private int wallet;
-	private int startingwallet;
+	private int startingwallet, tubesleft;
 	private float startinghealth;
 	private bool oxywarning, oxyerror, suitwarning, suiterror, medwarning, cranewarning;
 	private static string okmessage = "All systems operational";
@@ -101,11 +101,13 @@ public class HealthController : MonoBehaviour {
 				}
 			}
 		}
+		string tubesmessage = ejected?" (disconnected)":"";
 		string final = 
 			"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +
 				"Oxygen Levels: " + oxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
 				"Health: " + med.ToString("F2") + "/100.00\n" +
 				"Cash: " + wallet + "\n" + 
+				"Tubes left: " + tubesleft + tubesmessage + "\n" + 
 				words;
 		((GUIText)text.GetComponent("GUIText")).text = final;
 
@@ -183,6 +185,9 @@ public class HealthController : MonoBehaviour {
 	}
 	void StopDoingThat() {
 		pause = true;
+	}
+	void GetTubesLeft(int tubes) {
+		tubesleft = tubes;
 	}
 	void Im_Leaving() {
 		PlayerPrefs.SetInt ("wallet", wallet);

@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class Button : MonoBehaviour {
-	string usestring = "open door";
+	string usestring = "Press 'f' to open door";
 	private bool on;
 	// Use this for initialization
 	void Start () {
 		on = false;
 		if (this.transform.parent != null) 
-			if (this.transform.parent.name.Equals("Airlock")) usestring = "use airlock";
+			if (this.transform.parent.name.Equals("Airlock")) usestring = "Press 'f' to use airlock";
 
 	}
 	

@@ -8,7 +8,7 @@ public class ExitScript : MonoBehaviour {
 	private GameObject faderObject;
 	private SpriteRenderer Fader;
 	private GameObject Player;
-	public string usestring = "exit map";
+	public string usestring = "Press 'f' to exit map";
 	public Vector3 playerseat;
 	void Start () {
 		Player = GameObject.Find ("Player");

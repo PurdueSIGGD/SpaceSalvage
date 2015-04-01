@@ -26,6 +26,7 @@ public class RopeTubeController : MonoBehaviour {
 		} else {
 
 		}
+		GameObject.Find("Player").SendMessage("GetTubesLeft",tubesleft);
 
 	}
 	void GiveTubesLeft(int i) {
@@ -43,7 +44,7 @@ public class RopeTubeController : MonoBehaviour {
 		if (ejected) {
 
 		}
-
+		GameObject.Find("Player").SendMessage("GetTubesLeft",tubesleft);
 		timepassed += Time.deltaTime;
 		add = (Input.GetKey(KeyCode.E));
 		sub = (Input.GetKey(KeyCode.Q));
