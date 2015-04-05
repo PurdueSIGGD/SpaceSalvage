@@ -7,7 +7,7 @@ public class RopeTubeController : MonoBehaviour {
 	private float timepassed;
 	private float rate = .2f;
 	public bool emp;
-	public int tubesleft = 90;
+	public int tubesleft = 50;
 	private int startingtubes;
 	// Use this for initialization
 	void Start () {

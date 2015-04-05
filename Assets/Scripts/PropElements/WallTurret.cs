@@ -55,7 +55,7 @@ public class WallTurret : MonoBehaviour {
 					if (!ammo.name.Equals("Missile")) {
 
 						thingy.rigidbody2D.AddForce(100 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180)),Mathf.Sin(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180))));
-						thingy.rigidbody2D.AddTorque(22);
+						thingy.rigidbody2D.AddTorque(50);
 					} else {
 						thingy.GetComponent<MissileScript>().damageoremp = !empshooty;
 					}
