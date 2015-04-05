@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class OxygenStation : MonoBehaviour {
-
+	public float oxygaugeoffset = 1.5f;
 	public float oxygenAmt = 50;
 	private float startingoxy;
 	private GameObject Player;
 	private GameObject child;
+
 
 	public Sprite sprite;
 
@@ -16,6 +17,7 @@ public class OxygenStation : MonoBehaviour {
 		startingoxy = oxygenAmt;
 		child = new GameObject("Gauge");
 		child.transform.position = this.transform.position;
+		//child.transform.position = new Vector3);
 		child.transform.parent = this.transform;
 		SpriteRenderer sp = child.AddComponent<SpriteRenderer>();
 		sp.sprite = sprite;
@@ -27,7 +29,7 @@ public class OxygenStation : MonoBehaviour {
 	void Update () {
 		SpriteRenderer sp = child.GetComponent<SpriteRenderer>();
 		sp.color = new Color(1 - oxygenAmt/startingoxy, oxygenAmt/startingoxy, 0 , sp.color.a);
-		child.transform.position = new Vector3(this.transform.position.x + 1.5f, this.transform.position.y, this.transform.position.z);
+		child.transform.position = new Vector3(this.transform.position.x + oxygaugeoffset, this.transform.position.y, this.transform.position.z);
 		if (oxygenAmt > .2f) {
 			child.transform.localScale = new Vector2(1/this.transform.localScale.x,10 *(1-(oxygenAmt))/(startingoxy * this.transform.localScale.y));
 

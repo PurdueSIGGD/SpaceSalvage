@@ -12,8 +12,8 @@ public class ExitScript : MonoBehaviour {
 	public Vector3 playerseat;
 	void Start () {
 		Player = GameObject.Find ("Player");
-		if (playerseat == Vector3.zero) {
-			playerseat = this.transform.position;
+		if (transform.FindChild("PlayerSeat") != null) {
+			playerseat = transform.FindChild("PlayerSeat").position;
 		}
 		faderObject = GameObject.Find ("Fader");
 		Fader = faderObject.GetComponent<SpriteRenderer> ();
@@ -52,7 +52,7 @@ public class ExitScript : MonoBehaviour {
 			Player.SendMessage("StopDoingThat"); //stop the health and oxy loss
 			Player.SendMessage("EMP");
 			Player.transform.position = playerseat + Vector3.back;
-			Player.transform.rotation = Quaternion.Euler(0,0,180);
+			Player.transform.rotation = Quaternion.Euler(0,0,90);
 			Player.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
 			
 			if (Fader.color.a < 1) {

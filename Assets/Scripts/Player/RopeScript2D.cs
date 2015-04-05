@@ -46,7 +46,12 @@ public class RopeScript2D : MonoBehaviour {
 	private int retractindex;
 	private Vector3 endingpos;
 
+
 	void Start() {
+		Transform tee;
+		if ((tee = transform.FindChild("RopeStart")) != null) {
+			vec = tee.transform.position;
+		}
 		rope = true;
 		retractindex = 0;
 		lightintensity = 0;
@@ -105,7 +110,7 @@ public class RopeScript2D : MonoBehaviour {
 					dj.connectedBody = this.rigidbody2D;
 					dj.maxDistanceOnly = true;
 					dj.distance = 0;
-					if (!shiprope) {
+					if (!shiprope || true) {
 						Vector2 vectorry = new Vector2((this.vec.x - this.transform.position.x)/this.transform.localScale.x,(this.vec.y-this.transform.position.y)/this.transform.localScale.y);
 						float _x = vectorry.x;
 						float _y = vectorry.y;
@@ -122,11 +127,13 @@ public class RopeScript2D : MonoBehaviour {
 					}
 					hinger.transform.parent = transform;
 
-					}
+				}
+
 
 				segmentPos.Add (vector);
 				
 				//Add Physics to the segments
+			
 				AddJointPhysics(indexovertime);
 				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).collider2D, target.collider2D);
 				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).collider2D, transform.collider2D);
@@ -152,7 +159,6 @@ public class RopeScript2D : MonoBehaviour {
 					}
 					lr.material = line.material;
 					lr.SetWidth(linewidth,linewidth);
-
 
 					end.distance = (((vec.x - target.position.x))/segments)/3;
 					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
@@ -234,10 +240,10 @@ public class RopeScript2D : MonoBehaviour {
 		} else {
 			line.enabled = true;
 			line.SetVertexCount(2);
-			if (endingpos == Vector3.zero) {
+			if (vec == Vector3.zero) {
 				line.SetPosition(0,this.transform.position);
 			} else {
-				line.SetPosition(0,endingpos);
+				line.SetPosition(0,vec);
 			}
 			line.SetPosition(1,target.transform.position);
 		}
@@ -277,7 +283,7 @@ public class RopeScript2D : MonoBehaviour {
 		col.sharedMaterial = mate;
 		if(n==1){		
 			this.firstjoint = newie;
-			ph.connectedBody = this.transform.rigidbody2D;
+			ph.connectedBody = hinger.rigidbody2D;
 			//js.SendMessage("GiveConnected",this.gameObject); //remove if rolling back
 			//col.points = new Vector2[2] {new Vector2(0,0), (Vector2)(this.transform.position - newie.transform.position)}; //remove if rolling back
 
@@ -305,9 +311,7 @@ public class RopeScript2D : MonoBehaviour {
 		if (rope) {
 			segmentPos = new ArrayList();
 			joints = new ArrayList();
-			if (vec.Equals(Vector3.zero)){
-				vec = this.transform.position;
-			}
+
 			// Find the amount of segments based on the distance and resolution
 			// Example: [resolution of 1.0 = 1 joint per unit of distance]
 

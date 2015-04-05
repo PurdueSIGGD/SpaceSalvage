@@ -7,7 +7,10 @@ public class ParticleThing : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		time+=Time.deltaTime;
-		this.transform.localScale = new Vector3(this.transform.localScale.x - Time.deltaTime/5, this.transform.localScale.y - Time.deltaTime/5, 1);
+		float foo;
+		if (time < (1/2.5f)) foo = 2.5f;
+		else foo = 1/time;
+		this.transform.localScale = new Vector3(foo, foo, 1);
 		if (time > 2) {
 			Destroy(this.gameObject);
 		}
