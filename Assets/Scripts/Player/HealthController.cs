@@ -9,7 +9,7 @@ public class HealthController : MonoBehaviour {
 	private GameObject text;
 	private int wallet;
 	private int startingwallet, tubesleft;
-	private float startinghealth;
+	private float startinghealth, time;
 	private bool oxywarning, oxyerror, suitwarning, suiterror, medwarning, cranewarning;
 	private static string okmessage = "All systems operational";
 	private static string oxymessage = "WARNING: LOW OXYGEN\n";
@@ -26,6 +26,7 @@ public class HealthController : MonoBehaviour {
 	private float timesincelastdamage;
 	private float rechargetime;
 	private bool pause;
+	public GameObject particle;
 	public bool acceptingOxy, emp = false; //is oxy less than startingoxy?
 	public float emptime = 0;
 	// Use this for initialization
@@ -62,7 +63,7 @@ public class HealthController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		time+=Time.deltaTime;
 		acceptingOxy = (oxy < startingoxy);
 		string words = "";
 		if (timesincelastdamage >= 0) {
@@ -142,6 +143,14 @@ public class HealthController : MonoBehaviour {
 
 	void changeHealth(float f) { //not actual health, this is just the suit itegrity
 		if (!pause) {
+			print(med/100);
+			if (time > .25f && particle != null) {
+				
+				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
+				thingy.GetComponent<SpriteRenderer>().color = new Color(1 - (health/100), 0, 0);
+				thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+				time = 0;
+			}
 			if (health > 1 && health + f > 0) {
 				if (med >= 3*f/health) { //your health can be damaged by attacks, but your suit works like armor
 					med += 3*f/health;
@@ -170,7 +179,7 @@ public class HealthController : MonoBehaviour {
 	}
 	void changeMed(float f) { //local use ONLY
 		if (!pause) {
-			timesincelastdamage = 0;
+
 			if (med + f >= 100) {
 				med = 100;
 			} else if (med+f <=0) {
