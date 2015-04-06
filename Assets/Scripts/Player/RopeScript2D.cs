@@ -158,7 +158,7 @@ public class RopeScript2D : MonoBehaviour {
 						lr = target.gameObject.AddComponent<LineRenderer>();
 					}
 					lr.material = line.material;
-					lr.SetWidth(linewidth,linewidth);
+					if (target != GameObject.Find("Player").transform || shiprope) lr.SetWidth(linewidth,linewidth);
 
 					end.distance = (((vec.x - target.position.x))/segments)/3;
 					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;

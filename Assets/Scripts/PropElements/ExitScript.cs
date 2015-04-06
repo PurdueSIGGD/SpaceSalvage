@@ -39,10 +39,16 @@ public class ExitScript : MonoBehaviour {
 		}
 	}
 	void OnTriggerStay2D(Collider2D col) {
-		if (exiting && col.GetComponent<InteractController>() != null) {
-			col.SendMessage("GetMessage", "");
-		}
+		if ( col.GetComponent<InteractController>() != null) {
+			if (exiting) {
+				col.SendMessage("GetMessage", "");
+			} else {
+					col.SendMessage("GetMessage", this.usestring);
+					col.SendMessage("GetGO", this.gameObject);
+					
 
+			}
+		}
 	}
 	// Update is called once per frame
 	void Update () {

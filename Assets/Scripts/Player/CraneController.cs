@@ -134,7 +134,7 @@ public class CraneController : MonoBehaviour {
 			}
 			LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 			if (!grabbed) {
-				Player.GetComponent<LineRenderer>().SetWidth(GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth, GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth);
+				//Player.GetComponent<LineRenderer>().SetWidth(GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth, GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth);
 				l.enabled = true;
 				l.SetPosition(0, Player.transform.position);
 				l.SetPosition(1, ending.position);	
