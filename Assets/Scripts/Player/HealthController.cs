@@ -9,7 +9,7 @@ public class HealthController : MonoBehaviour {
 	private GameObject text;
 	private int wallet;
 	private int startingwallet, tubesleft;
-	private float startinghealth, time;
+	private float startinghealth, time, cranetime;
 	private bool oxywarning, oxyerror, suitwarning, suiterror, medwarning, cranewarning;
 	private static string okmessage = "All systems operational";
 	private static string oxymessage = "WARNING: LOW OXYGEN\n";
@@ -18,6 +18,7 @@ public class HealthController : MonoBehaviour {
 	private static string suitmessagegone = "WARNING: SUIT LOST\n";
 	private static string medmessage = "WARNING: VITAL SIGNS ARE LOW\n";
 	private static string cranemessage = "WARNING: CRANE IS DESTROYED\n";
+	//private static string cranedis = "DISCONNECTING CRANE IN ";
 	private static string empmessage = "WARNING: EMP DETECTED\n";
 	private static string empmessage2 = "TIME UNTIL SYSTEM REBOOT: ";
 	private bool ejected;
@@ -63,6 +64,7 @@ public class HealthController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//if (this.cranewarning) cranetime+=Time.deltaTime;
 		time+=Time.deltaTime;
 		acceptingOxy = (oxy < startingoxy);
 		string words = "";
@@ -74,19 +76,20 @@ public class HealthController : MonoBehaviour {
 				if (med <= 1) med +=  Time.deltaTime;
 			}
 		}
-		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || emp)) {
+		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) {
 			emergency = false;
 			words += okmessage;
 
 		} else {
  			emergency = true;
-			if (emp) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
+			if (emp && !pause) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
 			if (suitwarning) words += suitmessage;
 			if (suiterror) words += suitmessagegone;
 			if (oxywarning) words += oxymessage;
 			if (oxyerror) words += oxymessagegone;
 			if (medwarning) words += medmessage;
 			if (cranewarning) words += cranemessage;
+			//if (cranewarning && cranetime < 5) words += cranedis + (5 - cranetime) + "\n";
 
 		}
 		if (emergency) { //flashing lights
@@ -94,7 +97,7 @@ public class HealthController : MonoBehaviour {
 			timesince+=Time.deltaTime;
 			if (timesince > .25f) {
 				if (timesince > .5f) timesince = 0;
-				if (emp) {
+				if (emp && !pause) {
 					words = empmessage2 + (rechargetime - emptime).ToString("F2") + "\n";
 
 				} else {
@@ -119,7 +122,7 @@ public class HealthController : MonoBehaviour {
 		suitwarning = (health < 20 && health > 0);
 		suiterror = (health <= 0);
 		oxyerror  = (oxy <= 0);
-		if (emp && med <= 0) emp = false;
+		if (emp && !pause && med <= 0) emp = false;
 		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
 		if (ejected) { //change oxygen from being ejected

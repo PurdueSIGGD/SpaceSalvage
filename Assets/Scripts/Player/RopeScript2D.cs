@@ -44,7 +44,7 @@ public class RopeScript2D : MonoBehaviour {
 	private float lightintensity;
 	private Vector2 lastvel;
 	private int retractindex;
-	private Vector3 endingpos;
+
 
 
 	void Start() {
@@ -352,7 +352,7 @@ public class RopeScript2D : MonoBehaviour {
 		Destroy(this.GetComponent<RopeScript2D>());
 	}	
 	void SetTargetAnchor(Vector3 vec) {
-		endingpos = vec;
+
 		this.vec = vec;
 
 	}
@@ -400,7 +400,10 @@ public class RopeScript2D : MonoBehaviour {
 	void Connect() {
 		if (ejected && !death) {
 			if (!brokenrope) {
-				SpringJoint2D end = target.gameObject.AddComponent<SpringJoint2D>();
+				SpringJoint2D end;
+				if ((end = target.gameObject.GetComponent<SpringJoint2D>()) == null) {
+					end = target.gameObject.AddComponent<SpringJoint2D>();
+				}
 				end.distance = (((vec.x - target.position.x))/segments)/3;
 				end.connectedBody = lastnew.transform.rigidbody2D;
 				Destroy(connector);
@@ -425,6 +428,9 @@ public class RopeScript2D : MonoBehaviour {
 		if (connector != null) {
 			Destroy(connector);
 		}
+	}
+	void Disconnect() {
+		Destroy(((GameObject)joints[joints.Count-1]));
 	}
 	
 }

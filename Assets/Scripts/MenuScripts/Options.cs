@@ -32,7 +32,7 @@ public class Options : MonoBehaviour {
 			}
 		}
 		
-		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Options")) {
+		if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "KeyBinding")) {
 			Application.LoadLevel ("KeyBindings");
 		}
 		

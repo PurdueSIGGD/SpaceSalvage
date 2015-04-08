@@ -3,10 +3,13 @@ using System.Collections;
 
 public class Button : MonoBehaviour {
 	string usestring = "Press 'f' to open door";
-	private bool on;
+	public bool open;
 	// Use this for initialization
 	void Start () {
-		on = false;
+		if (open)  {
+			BroadcastMessage("Open");
+			open = !open;
+		}
 		if (this.transform.parent != null) 
 			if (this.transform.parent.name.Equals("Airlock")) usestring = "Press 'f' to use airlock";
 
@@ -14,14 +17,24 @@ public class Button : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (this.transform.parent != null) {
+			if (this.transform.parent.name.Equals("Airlock")) {
+				if (this.transform.parent.GetComponent<Airlock>().closed || this.transform.parent.GetComponent<Airlock>().cooldowntime < 10) {
+					usestring = "";
+				} else {
+					usestring = "Press 'f' to use airlock";
+				}
+			}
+		}
 	}
 	void Use() {
-		on = !on;
-		if (on) {
+		open = !open;
+		if (!open) {
+			//BroadcastMessage("Open");
 			if (this.transform.parent != null) this.transform.parent.SendMessage("Open");
 			else BroadcastMessage("Open");
 		} else {
+			//BroadcastMessage("Close");
 			if (this.transform.parent != null) this.transform.parent.SendMessage("Close");
 			else BroadcastMessage("Close");
 		}
@@ -45,7 +58,7 @@ public class Button : MonoBehaviour {
 		}
 	}
 	void ChangeWord(string s) {
-		usestring = s;
+		if (this.transform.parent != null && this.transform.parent.name != "Airlock") usestring = s;
 	}
 
 }

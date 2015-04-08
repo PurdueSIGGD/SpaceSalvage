@@ -9,8 +9,8 @@ public class CraneController : MonoBehaviour {
 	public bool emp, debugmode, grabbed = false, ended = false, broken, deadThrusters = false;
 	public float rotspeed = 300, movespeed = .5f, changedmovespeed, cranelength = 2, HarpoonSpeed, linewidth;
 	private Vector3 pz, delta, playerdelta, difference;
-	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle;
-	private bool retracting, releaseready, firing;
+	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime;
+	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
@@ -43,14 +43,25 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (broken) brokentime+=Time.deltaTime;
+		if (brokentime > 5) {
+			if (focus != null) {
+				focus.GetComponent<RopeScript2D>().SendMessage("Disconnect");
+			}
+		}
 		if (focus != null) {
 			if (focus.GetComponent<RopeScript2D>() != null) {
-				broken = (focus.GetComponent<RopeScript2D>().brokenrope);
+				if (broken = (focus.GetComponent<RopeScript2D>().brokenrope)) {
+					cranelength = 0;
+					LineRenderer lr = this.GetComponent<LineRenderer>();
+					lr.SetVertexCount(0);
+				}
 			}
 		} else {
 			// release grip
 			if (grabbed) {
 				Physics2D.IgnoreCollision(focus.collider2D, ending.collider2D, false);
+				Player.GetComponent<LineRenderer>().enabled = false;
 				grabbed = false;
 				firing = false;
 				retracting = true;
@@ -73,7 +84,7 @@ public class CraneController : MonoBehaviour {
 
 
 		}
-		if (!emp) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
+		if (!emp && !pause) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 
 		if (!broken) {
@@ -112,37 +123,43 @@ public class CraneController : MonoBehaviour {
 				}
 				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					grabbed = false;
+					Player.GetComponent<LineRenderer>().enabled = true;
+
 					firing = false;
 					retracting = true;
 					focus.BroadcastMessage("DestroyRope");
 }
 			} 
 
-			if (!firing && !retracting && !grabbed) {
-				ending.position = this.transform.position + (.05f * Vector3.forward);
+			if (!firing && !retracting && !grabbed && !pause && !emp) {
+				ending.position = this.transform.position + new Vector3(0,0,.01f);
 				ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 			} else {
 				if (grabbed) {
 					if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
 
 						ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
-						ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+						if (!pause) {
+							ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+						}
 					}
 				} else {
-					ending.eulerAngles = new Vector3(0,0,launchangle);
+					if (!pause) {
+						ending.eulerAngles = new Vector3(0,0,launchangle);
+					}
 				}
 			}
 			LineRenderer l = (LineRenderer)GetComponent<LineRenderer> ();
 			if (!grabbed) {
 				//Player.GetComponent<LineRenderer>().SetWidth(GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth, GameObject.Find("Ship").GetComponent<RopeScript2D>().linewidth);
 				l.enabled = true;
-				l.SetPosition(0, Player.transform.position);
+				l.SetPosition(0, Player.transform.position + new Vector3(0,0,.02f));
 				l.SetPosition(1, ending.position);	
 			} else {
 				l.enabled = false;
 			}
 			if (!grabbed && (firing || retracting)) {
-				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .1f); 
+				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .25f); 
 				foreach (Collider2D c in hitColliders) {
 					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 						retracting = true;
@@ -195,12 +212,13 @@ public class CraneController : MonoBehaviour {
 						}
 					} else {
 						if (c.isTrigger && c.GetComponent<DestructionStation>() != null) {
-							cranelength = 0;
-							broken = true;
+							//cranelength = 0;
+							//broken = true;
+							//brokentime = 0;
 							firing = false;
-							retracting = false;
-							LineRenderer lr = this.GetComponent<LineRenderer>();
-							lr.SetVertexCount(0);
+							retracting = true;
+							//LineRenderer lr = this.GetComponent<LineRenderer>();
+							//lr.SetVertexCount(0);
 						}
 					}
 
@@ -210,16 +228,18 @@ public class CraneController : MonoBehaviour {
 		} else {
 			if (focus != null && focus.GetComponent<RopeScript2D>() != null) {
 				ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
-				ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
-			
+				if (!pause) {
+					ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
+				}
 			} else {
-				ending.transform.position = Player.transform.position;
+				ending.transform.position = Player.transform.position + new Vector3(0,0,.01f);
 			}
 		}
 
 		SpriteRenderer ThrusterCW = (SpriteRenderer)GameObject.Find ("ThrusterCW").GetComponent ("SpriteRenderer");
 		SpriteRenderer ThrusterCCW = (SpriteRenderer)GameObject.Find ("ThrusterCCW").GetComponent ("SpriteRenderer");
-		if (Mathf.Abs (lastTheta - thetaersnenig) > 1) {
+
+		if (Mathf.Abs (lastTheta - thetaersnenig) > 1 && !emp) {
 			if (thetaersnenig < lastTheta) {
 				if (ThrusterCW.color.a < 1 && !deadThrusters)
 					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 5);
@@ -242,5 +262,8 @@ public class CraneController : MonoBehaviour {
 
 	void Im_Leaving() {
 		PlayerPrefs.SetFloat ("cranelength", cranelength);
+	}
+	void PauseGame(bool b) {
+		pause = b;
 	}
 }

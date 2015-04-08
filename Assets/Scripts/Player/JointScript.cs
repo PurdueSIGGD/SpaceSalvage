@@ -7,7 +7,7 @@ public class JointScript : MonoBehaviour {
 	private bool broken;
 	public bool severed;
 	private GameObject focus;
-	private GameObject connected;
+	//private GameObject connected;
 	// Use this for initialization
 	void Start () {
 		severed = false;
@@ -28,7 +28,7 @@ public class JointScript : MonoBehaviour {
 		//	}
 			lr.SetVertexCount(2);
 			lr.SetPosition(0,this.transform.position);
-			if (sp.connectedBody != null) {
+			if (sp != null && sp.connectedBody != null) {
 				lr.SetPosition(1,new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y, this.transform.position.z));
 				SpringJoint2D attempt;
 				if ((attempt = sp.connectedBody.GetComponent<SpringJoint2D>()) != null) {
@@ -54,9 +54,9 @@ public class JointScript : MonoBehaviour {
 	void GiveFocus(GameObject g) {
 		focus = g;
 	}
-	void GiveConnected(GameObject g) {
+	/*void GiveConnected(GameObject g) {
 		connected = g;
-	}
+	}*/
 	void ReconnectJoint() {
 		broken = false;
 	}
