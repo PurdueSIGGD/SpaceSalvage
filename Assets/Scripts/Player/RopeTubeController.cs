@@ -25,9 +25,7 @@ public class RopeTubeController : MonoBehaviour {
 		}
 		if (tubesleft == 0)  {
 			this.gameObject.GetComponent<RopeScript2D>().SendMessage("DeathIsSoon");
-		} else {
-
-		}
+		} 
 		GameObject.Find("Player").SendMessage("GetTubesLeft",tubesleft);
 
 	}
@@ -60,8 +58,16 @@ public class RopeTubeController : MonoBehaviour {
 		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes - 1) {
 			SendMessage("SubRope");
 			timepassed = 0;
-			tubesleft++;
+		} else {
+			if (sub) {
+				this.GetComponent<RopeScript2D>().pushing = true;
+			} else {
+				this.GetComponent<RopeScript2D>().pushing = false;
+			}
 		}
+	}
+	void SubTheRopeAmt() {
+		tubesleft++;
 	}
 	void RopeIsBuilt() {
 

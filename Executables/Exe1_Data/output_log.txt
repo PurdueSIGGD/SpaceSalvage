@@ -6,22 +6,22 @@ Direct3D:
     Vendor:   Intel
     VRAM:     128 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.249 seconds
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  1.056 seconds
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\NewSpaceGame\Executables\Exe1_Data\Managed\System.Core.dll (this message is harmless)
-UnloadTime: 0.408150 ms
+Platform assembly: C:\Users\Lonswaya\Documents\NewSpaceGame\SpaceSalvage\Executables\Exe1_Data\Managed\System.Core.dll (this message is harmless)
+UnloadTime: 0.422360 ms
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 206.
-Total: 1.051165 ms (FindLiveObjects: 0.019736 ms CreateObjectMapping: 0.016578 ms MarkObjects: 0.169733 ms  DeleteObjects: 0.014210 ms)
+Total: 0.749986 ms (FindLiveObjects: 0.015789 ms CreateObjectMapping: 0.019341 ms MarkObjects: 0.163812 ms  DeleteObjects: 0.011052 ms)
 
 10
  
@@ -43,11 +43,11 @@ The referenced script on this Behaviour is missing!
  
 (Filename:  Line: 1788)
 
-UnloadTime: 0.599199 ms
+UnloadTime: 0.336309 ms
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 115.
-Total: 1.076428 ms (FindLiveObjects: 0.017368 ms CreateObjectMapping: 0.015394 ms MarkObjects: 0.163418 ms  DeleteObjects: 0.043420 ms)
+Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 109.
+Total: 0.461833 ms (FindLiveObjects: 0.006710 ms CreateObjectMapping: 0.006710 ms MarkObjects: 0.086051 ms  DeleteObjects: 0.020525 ms)
 
 The referenced script on this Behaviour is missing!
  
@@ -61,27 +61,9 @@ The referenced script on this Behaviour is missing!
  
 (Filename:  Line: 1788)
 
-UnloadTime: 0.404598 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+UnloadTime: 0.239601 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 107.
-Total: 0.984061 ms (FindLiveObjects: 0.011052 ms CreateObjectMapping: 0.014999 ms MarkObjects: 0.170918 ms  DeleteObjects: 0.005131 ms)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-The referenced script on this Behaviour is missing!
- 
-(Filename:  Line: 1788)
-
-UnloadTime: 0.385651 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 107.
-Total: 0.983666 ms (FindLiveObjects: 0.011447 ms CreateObjectMapping: 0.014210 ms MarkObjects: 0.167365 ms  DeleteObjects: 0.005131 ms)
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 116.
+Total: 0.467360 ms (FindLiveObjects: 0.004736 ms CreateObjectMapping: 0.005526 ms MarkObjects: 0.100656 ms  DeleteObjects: 0.005920 ms)
 

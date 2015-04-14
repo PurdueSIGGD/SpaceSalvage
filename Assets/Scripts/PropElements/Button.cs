@@ -28,6 +28,8 @@ public class Button : MonoBehaviour {
 		}
 	}
 	void Use() {
+		this.GetComponent<AudioSource>().Play();
+
 		open = !open;
 		if (!open) {
 			//BroadcastMessage("Open");

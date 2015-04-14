@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class CraneController : MonoBehaviour {
+	public AudioClip firecrane;
 	public GameObject Player, focus;
 	public Material ropemat;
 	public PhysicsMaterial2D mate;
@@ -43,6 +44,13 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		SpringJoint2D[] myjoints = Player.GetComponents<SpringJoint2D>();
+		foreach (SpringJoint2D j in myjoints) {
+			//if (j.connectedBody == null) Destroy(j); //see line 136
+		}
+		if (emp && ending != null) {
+			ending.transform.localPosition = Vector3.zero;
+		}
 		if (broken) brokentime+=Time.deltaTime;
 		if (brokentime > 5) {
 			if (focus != null) {
@@ -53,15 +61,15 @@ public class CraneController : MonoBehaviour {
 			if (focus.GetComponent<RopeScript2D>() != null) {
 				if (broken = (focus.GetComponent<RopeScript2D>().brokenrope)) {
 					cranelength = 0;
-					LineRenderer lr = this.GetComponent<LineRenderer>();
-					lr.SetVertexCount(0);
+					//LineRenderer lr = this.GetComponent<LineRenderer>();
+					//lr.SetVertexCount(0);
 				}
 			}
 		} else {
 			// release grip
 			if (grabbed) {
 				Physics2D.IgnoreCollision(focus.collider2D, ending.collider2D, false);
-				Player.GetComponent<LineRenderer>().enabled = false;
+				//Player.GetComponent<LineRenderer>().enabled = false;
 				grabbed = false;
 				firing = false;
 				retracting = true;
@@ -92,6 +100,7 @@ public class CraneController : MonoBehaviour {
 				if (!firing) {
 
 					launchangle = thetaersnenig;
+					Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
 
 					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
 				}
@@ -107,7 +116,7 @@ public class CraneController : MonoBehaviour {
 				}
 
 				if (retracting) {
-					this.GetComponent<LineRenderer>().enabled = true;
+					//this.GetComponent<LineRenderer>().enabled = !broken;
 					ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 					if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
 						releaseready = false;
@@ -123,8 +132,8 @@ public class CraneController : MonoBehaviour {
 				}
 				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					grabbed = false;
-					Player.GetComponent<LineRenderer>().enabled = true;
-
+					//Player.GetComponent<LineRenderer>().enabled = false;
+					// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
 					firing = false;
 					retracting = true;
 					focus.BroadcastMessage("DestroyRope");
@@ -174,14 +183,14 @@ public class CraneController : MonoBehaviour {
 							grabbed = true;
 							this.lastendingangle = ending.eulerAngles.z;
 							firstfocusangle = focus.transform.eulerAngles.z;
-							LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
+							/*LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
 							if (lr == null) {
 								lr = focus.gameObject.AddComponent<LineRenderer>();
 							}
 							lr.SetWidth(linewidth,linewidth);
 							lr.material = this.ropemat;
 							lr.SetColors(new Color(0,0,0),new Color(0,0,0));
-							lr.sortingLayerName = "Foreground";
+							lr.sortingLayerName = "Foreground";*/
 							RopeScript2D rp = focus.GetComponent<RopeScript2D>();
 							if (rp == null) {
 								rp = focus.gameObject.AddComponent<RopeScript2D>();
@@ -207,7 +216,6 @@ public class CraneController : MonoBehaviour {
 							rp.rope = true;
 							rp.SendMessage("BuildRope");
 							rp.mate = mate;
-							lr.enabled = false;
 							break;
 						}
 					} else {

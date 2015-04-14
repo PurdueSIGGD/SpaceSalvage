@@ -7,7 +7,7 @@ public class HealthController : MonoBehaviour {
 	private float startingoxy = 30;
 	private float oxy;
 	private GameObject text;
-	private int wallet;
+	private int wallet = 50;
 	private int startingwallet, tubesleft;
 	private float startinghealth, time, cranetime;
 	private bool oxywarning, oxyerror, suitwarning, suiterror, medwarning, cranewarning;
@@ -106,9 +106,10 @@ public class HealthController : MonoBehaviour {
 			}
 		}
 		string tubesmessage = ejected?" (disconnected)":"";
+		float newoxy = (oxy >= startingoxy - 3*Time.deltaTime)?startingoxy:oxy; //so it doesnt go from 29 to 30 constantly
 		string final = 
 			"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +
-				"Oxygen Levels: " + oxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
+				"Oxygen Levels: " + newoxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
 				"Health: " + med.ToString("F2") + "/100.00\n" +
 				"Cash: " + wallet + "\n" + 
 				"Tubes left: " + tubesleft + tubesmessage + "\n" + 
@@ -146,9 +147,7 @@ public class HealthController : MonoBehaviour {
 
 	void changeHealth(float f) { //not actual health, this is just the suit itegrity
 		if (!pause) {
-			print(med/100);
-			if (time > .25f && particle != null) {
-				
+			if (time > .25f && particle != null) {				
 				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
 				thingy.GetComponent<SpriteRenderer>().color = new Color(1 - (health/100), 0, 0);
 				thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));

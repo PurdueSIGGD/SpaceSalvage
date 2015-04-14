@@ -44,7 +44,8 @@ public class WallTurret : MonoBehaviour {
 				}
 				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
-				if ((timebetweenshots >= .75f && shots < shotsperburst)|| (timebetweenshots > firingspeed)) {
+				if ((timebetweenshots >= .75f && shots < shotsperburst)|| (timebetweenshots > firingspeed)) { //fire
+					this.GetComponent<AudioSource>().Play();
 					if (timebetweenshots > 1.5f) shots = 0;
 					timebetweenshots = 0;
 					shots++;

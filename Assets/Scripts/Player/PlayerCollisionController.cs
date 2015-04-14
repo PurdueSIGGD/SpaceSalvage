@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCollisionController : MonoBehaviour {
 
 	private bool ejected;
-
+	public AudioClip bump;
 	// Creating SpriteRender (and a LineRenderer) variables for the Fading Screen,
 	//the Player sprite,
 	//and the sprites of all of the parts of the Player's Crane,
@@ -21,10 +21,14 @@ public class PlayerCollisionController : MonoBehaviour {
 
 	}
 	void OnCollisionEnter2D(Collision2D col) {
-		if (Vector3.Magnitude(col.relativeVelocity) > 4) {
-			this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
+		if (col.gameObject.GetComponent<SpringJoint2D>() == null) {
+			if (Vector3.Magnitude(col.relativeVelocity) > .5f) {
+				this.GetComponent<AudioSource>().PlayOneShot(bump);
+			}
+			if (Vector3.Magnitude(col.relativeVelocity) > 4) {
+				this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
 
-
+			}
 		}
 		
 	}

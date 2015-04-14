@@ -6,6 +6,7 @@ public class JointScript : MonoBehaviour {
 	private SpringJoint2D sp;
 	private bool broken;
 	public bool severed;
+	public string connector;
 	private GameObject focus;
 	//private GameObject connected;
 	// Use this for initialization
@@ -49,6 +50,13 @@ public class JointScript : MonoBehaviour {
 		if (!severed && focus != null && focus.GetComponent<RopeScript2D>() != null) {
 			focus.BroadcastMessage ("BrokenRope");
 		}
+
+	}
+	void OnCollisionEnter2D(Collision2D col) {
+		if (col.gameObject.name == "Player") Physics2D.IgnoreCollision(col.collider.collider2D, this.collider2D);
+
+		connector = col.gameObject.name;
+		//print(col.gameObject.name);
 
 	}
 	void GiveFocus(GameObject g) {

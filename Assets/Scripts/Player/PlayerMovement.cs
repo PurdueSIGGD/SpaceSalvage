@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float emprechargetime = 10;
 	private float currentemptime;
 	public bool debugmode;
-
+	public AudioClip move;
 
 	// Use this for initialization
 	void Start () {
@@ -143,6 +143,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 			if (flying) {
+				//this.GetComponent<AudioSource>().Play();
 
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {

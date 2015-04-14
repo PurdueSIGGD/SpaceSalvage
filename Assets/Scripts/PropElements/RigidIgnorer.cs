@@ -41,6 +41,7 @@ public class RigidIgnorer : MonoBehaviour {
 		Physics2D.IgnoreCollision(col, this.collider2D);
 	}
 	void RememberMe(Collider2D col) {
+		print(col.name);
 		Physics2D.IgnoreCollision(col, this.collider2D, false);
 	}
 }
