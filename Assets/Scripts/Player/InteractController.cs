@@ -24,7 +24,7 @@ using System.Collections;
  */
 public class InteractController : MonoBehaviour {
 	private GameObject go, target;
-	private string message;
+	public string message;
 	// Use this for initialization
 	void Start () {
 		go = new GameObject("ExitText");

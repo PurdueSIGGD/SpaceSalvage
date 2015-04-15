@@ -19,7 +19,7 @@ public class SlowStation : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 
 		if(col.gameObject == Player){
-			rigid.drag = 3;
+			rigid.drag = 1;
 		}
 
 	}

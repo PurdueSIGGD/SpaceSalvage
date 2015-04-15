@@ -44,6 +44,7 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 		SpringJoint2D[] myjoints = Player.GetComponents<SpringJoint2D>();
 		foreach (SpringJoint2D j in myjoints) {
 			//if (j.connectedBody == null) Destroy(j); //see line 136
@@ -183,14 +184,14 @@ public class CraneController : MonoBehaviour {
 							grabbed = true;
 							this.lastendingangle = ending.eulerAngles.z;
 							firstfocusangle = focus.transform.eulerAngles.z;
-							/*LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
+							LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
 							if (lr == null) {
 								lr = focus.gameObject.AddComponent<LineRenderer>();
 							}
 							lr.SetWidth(linewidth,linewidth);
 							lr.material = this.ropemat;
 							lr.SetColors(new Color(0,0,0),new Color(0,0,0));
-							lr.sortingLayerName = "Foreground";*/
+							lr.sortingLayerName = "Foreground";
 							RopeScript2D rp = focus.GetComponent<RopeScript2D>();
 							if (rp == null) {
 								rp = focus.gameObject.AddComponent<RopeScript2D>();

@@ -62,7 +62,7 @@ public class RopeScript2D : MonoBehaviour {
 			istube = true;
 		}
 		ropeColRadius = 0.03f;
-		line = this.GetComponent<LineRenderer>();
+		//line = this.GetComponent<LineRenderer>();
 		if (startmade) {
 			BuildRope();
 		}
