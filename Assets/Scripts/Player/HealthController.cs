@@ -105,6 +105,7 @@ public class HealthController : MonoBehaviour {
 				}
 			}
 		}
+		string m = "m";
 		string tubesmessage = ejected?" (disconnected)":"";
 		float newoxy = (oxy >= startingoxy - 3*Time.deltaTime)?startingoxy:oxy; //so it doesnt go from 29 to 30 constantly
 		string final = 
@@ -112,7 +113,7 @@ public class HealthController : MonoBehaviour {
 				"Oxygen Levels: " + newoxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
 				"Health: " + med.ToString("F2") + "/100.00\n" +
 				"Cash: " + wallet + "\n" + 
-				"Tubes left: " + tubesleft + tubesmessage + "\n" + 
+				"Tube length left: " + tubesleft + m + tubesmessage + "\n" + 
 				words;
 		((GUIText)text.GetComponent("GUIText")).text = final;
 

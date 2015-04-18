@@ -144,7 +144,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Engine Power = " + thrustermoverate + "  ($10)");
-		if (thrustermoverate >= 5) { // 5 being max speed
+		if (thrustermoverate >= 6) { // 6 being max speed
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ .1");
 		} else {
 			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ .1")) {
@@ -235,20 +235,20 @@ public class UpgradeScript : MonoBehaviour {
 		}
 		yval1+= .08f;
 		if (tubesleft == startingtubesleft) {
-			GUI.Box (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 10");
+			GUI.Box (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "-10m");
 		} else {
-			if (GUI.Button (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 10")) {
+			if (GUI.Button (new Rect (Screen.width * xval1, Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "-10m")) {
 				tubesleft -= 10;
 				cash += 10;
 			}
 			
 		}
 		
-		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Tube Length= " + tubesleft + "  ($10)");
+		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Tube Length= " + tubesleft + "m  ($10)");
 		if (tubesleft == 500) { //4 being max time
-			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 10");
+			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m");
 		} else {
-			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 10")) {
+			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m")) {
 				tubesleft += 10;
 				cash -= 10;
 			}

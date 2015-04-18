@@ -101,7 +101,7 @@ public class CraneController : MonoBehaviour {
 				if (!firing) {
 
 					launchangle = thetaersnenig;
-					Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
+					if (!broken) Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
 
 					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
 				}
@@ -217,6 +217,7 @@ public class CraneController : MonoBehaviour {
 							rp.rope = true;
 							rp.SendMessage("BuildRope");
 							rp.mate = mate;
+							if (GameObject.Find("Ship").GetComponent<RopeScript2D>().brokenrope) Player.GetComponent<LineRenderer>().SetWidth(linewidth, linewidth); //so we don't get awkward rope when we use it
 							break;
 						}
 					} else {

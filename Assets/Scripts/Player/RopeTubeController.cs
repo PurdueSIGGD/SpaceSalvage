@@ -7,12 +7,13 @@ public class RopeTubeController : MonoBehaviour {
 	private float timepassed;
 	private float rate = .2f;
 	public bool emp, debugmode;
-	public int tubesleft = 50;
+	public int tubesleft = 100;
 	private int startingtubes;
 	// Use this for initialization
 	void Start () {
 
 		if (PlayerPrefs.HasKey("tubesleft")) {
+
 			tubesleft = PlayerPrefs.GetInt("tubesleft");
 			if (debugmode) {
 				tubesleft = 90;

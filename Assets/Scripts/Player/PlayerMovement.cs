@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour {
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
-	public float moverate = 1;
+	public float moverate = 2;
 	public bool emp;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;

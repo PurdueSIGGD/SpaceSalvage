@@ -10,6 +10,8 @@ public class ExplosionScript : MonoBehaviour {
 	public float radius = 1;
 	// Use this for initialization
 	void Start () {
+		this.GetComponent<AudioSource>().Play();
+
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		if (!damageoremp) sp.color = cee;
 		Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius); 

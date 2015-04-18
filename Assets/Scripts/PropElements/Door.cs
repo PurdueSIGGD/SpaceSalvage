@@ -26,17 +26,17 @@ public class Door : MonoBehaviour {
 
 
 
-				if (Mathf.Abs(this.transform.position.y - close.y) > .03f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (close.y - open.y)), this.transform.position.z);
-				if (Mathf.Abs(this.transform.position.x - close.x) > .03f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (close.x - open.x)), this.transform.position.y, this.transform.position.z);
-				moving = ((Mathf.Abs(this.transform.position.x - close.x) > .03f) || (Mathf.Abs(this.transform.position.y - close.y) > .03f));
+				if (Mathf.Abs(this.transform.position.y - close.y) > .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (close.y - open.y)), this.transform.position.z);
+				if (Mathf.Abs(this.transform.position.x - close.x) > .1f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (close.x - open.x)), this.transform.position.y, this.transform.position.z);
+				moving = ((Mathf.Abs(this.transform.position.x - close.x) > .1f) || (Mathf.Abs(this.transform.position.y - close.y) > .1f));
 				//if (moving) print("Whatttt");
 			} else {
 				if (transform.parent.name == "Button") this.SendMessageUpwards("ChangeWord", "close door");
 
 
-				if (Mathf.Abs(this.transform.position.y - open.y) > .03f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (open.y - close.y)), this.transform.position.z);
-				if (Mathf.Abs(this.transform.position.x - open.x) > .03f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (open.x - close.x)), this.transform.position.y, this.transform.position.z);
-				moving = ((Mathf.Abs(this.transform.position.x - open.x) > .03f) || (Mathf.Abs(this.transform.position.y - open.y) > .03f));
+				if (Mathf.Abs(this.transform.position.y - open.y) > .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (open.y - close.y)), this.transform.position.z);
+				if (Mathf.Abs(this.transform.position.x - open.x) > .1f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (open.x - close.x)), this.transform.position.y, this.transform.position.z);
+				moving = ((Mathf.Abs(this.transform.position.x - open.x) > .1f) || (Mathf.Abs(this.transform.position.y - open.y) > .1f));
 				//if (moving) print("Whatttt");
 
 			}

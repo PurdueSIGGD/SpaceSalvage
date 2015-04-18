@@ -7,7 +7,9 @@ public class Airlock : MonoBehaviour {
 	public bool closed;
 	public bool leftside = true;
 
+	private bool sound;
 	private bool buttontrigger;
+	private bool started;
 	private float time = 0;
 	public float cooldowntime = 10;
 	private float particletime;
@@ -69,6 +71,7 @@ public class Airlock : MonoBehaviour {
 
 			time+=Time.deltaTime;
 			if (buttontrigger && closed != true && cooldowntime > 10) {
+				started = true;
 				buttontrigger = false;
 				closed = true;
 				time = 0;
@@ -79,7 +82,29 @@ public class Airlock : MonoBehaviour {
 		}
 	}
 	void OnTriggerExit2D(Collider2D col) {
+
 		if (col.name.Equals ("Player")) {
+			if (started) {
+				started = false;
+				if (leftside) {
+					leftside = true;
+					time = 0;
+					cooldowntime = 0;
+					closed = false;
+					Door1left.SendMessage("Open");
+					Door2left.SendMessage("Open");
+					sound = false;
+				} else {
+					leftside = false;
+					time = 0;
+					cooldowntime = 0;
+					closed = false;
+					Door1right.SendMessage("Open");
+					Door2right.SendMessage("Open");
+					sound = false;
+
+				}
+			}
 			time = 0;
 		}
 	}
@@ -94,11 +119,14 @@ public class Airlock : MonoBehaviour {
 				Door2left.SendMessage("Close");
 				Door1right.SendMessage("Close");
 				Door2right.SendMessage("Close");
-
+				
 				if (leftside) {
 
 
 					if (time > 10) {
+						
+					sound = false;
+						started = false;
 						leftside = false;
 						time = 0;
 						cooldowntime = 0;
@@ -106,6 +134,10 @@ public class Airlock : MonoBehaviour {
 						Door1right.SendMessage("Open");
 						Door2right.SendMessage("Open");
 					} else {
+						if (!sound && started) {
+							this.GetComponent<AudioSource>().Play();
+							sound = true;
+						} 
 						if (time > 3 && time < 8) {
 							this.particletime+= Time.deltaTime;
 							if (this.particletime > .2f) {
@@ -119,6 +151,8 @@ public class Airlock : MonoBehaviour {
 					}
 				} else {
 					if (time > 10) {
+					sound = false;
+					started = false;
 						leftside = true;
 						time = 0;
 						cooldowntime = 0;
@@ -126,6 +160,10 @@ public class Airlock : MonoBehaviour {
 						Door1left.SendMessage("Open");
 						Door2left.SendMessage("Open");
 					} else {
+						if (!sound && started) {
+							this.GetComponent<AudioSource>().Play();
+							sound = true;
+						} 
 						if (time > 3 && time < 8) {
 
 							this.particletime+= Time.deltaTime;

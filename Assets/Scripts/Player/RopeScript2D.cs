@@ -70,7 +70,9 @@ public class RopeScript2D : MonoBehaviour {
 	void Update()
 	{
 		if (pushing) {
-			spree.frequency += Time.deltaTime;
+			if (spree != null) {
+				if (spree.frequency < 5) spree.frequency += Time.deltaTime;
+			}
 
 		}
 		if (retract_on_death && brokenrope) {
@@ -160,6 +162,7 @@ public class RopeScript2D : MonoBehaviour {
 					// Attach the joints to the target object and parent it to this object	
 					SpringJoint2D end = target.gameObject.AddComponent<SpringJoint2D>();
 					spree = end;
+					end.frequency = frequency;
 					LineRenderer lr = target.gameObject.GetComponent<LineRenderer>();
 					JointScript js = target.gameObject.AddComponent<JointScript>();
 					js.SendMessage("GiveFocus",this.gameObject);
@@ -214,7 +217,7 @@ public class RopeScript2D : MonoBehaviour {
 			GameObject newobj = AddJointPhysics(joints.Count + 1); //increment physics points
 			target.GetComponent<SpringJoint2D>().connectedBody = newobj.rigidbody2D;
 			newobj.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).rigidbody2D;
-
+			spree.frequency = frequency;
 			newobj.transform.position = target.transform.position;
 			LineRenderer lr = target.GetComponent<LineRenderer>();
 			lr.SetVertexCount (2);
@@ -239,6 +242,7 @@ public class RopeScript2D : MonoBehaviour {
 				joints.RemoveAt(segments-1);
 				segmentPos.RemoveAt(segments - 1);
 				segments--;
+				spree.frequency = frequency;
 				this.GetComponent<RopeTubeController>().SendMessage("SubTheRopeAmt");
 				lastnew = ((GameObject)joints[segments - 1]);
 				//((GameObject)joints[segments-2]).GetComponent<SpringJoint2D>().frequency = frequency * 10;
@@ -419,12 +423,11 @@ public class RopeScript2D : MonoBehaviour {
 	void Connect() {
 		if (ejected && !death) {
 			if (!brokenrope) {
-				SpringJoint2D end;
-				if ((end = target.gameObject.GetComponent<SpringJoint2D>()) == null) {
-					end = target.gameObject.AddComponent<SpringJoint2D>();
+				if ((spree = target.gameObject.GetComponent<SpringJoint2D>()) == null) {
+					spree = target.gameObject.AddComponent<SpringJoint2D>();
 				}
-				end.distance = (((vec.x - target.position.x))/segments)/3;
-				end.connectedBody = lastnew.transform.rigidbody2D;
+				spree.distance = (((vec.x - target.position.x))/segments)/3;
+				spree.connectedBody = lastnew.transform.rigidbody2D;
 				Destroy(connector);
 				ejected = false;
 				LineRenderer lr = target.GetComponent<LineRenderer>();
