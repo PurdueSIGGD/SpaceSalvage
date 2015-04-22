@@ -54,6 +54,14 @@ public class CraneController : MonoBehaviour {
 		}
 		if (broken) brokentime+=Time.deltaTime;
 		if (brokentime > 5) {
+			grabbed = false;
+			Destroy(focus.GetComponent<LineRenderer>());
+			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+			JointScript[] jss = Player.GetComponents<JointScript>();
+			foreach (JointScript jass in jss) {
+				if (!jass.shiprope) 	Destroy(jass);
+				
+			}
 			if (focus != null) {
 				focus.GetComponent<RopeScript2D>().SendMessage("Disconnect");
 			}
@@ -71,6 +79,14 @@ public class CraneController : MonoBehaviour {
 			if (grabbed) {
 				Physics2D.IgnoreCollision(focus.collider2D, ending.collider2D, false);
 				//Player.GetComponent<LineRenderer>().enabled = false;
+				JointScript[] jss = Player.GetComponents<JointScript>();
+				foreach (JointScript jass in jss) {
+					if (!jass.shiprope) Destroy(jass);
+					
+				}
+				Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+				Destroy(focus.GetComponent<LineRenderer>());
+
 				grabbed = false;
 				firing = false;
 				retracting = true;
@@ -133,11 +149,19 @@ public class CraneController : MonoBehaviour {
 				}
 				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					grabbed = false;
+					Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+					Destroy(focus.GetComponent<LineRenderer>());
+
 					//Player.GetComponent<LineRenderer>().enabled = false;
 					// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
 					firing = false;
 					retracting = true;
 					focus.BroadcastMessage("DestroyRope");
+					JointScript[] jss = Player.GetComponents<JointScript>();
+					foreach (JointScript jass in jss) {
+						if (!jass.shiprope) 	Destroy(jass);
+						
+					}
 }
 			} 
 
@@ -188,6 +212,8 @@ public class CraneController : MonoBehaviour {
 							if (lr == null) {
 								lr = focus.gameObject.AddComponent<LineRenderer>();
 							}
+							lr.enabled = false;
+
 							lr.SetWidth(linewidth,linewidth);
 							lr.material = this.ropemat;
 							lr.SetColors(new Color(0,0,0),new Color(0,0,0));

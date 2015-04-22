@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 	public int sampleRate = 0;
 	public float frequency = 440;
 	public float moverate = 2;
+	public float startingmoverate;
 	public bool emp;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (PlayerPrefs.HasKey("moverate")) {
 			moverate = PlayerPrefs.GetFloat("moverate");
 			if (debugmode) moverate = 3;
+		
 		} else {
 			PlayerPrefs.SetFloat("moverate", moverate);
 		}
@@ -38,6 +40,7 @@ public class PlayerMovement : MonoBehaviour {
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
 		RightThruster = GameObject.Find ("RightThruster").GetComponent<SpriteRenderer> ();
 		currentemptime = 0;
+		startingmoverate = moverate;
 	}
 	void EMP() {
 		currentemptime = 0;
@@ -58,9 +61,11 @@ public class PlayerMovement : MonoBehaviour {
 			currentemptime+= Time.deltaTime;
 			if (currentemptime > emprechargetime) {
 				emp = false;
+				currentemptime = 0;
 				GameObject.Find("Ship").GetComponent<RopeTubeController>().emp = false;
 				GameObject.Find ("Crane").GetComponent<CraneController>().emp = false;
 				this.GetComponent<HealthController>().emp = false;
+				this.GetComponent<HealthController>().emptime = 0;
 
 			}
 			this.GetComponent<HealthController>().emptime = currentemptime;
@@ -81,29 +86,33 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	//Handles movement and stuff
 	void FixedUpdate () {
-		if (!emp) {
-			double rangestart = 0;
-			double rangeend = 0;
-			bool flying = false;
-			if (right)
-			{
-				this.rigidbody2D.AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));
-				rangestart = 100;
-				rangeend = 260;
-				flying = true;
-			}
-			if (left)
-			{
-				this.rigidbody2D.AddForce(new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
-				rangestart = 280;
-				rangeend = 80;
-				flying = true;
-			}
-			if (up)
-			{
-				this.rigidbody2D.AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
-				if (flying) {
-					if (right) {
+		if (emp){
+			moverate = startingmoverate / 4;
+		} else  {
+			moverate = startingmoverate;
+		}
+		double rangestart = 0;
+		double rangeend = 0;
+		bool flying = false;
+		if (right)
+		{
+			this.rigidbody2D.AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));
+			rangestart = 100;
+			rangeend = 260;
+			flying = true;
+		}
+		if (left)
+		{
+			this.rigidbody2D.AddForce(new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
+			rangestart = 280;
+			rangeend = 80;
+			flying = true;
+		}
+		if (up)
+		{
+			this.rigidbody2D.AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
+			if (flying) {
+				if (right) {
 						rangestart = 125;
 						rangeend = 315;
 
@@ -113,38 +122,36 @@ public class PlayerMovement : MonoBehaviour {
 						rangeend = 80;
 					}
 				
-				} else {
+			} else {
 					// ("Only up");
-					rangestart = 190;
-					rangeend = 350;
-				}
-
-				flying = true;
-			}
-			if (down)
-			{
-				this.rigidbody2D.AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
-				if (flying) {
-					if (right) {
-						rangestart = 10;
-						rangeend = 260;
-					}
-					if (left) {
-						rangestart = 315;
-						rangeend = 125;
-					}
-					
-				} else {
-					rangestart = 10;
-					rangeend = 170;
-				}
-				flying = true;
+				rangestart = 190;
+				rangeend = 350;
 			}
 
-
+		flying = true;
+		}
+		if (down)
+		{
+			this.rigidbody2D.AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
 			if (flying) {
-				//this.GetComponent<AudioSource>().Play();
+				if (right) {
+					rangestart = 10;
+					rangeend = 260;
+				}
+				if (left) {
+					rangestart = 315;
+					rangeend = 125;
+				}
 
+			} else {
+				rangestart = 10;
+				rangeend = 170;
+			}
+			flying = true;
+		}
+		if (flying) {
+			//this.GetComponent<AudioSource>().Play();
+			if (!emp) {
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
@@ -185,8 +192,22 @@ public class PlayerMovement : MonoBehaviour {
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 					}
 				}
-				
 			} else {
+				if (BackThruster.color.a > 0) {
+					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 2);
+				}
+				if (FrontThruster.color.a > 0) {
+					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 2);
+				}
+				if (LeftThruster.color.a > 0) {
+					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 2);
+				}
+				if (RightThruster.color.a > 0) {
+					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 2);
+				}
+			}
+				
+		} else {
 				if (BackThruster.color.a > 0) {
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 				}
@@ -199,20 +220,9 @@ public class PlayerMovement : MonoBehaviour {
 				if (RightThruster.color.a > 0) {
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 				}
-			}
-		} else {
-			if (BackThruster.color.a > 0) {
-				BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 2);
-			}
-			if (FrontThruster.color.a > 0) {
-				FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 2);
-			}
-			if (LeftThruster.color.a > 0) {
-				LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 2);
-			}
-			if (RightThruster.color.a > 0) {
-				RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 2);
-			}
 		}
+
+			
+
 	}
 }

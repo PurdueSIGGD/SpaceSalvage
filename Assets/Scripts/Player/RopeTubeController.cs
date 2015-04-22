@@ -67,6 +67,11 @@ public class RopeTubeController : MonoBehaviour {
 			}
 		}
 	}
+	void ReconnectAdd() {
+		SendMessage("AddRope");
+		timepassed = 0;
+		tubesleft--;
+	}
 	void SubTheRopeAmt() {
 		tubesleft++;
 	}

@@ -33,6 +33,7 @@ public class RopeScript2D : MonoBehaviour {
 	private int indexovertime;
 	private float timepassed;
 	private bool deadlines;
+	private bool hasgotvec;
 	//Joint Settings
 	public bool usemotor = false;
 	public bool UseLimits = false;
@@ -165,12 +166,18 @@ public class RopeScript2D : MonoBehaviour {
 					end.frequency = frequency;
 					LineRenderer lr = target.gameObject.GetComponent<LineRenderer>();
 					JointScript js = target.gameObject.AddComponent<JointScript>();
+					js.material = this.ropemat;
+					js.shiprope = this.shiprope;
 					js.SendMessage("GiveFocus",this.gameObject);
+					js.linewidth = this.linewidth;
+
 					if (lr == null) {
 						lr = target.gameObject.AddComponent<LineRenderer>();
 					}
 					lr.material = line.material;
-					if (target != GameObject.Find("Player").transform || shiprope) lr.SetWidth(linewidth,linewidth);
+					if (shiprope) {
+						lr.SetWidth(linewidth,linewidth);
+					}
 					startingdistance = (((vec.x - target.position.x))/segments)/3;
 					end.distance = (((vec.x - target.position.x))/segments)/3;
 					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
@@ -254,17 +261,22 @@ public class RopeScript2D : MonoBehaviour {
 	{
 		line = this.GetComponent<LineRenderer>();
 		// Does rope exist? If so, update its position
-		if (!isgenerating || deadlines) {
+		if (!isgenerating || deadlines ) {
 			line.enabled = false;
+
 		} else {
-			line.enabled = true;
-			line.SetVertexCount(2);
-			if (vec == Vector3.zero) {
-				line.SetPosition(0,this.transform.position);
-			} else {
-				line.SetPosition(0,vec);
+			if (this.hasgotvec) { //so no rope appears before it has the proper plaements
+
+				line.SetVertexCount(2);
+				if (vec == Vector3.zero) {
+					line.SetPosition(0,this.transform.position);
+				} else {
+
+					line.SetPosition(0,vec);
+				}
+				line.enabled = true;
+				line.SetPosition(1,target.transform.position);
 			}
-			line.SetPosition(1,target.transform.position);
 		}
 	}
 	GameObject AddJointPhysics(int n)
@@ -280,6 +292,11 @@ public class RopeScript2D : MonoBehaviour {
 		LineRenderer ln = newie.AddComponent<LineRenderer>();
 		JointScript js = newie.gameObject.AddComponent<JointScript>();
 		js.SendMessage("GiveFocus",this.gameObject); 
+		js.shiprope = this.shiprope;
+		js.linewidth = this.linewidth;					
+		js.material = this.ropemat;
+
+
 		line = parent.GetComponent<LineRenderer> ();
 		ln.material = line.material;
 		ln.SetWidth(linewidth,linewidth);
@@ -374,7 +391,7 @@ public class RopeScript2D : MonoBehaviour {
 		Destroy(this.GetComponent<RopeScript2D>());
 	}	
 	void SetTargetAnchor(Vector3 vec) {
-
+		this.hasgotvec = true;
 		this.vec = vec;
 
 	}
@@ -391,14 +408,27 @@ public class RopeScript2D : MonoBehaviour {
 					SpriteRenderer sp = connector.AddComponent<SpriteRenderer> ();
 					SpringJoint2D sj = connector.AddComponent<SpringJoint2D> ();
 					LineRenderer lr = connector.AddComponent<LineRenderer> ();
+					connector.AddComponent<RigidIgnorer>();
 					lr.material = line.material;
 					lr.SetWidth (linewidth, linewidth);
 					GameObject.Find("Player").GetComponent<LineRenderer>().enabled = false;
 					JointScript js = connector.gameObject.AddComponent<JointScript>();
-					js.SendMessage("GiveFocus",this.gameObject);							
+					js.SendMessage("GiveFocus",this.gameObject);	
+					js.shiprope = this.shiprope;
+					js.linewidth = this.linewidth;
+					js.material = this.ropemat;
+
 					rg.gravityScale = 0;
 					cc.radius = .1f;
 					Physics2D.IgnoreCollision(GameObject.Find("Player").collider2D, cc.collider2D);
+					LineRenderer[] lers = target.GetComponentsInChildren<LineRenderer>();
+					LineRenderer luhr = null;
+					foreach (LineRenderer l in lers) {
+						if (l.name == "SubLine") luhr = l;
+					}
+					if (luhr != null) {
+						luhr.enabled = false;
+					}
 					icc.isTrigger = true;
 					innercol.transform.parent = connector.transform;	
 					rg.mass = ropeMass;
@@ -411,8 +441,15 @@ public class RopeScript2D : MonoBehaviour {
 				} 
 				ejected = true;
 				LineRenderer ls = target.GetComponent<LineRenderer>();
-				Destroy(target.GetComponent<SpringJoint2D>());
-				Destroy(target.GetComponent<JointScript>());
+				SpringJoint2D[] sjs = target.GetComponents<SpringJoint2D>();
+				foreach (SpringJoint2D sj in sjs) {
+					if (sj.distance == .005f) Destroy(sj);
+				}
+				JointScript[] jss = target.GetComponents<JointScript>();
+				foreach (JointScript jass in jss) {
+					if (jass.shiprope) 	Destroy(jass);
+					
+				}
 
 				ls.SetVertexCount(0);
 				// detach from rope
@@ -430,13 +467,25 @@ public class RopeScript2D : MonoBehaviour {
 				spree.connectedBody = lastnew.transform.rigidbody2D;
 				Destroy(connector);
 				ejected = false;
-				LineRenderer lr = target.GetComponent<LineRenderer>();
-				lr.enabled = true;
+				LineRenderer[] lers = target.GetComponentsInChildren<LineRenderer>();
+				LineRenderer luhr = null;
+				foreach (LineRenderer l in lers) {
+					if (l.name == "SubLine") luhr = l;
+				}
+				if (luhr != null && !shiprope) {
+					luhr.material = this.ropemat;
+				}
+				/*LineRenderer lr = target.GetComponent<LineRenderer>();
 				lr.SetVertexCount(2);
 				lr.SetPosition(0,target.transform.position);
-				lr.SetPosition(1,lastnew.transform.position);
-				target.gameObject.AddComponent<JointScript>().SendMessage("ReconnectJoint");
-				target.SendMessage("GiveFocus",this.gameObject);						
+				lr.SetPosition(1,lastnew.transform.position);*/
+				JointScript js = target.gameObject.AddComponent<JointScript>();
+				js.SendMessage("ReconnectJoint");
+				js.material = this.ropemat;
+				js.linewidth = this.linewidth;
+				js.shiprope = true;
+				target.SendMessage("GiveFocus",this.gameObject);
+				this.SendMessage("ReconnectAdd");
 			} 
 
 		}
