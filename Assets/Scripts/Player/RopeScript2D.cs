@@ -262,7 +262,7 @@ public class RopeScript2D : MonoBehaviour {
 		line = this.GetComponent<LineRenderer>();
 		// Does rope exist? If so, update its position
 		if (!isgenerating || deadlines ) {
-			line.enabled = false;
+			if (line != null) line.enabled = false;
 
 		} else {
 			if (this.hasgotvec) { //so no rope appears before it has the proper plaements
@@ -301,6 +301,7 @@ public class RopeScript2D : MonoBehaviour {
 		ln.material = line.material;
 		ln.SetWidth(linewidth,linewidth);
 		col.radius = .03f;
+
 		if (debugmode) {
 			SpriteRenderer sp = newie.AddComponent<SpriteRenderer>();
 			sp.sprite = spriteconnector;
@@ -443,7 +444,7 @@ public class RopeScript2D : MonoBehaviour {
 				LineRenderer ls = target.GetComponent<LineRenderer>();
 				SpringJoint2D[] sjs = target.GetComponents<SpringJoint2D>();
 				foreach (SpringJoint2D sj in sjs) {
-					if (sj.distance == .005f) Destroy(sj);
+					if (sj.frequency == frequency) Destroy(sj);
 				}
 				JointScript[] jss = target.GetComponents<JointScript>();
 				foreach (JointScript jass in jss) {

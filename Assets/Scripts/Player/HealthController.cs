@@ -124,6 +124,7 @@ public class HealthController : MonoBehaviour {
 		suitwarning = (health < 20 && health > 0);
 		suiterror = (health <= 0);
 		oxyerror  = (oxy <= 0);
+
 		if (emp && !pause && med <= 0) emp = false;
 		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
@@ -134,7 +135,13 @@ public class HealthController : MonoBehaviour {
 				changeOxy(-1 * Time.deltaTime);
 			}
 		} else {
-			changeOxy(3 * 	Time.deltaTime);
+			if (health < 15) {
+				changeOxy(-.2f * Time.deltaTime);
+
+			} else {
+				changeOxy(3 * 	Time.deltaTime);
+
+			}
 		}
 
 		if (oxy < 15) {

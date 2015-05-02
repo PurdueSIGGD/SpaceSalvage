@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class JointScript : MonoBehaviour {
 	private LineRenderer lr;
 	private SpringJoint2D sp;
+	private EdgeCollider2D eg;
 	private bool broken;
 	public bool shiprope;
 	public bool severed;
@@ -27,7 +29,10 @@ public class JointScript : MonoBehaviour {
 		} else {
 			lr = this.GetComponent<LineRenderer>();
 		}
-		sp = this.GetComponent<SpringJoint2D>();
+		//if (this.name != "Player") {
+			//eg = this.GetComponent<EdgeCollider2D>();
+		//}
+			sp = this.GetComponent<SpringJoint2D>();
 		lr.SetVertexCount(2);
 
 	}
@@ -42,6 +47,7 @@ public class JointScript : MonoBehaviour {
 			if (this.name == "Player" && !shiprope && subline != null) {
 				lr = subline.GetComponent<LineRenderer>();
 			} else {
+
 				lr = this.GetComponent<LineRenderer>();
 			}
 			SpringJoint2D[] sps = this.GetComponents<SpringJoint2D>();
@@ -60,20 +66,48 @@ public class JointScript : MonoBehaviour {
 		//		col.points = new Vector2[2] {new Vector2(0,0), ((Vector2)(this.transform.position - connected.transform.position))}; //remove if rolling back
 		//	}
 
-			if (this.name != "Player") {
+			if (this.name != "Player" || shiprope) {
+		//		int i = 0;
+		//		Vector2[] thepoints = new Vector2[4];
+				lr.enabled = true;
 				lr.SetWidth(this.linewidth,this.linewidth);
 				lr.SetVertexCount(2);
 				lr.SetPosition(0,this.transform.position);
+		/*		if (this.name != "Player") {
+
+					thepoints[i] = Vector2.zero;
+					i++;
+					print("setting the first");
+				}*/
 				if (sp != null && sp.connectedBody != null) {
 					lr.SetPosition(1,new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y, this.transform.position.z));
+					/*if (this.name != "Player") {
+						thepoints[i] = (new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y)- this.transform.position);
+
+						i++;
+						
+						print("setting the second");
+					}*/
 					SpringJoint2D attempt;
 					if ((attempt = sp.connectedBody.GetComponent<SpringJoint2D>()) != null) {
 						if (attempt.connectedBody != null ){//&& attempt.connectedBody.gameObject != focus) {
+
+
+							/*if (this.name != "Player" && this.name != "Joint_1") thepoints[i] = (attempt.connectedBody.transform.position - this.transform.position);
+							i++;*/
 							lr.SetVertexCount(3);
 							lr.SetPosition(2, attempt.connectedBody.transform.position);
 						}
 					}
 				}
+				/*if (this.name != "Player") {
+					thepoints[i] = Vector2.zero;
+					i++;
+
+					//eg.points = thepoints;
+					//((Vector2[])newVerticies).CopyTo(eg.points);
+
+				}*/
 			} else {
 				LineRenderer[] ls = this.GetComponentsInChildren<LineRenderer>();
 				foreach (LineRenderer ell in ls) {
@@ -93,6 +127,8 @@ public class JointScript : MonoBehaviour {
 							}
 						}
 						ell.enabled = (GameObject.Find("Player").GetComponentInChildren<CraneController>().grabbed && !GameObject.Find("Player").GetComponentInChildren<CraneController>().broken);
+					} else {
+
 					}
 				}
 			}
