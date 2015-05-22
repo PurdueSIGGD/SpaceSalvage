@@ -28,6 +28,9 @@ public class DestructionStation : MonoBehaviour {
 
 		if (col.gameObject == Player) {
 			attack ();
+			GameObject.Find ("Camera").SendMessage ("ShakeOnOff", true);
+			GameObject.Find("Camera").SendMessage("Shake",1);
+
 			return;
 		}
 		if (col.GetComponent<JointScript> () != null) {
@@ -35,8 +38,16 @@ public class DestructionStation : MonoBehaviour {
 		}
 	}
 	void OnTriggerEnter2D(Collider2D col){
+		if (col.gameObject == Player) {
+				GameObject.Find ("Camera").SendMessage ("ShakeOnOff", true);
+
+				attack ();
+		}
+	}
+	void OnTriggerExit2D(Collider2D col){
 		if (col.gameObject == Player)
-			attack ();
+			GameObject.Find("Camera").SendMessage("ShakeOnOff", false);
+
 	}
 
 	void attack(){

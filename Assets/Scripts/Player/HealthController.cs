@@ -75,6 +75,7 @@ public class HealthController : MonoBehaviour {
 				if (med > 1) med +=  (8 * Time.deltaTime)/med;
 				if (med <= 1) med +=  Time.deltaTime;
 			}
+
 		}
 		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) {
 			emergency = false;
@@ -154,6 +155,8 @@ public class HealthController : MonoBehaviour {
 	}
 
 	void changeHealth(float f) { //not actual health, this is just the suit itegrity
+
+
 		if (!pause) {
 			if (time > .25f && particle != null) {				
 				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);

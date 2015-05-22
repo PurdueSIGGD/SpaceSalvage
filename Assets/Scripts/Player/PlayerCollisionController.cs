@@ -27,8 +27,9 @@ public class PlayerCollisionController : MonoBehaviour {
 			}
 			if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 				this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
-
 			}
+			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity));
+
 		}
 		
 	}
