@@ -24,7 +24,7 @@ public class RigidIgnorer : MonoBehaviour {
 		Rigidbody2D[] rigids = GameObject.FindObjectsOfType<Rigidbody2D>();
 		foreach (Rigidbody2D d in rigids) {
 			if (d.GetComponent<RopeCrusher>() == null) { //add the exceptions here
-				Physics2D.IgnoreCollision(d.collider2D, this.rigidbody2D.collider2D);
+				Physics2D.IgnoreCollision(d.GetComponent<Collider2D>(), this.GetComponent<Rigidbody2D>().GetComponent<Collider2D>());
 			}
 		}
 	}
@@ -38,9 +38,9 @@ public class RigidIgnorer : MonoBehaviour {
 		}
 	}
 	void IgnoreMe(Collider2D col) {
-		Physics2D.IgnoreCollision(col, this.collider2D);
+		Physics2D.IgnoreCollision(col, this.GetComponent<Collider2D>());
 	}
 	void RememberMe(Collider2D col) {
-		Physics2D.IgnoreCollision(col, this.collider2D, false);
+		Physics2D.IgnoreCollision(col, this.GetComponent<Collider2D>(), false);
 	}
 }

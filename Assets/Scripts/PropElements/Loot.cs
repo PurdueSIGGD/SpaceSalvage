@@ -18,7 +18,7 @@ public class Loot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!this.rigidbody2D.isKinematic) {
+		if (!this.GetComponent<Rigidbody2D>().isKinematic) {
 			timesincekinematic += Time.deltaTime;
 		} else {
 			timesincekinematic = 0;

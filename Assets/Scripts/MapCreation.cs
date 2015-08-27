@@ -22,7 +22,7 @@ public class MapCreation : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Y) && !blerp) {
 			Vector3 vec = new Vector3(2, 0,  0);
 			GameObject thingy = (GameObject)Instantiate(HealthCrate, vec, Quaternion.identity);
-			thingy.rigidbody2D.AddForce(new Vector2(0, 50));
+			thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 50));
 			blerp = true;
 		}
 	}

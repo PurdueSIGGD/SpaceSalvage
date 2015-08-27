@@ -59,7 +59,7 @@ public class MissileScript : MonoBehaviour {
 			this.fuel -= Time.deltaTime;
 			if (fuel <= 0) thrusting = false;
 			if (homing && target != null) {
-							this.rigidbody2D.AddForce(2 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle)));
+							this.GetComponent<Rigidbody2D>().AddForce(2 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle)));
 
 				float thetaersnenig;
 				Vector3 pz = this.transform.position;
@@ -73,11 +73,11 @@ public class MissileScript : MonoBehaviour {
 				}
 				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
 				this.transform.eulerAngles = new Vector3(0,0, thetaersnenig + 180);
-				this.rigidbody2D.velocity = (2 * (target.transform.position - this.transform.position)/Vector3.Distance(target.transform.position, this.transform.position));
+				this.GetComponent<Rigidbody2D>().velocity = (2 * (target.transform.position - this.transform.position)/Vector3.Distance(target.transform.position, this.transform.position));
 				//this.rigidbody2D.AddForce(2 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle)));
 
 			} else {
-				this.rigidbody2D.AddForce(2 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle)));
+				this.GetComponent<Rigidbody2D>().AddForce(2 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle)));
 
 			}
 

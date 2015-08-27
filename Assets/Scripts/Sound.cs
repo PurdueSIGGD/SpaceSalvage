@@ -15,8 +15,8 @@ public class Sound : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.A) || Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.D)) {
-			audio.clip = motion;
-			audio.Play();
+			GetComponent<AudioSource>().clip = motion;
+			GetComponent<AudioSource>().Play();
 
 			//if(audio.isPlaying) {
 				//yield WaitForSeconds(motion.length());
@@ -24,7 +24,7 @@ public class Sound : MonoBehaviour {
 
 		}
 		else {
-			audio.Pause();
+			GetComponent<AudioSource>().Pause();
 		}
 	}
 }

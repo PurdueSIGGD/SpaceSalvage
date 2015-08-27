@@ -148,7 +148,7 @@ public class JointScript : MonoBehaviour {
 
 	}
 	void OnCollisionEnter2D(Collision2D col) {
-		if (col.gameObject.name == "Player") Physics2D.IgnoreCollision(col.collider.collider2D, this.collider2D);
+		if (col.gameObject.name == "Player") Physics2D.IgnoreCollision(col.collider.GetComponent<Collider2D>(), this.GetComponent<Collider2D>());
 
 		connector = col.gameObject.name;
 		//print(col.gameObject.name);

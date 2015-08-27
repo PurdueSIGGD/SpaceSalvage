@@ -82,7 +82,7 @@ public class RopeScript2D : MonoBehaviour {
 					if (joints[retractindex]!= null) {
 						if (joints.Count > retractindex + 1 && ((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>() != null && ((GameObject)joints[retractindex]).GetComponent<SpringJoint2D>().connectedBody != null) {
 							timepassed = 0;
-							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
+							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.GetComponent<Rigidbody2D>();
 							Destroy((GameObject)joints[retractindex]);
 							retractindex++;
 						} else {
@@ -114,7 +114,7 @@ public class RopeScript2D : MonoBehaviour {
 					//do this thing
 					DistanceJoint2D dj = hinger.AddComponent<DistanceJoint2D>();
 					hinger.GetComponent<Rigidbody2D>().gravityScale = 0;
-					dj.connectedBody = this.rigidbody2D;
+					dj.connectedBody = this.GetComponent<Rigidbody2D>();
 					dj.maxDistanceOnly = true;
 					dj.distance = 0;
 					if (!shiprope || true) {
@@ -142,15 +142,15 @@ public class RopeScript2D : MonoBehaviour {
 				//Add Physics to the segments
 			
 				GameObject newie = AddJointPhysics(indexovertime);
-				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).collider2D, target.collider2D);
-				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).collider2D, transform.collider2D);
+				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).GetComponent<Collider2D>(), target.GetComponent<Collider2D>());
+				Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).GetComponent<Collider2D>(), transform.GetComponent<Collider2D>());
 				if (parent.GetComponentInChildren<CraneController>() != null) {
-					Physics2D.IgnoreCollision(parent.GetComponentInChildren<CraneController>().focus.collider2D, ((GameObject)joints[indexovertime-1]).collider2D);
+					Physics2D.IgnoreCollision(parent.GetComponentInChildren<CraneController>().focus.GetComponent<Collider2D>(), ((GameObject)joints[indexovertime-1]).GetComponent<Collider2D>());
 					
 				}
 				if (indexovertime>1) { //if it is not the first
 					foreach (GameObject gee in joints) {
-						Physics2D.IgnoreCollision(newie.collider2D, gee.collider2D);
+						Physics2D.IgnoreCollision(newie.GetComponent<Collider2D>(), gee.GetComponent<Collider2D>());
 
 					}
 					//Physics2D.IgnoreCollision(((GameObject)joints[indexovertime - 1]).collider2D, ((GameObject)joints[indexovertime-2]).collider2D);
@@ -180,11 +180,11 @@ public class RopeScript2D : MonoBehaviour {
 					}
 					startingdistance = (((vec.x - target.position.x))/segments)/3;
 					end.distance = (((vec.x - target.position.x))/segments)/3;
-					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.rigidbody2D;
+					end.connectedBody = ((GameObject)joints[joints.Count-1]).transform.GetComponent<Rigidbody2D>();
 
-						((GameObject)joints[0]).GetComponent<SpringJoint2D>().connectedBody = hinger.rigidbody2D;
+						((GameObject)joints[0]).GetComponent<SpringJoint2D>().connectedBody = hinger.GetComponent<Rigidbody2D>();
 						
-					target.rigidbody2D.gravityScale = 0;
+					target.GetComponent<Rigidbody2D>().gravityScale = 0;
 				
 				}
 				indexovertime++; //increment (like a for loop)
@@ -222,18 +222,18 @@ public class RopeScript2D : MonoBehaviour {
 			segments++;
 			segmentPos.Add(GameObject.Find("Player").transform.position); //add to araylist
 			GameObject newobj = AddJointPhysics(joints.Count + 1); //increment physics points
-			target.GetComponent<SpringJoint2D>().connectedBody = newobj.rigidbody2D;
-			newobj.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).rigidbody2D;
+			target.GetComponent<SpringJoint2D>().connectedBody = newobj.GetComponent<Rigidbody2D>();
+			newobj.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).GetComponent<Rigidbody2D>();
 			spree.frequency = frequency;
 			newobj.transform.position = target.transform.position;
 			LineRenderer lr = target.GetComponent<LineRenderer>();
 			lr.SetVertexCount (2);
 			lr.SetPosition (0, target.transform.position);
 			lr.SetPosition (1, newobj.transform.position);
-			Physics2D.IgnoreCollision(newobj.collider2D, target.collider2D); //cleaning up collision
-			Physics2D.IgnoreCollision(newobj.collider2D, parent.collider2D);
+			Physics2D.IgnoreCollision(newobj.GetComponent<Collider2D>(), target.GetComponent<Collider2D>()); //cleaning up collision
+			Physics2D.IgnoreCollision(newobj.GetComponent<Collider2D>(), parent.GetComponent<Collider2D>());
 			if (istube && parent.GetComponentInChildren<CraneController>() != null) {
-				Physics2D.IgnoreCollision(parent.GetComponentInChildren<CraneController>().focus.collider2D, (newobj).collider2D);
+				Physics2D.IgnoreCollision(parent.GetComponentInChildren<CraneController>().focus.GetComponent<Collider2D>(), (newobj).GetComponent<Collider2D>());
 			}
 		}
 
@@ -245,7 +245,7 @@ public class RopeScript2D : MonoBehaviour {
 			if ( Vector3.Distance(((GameObject)joints[segments - 1]).transform.position,target.transform.position) < .4f) {
 				pushing = false;
 				Destroy(((GameObject)joints[segments - 1]));
-				target.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).rigidbody2D;
+				target.GetComponent<SpringJoint2D>().connectedBody = ((GameObject)joints[segments-2]).GetComponent<Rigidbody2D>();
 				joints.RemoveAt(segments-1);
 				segmentPos.RemoveAt(segments - 1);
 				segments--;
@@ -307,7 +307,7 @@ public class RopeScript2D : MonoBehaviour {
 			sp.sprite = spriteconnector;
 		}
 		newie.AddComponent<RigidIgnorer>();
-		ph.collideConnected = false;
+		ph.enableCollision = false;
 		ph.frequency = frequency;
 		ph.dampingRatio = dampening;
 		ph.distance = startingdistance;
@@ -320,13 +320,13 @@ public class RopeScript2D : MonoBehaviour {
 		col.sharedMaterial = mate;
 		if(n==1){		
 			this.firstjoint = newie;
-			ph.connectedBody = hinger.rigidbody2D;
+			ph.connectedBody = hinger.GetComponent<Rigidbody2D>();
 			//js.SendMessage("GiveConnected",this.gameObject); //remove if rolling back
 			//col.points = new Vector2[2] {new Vector2(0,0), (Vector2)(this.transform.position - newie.transform.position)}; //remove if rolling back
 
 		} else
 		{
-			ph.connectedBody = ((GameObject)joints[n-2]).rigidbody2D;	
+			ph.connectedBody = ((GameObject)joints[n-2]).GetComponent<Rigidbody2D>();	
 			//js.SendMessage("GiveConnected",((GameObject)joints[n-2])); //remove if rolling back
 			//col.points = new Vector2[2] {new Vector2(0,0), (Vector2)(this.transform.position - ((GameObject)joints[n-2]).transform.position)}; //remove if rolling back
 
@@ -421,7 +421,7 @@ public class RopeScript2D : MonoBehaviour {
 
 					rg.gravityScale = 0;
 					cc.radius = .1f;
-					Physics2D.IgnoreCollision(GameObject.Find("Player").collider2D, cc.collider2D);
+					Physics2D.IgnoreCollision(GameObject.Find("Player").GetComponent<Collider2D>(), cc.GetComponent<Collider2D>());
 					LineRenderer[] lers = target.GetComponentsInChildren<LineRenderer>();
 					LineRenderer luhr = null;
 					foreach (LineRenderer l in lers) {
@@ -437,7 +437,7 @@ public class RopeScript2D : MonoBehaviour {
 					sp.color = new Color (sp.color.r, sp.color.g, sp.color.b, lightintensity);
 					connector.transform.position = target.transform.position;
 					sj.distance = startingdistance;
-					sj.connectedBody = lastnew.rigidbody2D;
+					sj.connectedBody = lastnew.GetComponent<Rigidbody2D>();
 				
 				} 
 				ejected = true;
@@ -465,7 +465,7 @@ public class RopeScript2D : MonoBehaviour {
 					spree = target.gameObject.AddComponent<SpringJoint2D>();
 				}
 				spree.distance = (((vec.x - target.position.x))/segments)/3;
-				spree.connectedBody = lastnew.transform.rigidbody2D;
+				spree.connectedBody = lastnew.transform.GetComponent<Rigidbody2D>();
 				Destroy(connector);
 				ejected = false;
 				LineRenderer[] lers = target.GetComponentsInChildren<LineRenderer>();

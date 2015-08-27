@@ -40,10 +40,10 @@ public class Airlock : MonoBehaviour {
 		RopeCrusher D2r = Door2right.gameObject.AddComponent<RopeCrusher>();
 		D2r.partner = Door1right.gameObject; 
 	
-		Physics2D.IgnoreCollision(Door1left.collider2D  , collider2D);
-		Physics2D.IgnoreCollision(Door2left.collider2D  , collider2D);
-		Physics2D.IgnoreCollision(Door1right.collider2D  , collider2D);
-		Physics2D.IgnoreCollision(Door2right.collider2D  , collider2D); //doors won't set off the airlock
+		Physics2D.IgnoreCollision(Door1left.GetComponent<Collider2D>()  , GetComponent<Collider2D>());
+		Physics2D.IgnoreCollision(Door2left.GetComponent<Collider2D>()  , GetComponent<Collider2D>());
+		Physics2D.IgnoreCollision(Door1right.GetComponent<Collider2D>()  , GetComponent<Collider2D>());
+		Physics2D.IgnoreCollision(Door2right.GetComponent<Collider2D>()  , GetComponent<Collider2D>()); //doors won't set off the airlock
 
 
 
@@ -143,8 +143,8 @@ public class Airlock : MonoBehaviour {
 							if (this.particletime > .2f) {
 								GameObject thingy = (GameObject)Instantiate(particle, spawner1.position, Quaternion.identity);
 								GameObject thingy2 = (GameObject)Instantiate(particle, spawner2.position, Quaternion.identity);
-								thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-80,0)));
-								thingy2.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(0,80)));
+								thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-80,0)));
+								thingy2.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(0,80)));
 
 							}
 						}
@@ -170,10 +170,10 @@ public class Airlock : MonoBehaviour {
 							if (this.particletime > .2f) {
 								GameObject thingy = (GameObject)Instantiate(particle, spawner1.position, Quaternion.identity);
 								GameObject thingy2 = (GameObject)Instantiate(particle, spawner2.position, Quaternion.identity);
-								thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
-								thingy2.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
-								Physics2D.IgnoreCollision(thingy.collider2D, GameObject.Find("Player").collider2D);
-								Physics2D.IgnoreCollision(thingy2.collider2D, GameObject.Find("Player").collider2D);
+								thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+								thingy2.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+								Physics2D.IgnoreCollision(thingy.GetComponent<Collider2D>(), GameObject.Find("Player").GetComponent<Collider2D>());
+								Physics2D.IgnoreCollision(thingy2.GetComponent<Collider2D>(), GameObject.Find("Player").GetComponent<Collider2D>());
 
 							}
 

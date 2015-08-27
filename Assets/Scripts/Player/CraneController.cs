@@ -77,7 +77,7 @@ public class CraneController : MonoBehaviour {
 		} else {
 			// release grip
 			if (grabbed) {
-				Physics2D.IgnoreCollision(focus.collider2D, ending.collider2D, false);
+				Physics2D.IgnoreCollision(focus.GetComponent<Collider2D>(), ending.GetComponent<Collider2D>(), false);
 				//Player.GetComponent<LineRenderer>().enabled = false;
 				JointScript[] jss = Player.GetComponents<JointScript>();
 				foreach (JointScript jass in jss) {
@@ -119,7 +119,7 @@ public class CraneController : MonoBehaviour {
 					launchangle = thetaersnenig;
 					if (!broken) Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
 
-					ending.rigidbody2D.AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
+					ending.GetComponent<Rigidbody2D>().AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
 				}
 				firing = true;
 				if (dist > cranelength) {
@@ -134,7 +134,7 @@ public class CraneController : MonoBehaviour {
 
 				if (retracting) {
 					//this.GetComponent<LineRenderer>().enabled = !broken;
-					ending.rigidbody2D.velocity = (Vector3)Player.rigidbody2D.velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
+					ending.GetComponent<Rigidbody2D>().velocity = (Vector3)Player.GetComponent<Rigidbody2D>().velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 					if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
 						releaseready = false;
 						retracting = false;
@@ -199,12 +199,12 @@ public class CraneController : MonoBehaviour {
 						retracting = true;
 						firing = false;
 						if (c.GetComponent("ItemPickup") != null) {
-							Physics2D.IgnoreCollision(c, ending.collider2D);
+							Physics2D.IgnoreCollision(c, ending.GetComponent<Collider2D>());
 							releaseready = false;
 							focus = c.gameObject;
 							firing = false;
 							retracting = false;
-							focus.rigidbody2D.isKinematic = false;
+							focus.GetComponent<Rigidbody2D>().isKinematic = false;
 							grabbed = true;
 							this.lastendingangle = ending.eulerAngles.z;
 							firstfocusangle = focus.transform.eulerAngles.z;

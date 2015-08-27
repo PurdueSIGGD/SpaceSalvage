@@ -161,7 +161,7 @@ public class HealthController : MonoBehaviour {
 			if (time > .25f && particle != null) {				
 				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
 				thingy.GetComponent<SpriteRenderer>().color = new Color(1 - (health/100), 0, 0);
-				thingy.rigidbody2D.AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 				time = 0;
 			}
 			if (health > 1 && health + f > 0) {

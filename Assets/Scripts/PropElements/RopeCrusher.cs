@@ -11,8 +11,8 @@ public class RopeCrusher : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D col) {
 
 		if (col.gameObject.GetComponent<RigidIgnorer>() != null && isclosing) {
-			col.collider.rigidbody2D.isKinematic = true;
-			col.gameObject.SendMessage("IgnoreMe", this.collider2D);
+			col.collider.GetComponent<Rigidbody2D>().isKinematic = true;
+			col.gameObject.SendMessage("IgnoreMe", this.GetComponent<Collider2D>());
 		}
 
 
@@ -20,8 +20,8 @@ public class RopeCrusher : MonoBehaviour {
 	}
 	void OnCollisionExit2D(Collision2D col) {
 		if (col.gameObject.GetComponent<RigidIgnorer>() != null) {
-			col.collider.rigidbody2D.isKinematic = false;
-			col.gameObject.SendMessage("RememberMe", this.collider2D);
+			col.collider.GetComponent<Rigidbody2D>().isKinematic = false;
+			col.gameObject.SendMessage("RememberMe", this.GetComponent<Collider2D>());
 		}
 	}
 	// Update is called once per frame

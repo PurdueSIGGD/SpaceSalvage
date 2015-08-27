@@ -19,7 +19,7 @@ public class ExplosionScript : MonoBehaviour {
 			if (damageoremp) {
 
 				//push
-				if (c.rigidbody2D != null) c.rigidbody2D.AddForce(damage * (c.transform.position - this.transform.position));
+				if (c.GetComponent<Rigidbody2D>() != null) c.GetComponent<Rigidbody2D>().AddForce(damage * (c.transform.position - this.transform.position));
 				//damage
 				if (c.GetComponent<HealthController>() != null) c.SendMessage("changeHealth",-1 * damage * Vector3.Distance(c.transform.position, this.transform.position));
 				//break

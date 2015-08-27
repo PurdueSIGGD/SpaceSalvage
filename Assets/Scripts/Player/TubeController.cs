@@ -61,7 +61,7 @@ public class TubeController : MonoBehaviour {
 							dist = 0;
 					}
 					if ( tubesleft == 0 || dist > tubelength) {
-						this.transform.rigidbody2D.AddForce((tubes[tubecount - 2] - transform.position));
+						this.transform.GetComponent<Rigidbody2D>().AddForce((tubes[tubecount - 2] - transform.position));
 					}
 						
 		}
@@ -112,10 +112,10 @@ public class TubeController : MonoBehaviour {
 
 				}
 				if (Vector3.Magnitude (tubes [tubecount - 2] - transform.position) > tubelength + tubelength/2	) {
-					this.transform.rigidbody2D.AddForce(2 * (tubes[tubecount - 2] - transform.position));
+					this.transform.GetComponent<Rigidbody2D>().AddForce(2 * (tubes[tubecount - 2] - transform.position));
 				}
 				if (reelkey) { 
-					this.transform.rigidbody2D.AddForce(3 * (tubes[tubecount - 2] - transform.position));
+					this.transform.GetComponent<Rigidbody2D>().AddForce(3 * (tubes[tubecount - 2] - transform.position));
 				}
 
 					
@@ -126,7 +126,7 @@ public class TubeController : MonoBehaviour {
 
 		if (ejectkey && !emp	) {
 			if (!ejected) {
-				this.transform.rigidbody2D.AddForce(80 * (transform.position - tubes[tubecount - 2]));
+				this.transform.GetComponent<Rigidbody2D>().AddForce(80 * (transform.position - tubes[tubecount - 2]));
 			}
 			ejected = true;
 

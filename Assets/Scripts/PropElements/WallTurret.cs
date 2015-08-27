@@ -31,7 +31,7 @@ public class WallTurret : MonoBehaviour {
 		if (!emp) {
 			if (focused) {
 				timebetweenshots+=Time.deltaTime;
-				barrel.rigidbody2D.angularVelocity = 0;
+				barrel.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				float thetaersnenig;
 				Vector3 pz = this.transform.position;
 				thetaersnenig = (Mathf.Atan( ((pz.y - (Player.transform.position.y)) /(pz.x - Player.transform.position.x)))); //angle from mouse to me, formatting later
@@ -52,11 +52,11 @@ public class WallTurret : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(ammo, barrel.transform.FindChild("OtherBarrel").transform.position, Quaternion.identity);
 					thingy.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z + 180);
 					if (homig) thingy.SendMessage("GetTarget",Player);
-					Physics2D.IgnoreCollision(this.collider2D, thingy.collider2D);
+					Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), thingy.GetComponent<Collider2D>());
 					if (!ammo.name.Equals("Missile")) {
 
-						thingy.rigidbody2D.AddForce(100 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180)),Mathf.Sin(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180))));
-						thingy.rigidbody2D.AddTorque(50);
+						thingy.GetComponent<Rigidbody2D>().AddForce(100 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180)),Mathf.Sin(Mathf.Deg2Rad * (barrel.transform.eulerAngles.z+180))));
+						thingy.GetComponent<Rigidbody2D>().AddTorque(50);
 					} else {
 						thingy.GetComponent<MissileScript>().damageoremp = !empshooty;
 					}

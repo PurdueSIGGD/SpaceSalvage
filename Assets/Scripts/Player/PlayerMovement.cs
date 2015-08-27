@@ -96,21 +96,21 @@ public class PlayerMovement : MonoBehaviour {
 		bool flying = false;
 		if (right)
 		{
-			this.rigidbody2D.AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));
+			this.GetComponent<Rigidbody2D>().AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));
 			rangestart = 100;
 			rangeend = 260;
 			flying = true;
 		}
 		if (left)
 		{
-			this.rigidbody2D.AddForce(new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
+			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
 			rangestart = 280;
 			rangeend = 80;
 			flying = true;
 		}
 		if (up)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
+			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, moverate / (70*Time.deltaTime)));
 			if (flying) {
 				if (right) {
 						rangestart = 125;
@@ -132,7 +132,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (down)
 		{
-			this.rigidbody2D.AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
+			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
 			if (flying) {
 				if (right) {
 					rangestart = 10;

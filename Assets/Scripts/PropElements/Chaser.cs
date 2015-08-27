@@ -35,9 +35,9 @@ public class Chaser : MonoBehaviour {
 				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
 			
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
-				this.rigidbody2D.AddForce(6 * Time.deltaTime * (Player.transform.position - this.transform.position) * Vector3.Distance(Player.transform.position, this.transform.position));
+				this.GetComponent<Rigidbody2D>().AddForce(6 * Time.deltaTime * (Player.transform.position - this.transform.position) * Vector3.Distance(Player.transform.position, this.transform.position));
 			} else {
-				this.rigidbody2D.AddForce(-1 * this.rigidbody2D.velocity);
+				this.GetComponent<Rigidbody2D>().AddForce(-1 * this.GetComponent<Rigidbody2D>().velocity);
 				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+ 30 * Time.deltaTime);
 			}
 		} else {

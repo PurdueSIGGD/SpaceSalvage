@@ -18,18 +18,18 @@ public class ItemHolder : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 
-		if (col.rigidbody2D != null) {
-			if (numpackages < maxnumpackages && !col.rigidbody2D.isKinematic && col.GetComponent<Loot>() && col.GetComponent<Loot>().timesincekinematic > 8) {
+		if (col.GetComponent<Rigidbody2D>() != null) {
+			if (numpackages < maxnumpackages && !col.GetComponent<Rigidbody2D>().isKinematic && col.GetComponent<Loot>() && col.GetComponent<Loot>().timesincekinematic > 8) {
 				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * numpackages), this.transform.position.y + packagearea.y ,-1);
 				this.GetComponent<AudioSource>().Play();
 
-				col.rigidbody2D.isKinematic = true;
+				col.GetComponent<Rigidbody2D>().isKinematic = true;
 				if (col.GetComponent<RopeScript2D>() != null) col.gameObject.BroadcastMessage("DestroyRope");
 				col.GetComponent<Loot>().isbelonging = true;
-				col.rigidbody2D.velocity = new Vector2(0,0);
-				col.rigidbody2D.angularVelocity = 0;
+				col.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
+				col.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				col.transform.rotation = Quaternion.Euler(0,0,90);
-				col.rigidbody2D.Sleep();
+				col.GetComponent<Rigidbody2D>().Sleep();
 
 				numpackages++;
 
