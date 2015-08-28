@@ -32,7 +32,7 @@ public class InteractController : MonoBehaviour {
 		gu.text = "";
 		message = "";
 		gu.color = new Color(1,1,1);
-		gu.pixelOffset = new Vector2(Screen.width / 2, Screen.height/2);
+		gu.pixelOffset = new Vector2(Screen.width * 4 / 6, Screen.height/2);
 	}
 	void GetMessage(string s) {
 		message = s;
