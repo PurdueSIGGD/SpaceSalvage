@@ -13,7 +13,12 @@ public class ExplosionScript : MonoBehaviour {
 		this.GetComponent<AudioSource>().Play();
 
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
-		if (!damageoremp) sp.color = cee;
+		Light l = this.GetComponentInChildren<Light>();
+		l.intensity = 0;
+		if (!damageoremp) {
+			sp.color = cee;
+			l.color = cee;
+		}
 		Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, radius); 
 		foreach (Collider2D c in hitColliders) {
 			if (damageoremp) {
@@ -36,10 +41,12 @@ public class ExplosionScript : MonoBehaviour {
 	void Update () {
 		time += Time.deltaTime;
 		if (time <  .5f/speed) {
+			this.GetComponentInChildren<Light>().intensity = 2;
 			this.transform.localScale = new Vector3(this.transform.localScale.x + 6 * Time.deltaTime, this.transform.localScale.y + 6 * Time.deltaTime, 1);
-		} else if (time < 1.5f/speed) {
+		} else if (time < 2/speed) {
+			this.GetComponentInChildren<Light>().intensity = 2 - time;
 			this.transform.localScale = new Vector3(this.transform.localScale.x - 3 * Time.deltaTime, this.transform.localScale.y - 3 * Time.deltaTime, 1);
-		} else if (time > 1.5f/speed) {
+		} else if (time > 2/speed) {
 			Destroy(this.gameObject);
 		}
 	}

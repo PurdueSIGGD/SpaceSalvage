@@ -19,7 +19,9 @@ public class MissileScript : MonoBehaviour {
 	private bool flashingb;
 	// Use this for initialization
 	void Start () {
+
 		thruster = transform.FindChild("Thruster");
+		thruster.GetComponentInChildren<Light>().intensity = 0;
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		if (damageoremp) { //color of main sprite
 			sp.color = damagecolor;
@@ -30,10 +32,10 @@ public class MissileScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		
 		SpriteRenderer c = thruster.GetComponent<SpriteRenderer>();
 		SpriteRenderer cc = this.transform.FindChild("Nose").GetComponent<SpriteRenderer>();
-
+		Light ccc = thruster.GetComponentInChildren<Light>();
 		time += Time.deltaTime;
 		if (thrusting) {
 			if (c.color.a < 1) {
@@ -42,6 +44,9 @@ public class MissileScript : MonoBehaviour {
 				cc.color = new Color(cc.color.r, cc.color.g, cc.color.b, 1);
 
 			} 
+			if (ccc.intensity < 1.5) {
+				ccc.intensity += Time.deltaTime;
+			}
 			if (homing) {
 				if (flashingb) {
 					flashing+= Time.deltaTime;
