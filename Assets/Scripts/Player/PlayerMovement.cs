@@ -2,12 +2,18 @@ using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
+	public KeyCode kup = KeyCode.W;
+	public KeyCode kdown = KeyCode.S;
+	public KeyCode kleft = KeyCode.A;
+	public KeyCode kright = KeyCode.D;
+
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
 	public float moverate = 2;
 	public float startingmoverate;
 	public bool emp;
+
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
 	private SpriteRenderer LeftThruster;
@@ -56,7 +62,10 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 
+
 	void Update() {
+
+
 		if (emp) {
 			currentemptime+= Time.deltaTime;
 			if (currentemptime > emprechargetime) {
@@ -70,10 +79,10 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
-		up = Input.GetKey (KeyCode.W);
-		down = Input.GetKey (KeyCode.S);
-		right = Input.GetKey (KeyCode.D);
-		left = Input.GetKey (KeyCode.A);
+		up = Input.GetKey (kup);
+		down = Input.GetKey (kdown);
+		right = Input.GetKey (kleft);
+		left = Input.GetKey (kright);
 	}
 	bool inRange(double d, double rangestart, double rangeend) {
 		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
@@ -149,37 +158,66 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			flying = true;
 		}
+		Light BLight = this.transform.FindChild("BackLight").GetComponent<Light>();
+		Light FLight = this.transform.FindChild("FrontLight").GetComponent<Light>();
+		Light LLight = this.transform.FindChild("LeftLight").GetComponent<Light>();
+		Light RLight = this.transform.FindChild("RightLight").GetComponent<Light>();
+		Light CLight = this.transform.FindChild("CWLight").GetComponent<Light>();
+		Light CCLight = this.transform.FindChild("CCWLight").GetComponent<Light>();
 		if (flying) {
+
+
 			//this.GetComponent<AudioSource>().Play();
 			if (!emp) {
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
 						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 5);
+
+					}
+					if (BLight.intensity < 0.00f) {
+						BLight.intensity += Time.deltaTime * 5;
 					}
 				} else {
 					if (BackThruster.color.a > 0) {
 						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 					}
+					if (BLight.intensity > 0) {
+						BLight.intensity -= Time.deltaTime * 5;
+					}
+
 				}
 				//FrontAngle
 				if (inRange(FrontAngle, rangestart, rangeend)|| inRangeLeft(FrontAngle, rangestart, rangeend)) {
 					if (FrontThruster.color.a < 1) {
 						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 5);
 					}
+					if (FLight.intensity < 0.00f) {
+						FLight.intensity += Time.deltaTime * 5;
+					}
 				} else {
 					if (FrontThruster.color.a > 0) {
 						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
 					}
+					if (FLight.intensity > 0) {
+						FLight.intensity -= Time.deltaTime * 5;
+					}
+
 				}
 				//LeftAngle
 				if (inRange(LeftAngle, rangestart, rangeend) || inRangeLeft(LeftAngle, rangestart, rangeend)) {
 					if (LeftThruster.color.a < 1) {
 						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 5);
 					}
+					if (LLight.intensity < 0.00f) {
+						LLight.intensity += Time.deltaTime * 5;
+					}
 				} else {
 					if (LeftThruster.color.a > 0) {
 						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
+					}
+					if (LLight.intensity > 0) {
+						LLight.intensity -= Time.deltaTime * 5;
 					}
 				}
 				//RightAngle
@@ -187,23 +225,41 @@ public class PlayerMovement : MonoBehaviour {
 					if (RightThruster.color.a < 1) {
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 5);
 					}
+					if (BLight.intensity < 0.00f) {
+						BLight.intensity += Time.deltaTime * 5;
+					}
 				} else {
 					if (RightThruster.color.a > 0) {
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
+					}
+					if (RLight.intensity > 0) {
+						RLight.intensity -= Time.deltaTime * 5;
 					}
 				}
 			} else {
 				if (BackThruster.color.a > 0) {
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 2);
 				}
+				if (BLight.intensity > 0) {
+					BLight.intensity -= Time.deltaTime * 5;
+				}
 				if (FrontThruster.color.a > 0) {
 					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 2);
+				}
+				if (FLight.intensity > 0) {
+					FLight.intensity -= Time.deltaTime * 5;
 				}
 				if (LeftThruster.color.a > 0) {
 					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 2);
 				}
+				if (LLight.intensity > 0) {
+					LLight.intensity -= Time.deltaTime * 5;
+				}
 				if (RightThruster.color.a > 0) {
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 2);
+				}
+				if (RLight.intensity > 0) {
+					RLight.intensity -= Time.deltaTime * 5;
 				}
 			}
 				
@@ -211,14 +267,26 @@ public class PlayerMovement : MonoBehaviour {
 				if (BackThruster.color.a > 0) {
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 				}
+				if (BLight.intensity > 0) {
+					BLight.intensity -= Time.deltaTime * 5;
+				}
 				if (FrontThruster.color.a > 0) {
 					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
+				}
+				if (FLight.intensity > 0) {
+					FLight.intensity -= Time.deltaTime * 5;
 				}
 				if (LeftThruster.color.a > 0) {
 					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
 				}
+				if (LLight.intensity > 0) {
+					LLight.intensity -= Time.deltaTime * 5;
+				}
 				if (RightThruster.color.a > 0) {
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
+				}
+				if (RLight.intensity > 0) {
+					RLight.intensity -= Time.deltaTime * 5;
 				}
 		}
 

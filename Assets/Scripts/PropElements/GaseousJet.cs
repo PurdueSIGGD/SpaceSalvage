@@ -12,8 +12,10 @@ public class GaseousJet : MonoBehaviour {
 		bottom = transform.FindChild("Bottom").position;
 	}
 	void OnTriggerStay2D(Collider2D col) {
-		if (Vector2.SqrMagnitude(col.GetComponent<Rigidbody2D>().velocity) <= maxspeed) {
-			col.GetComponent<Rigidbody2D>().AddForce(force * (top - bottom));
+		if (col.GetComponent<Rigidbody2D>() != null) {
+			if (Vector2.SqrMagnitude(col.GetComponent<Rigidbody2D>().velocity) <= maxspeed) {
+				col.GetComponent<Rigidbody2D>().AddForce(force * (top - bottom));
+			}
 		}
 	}
 	// Update is called once per frame

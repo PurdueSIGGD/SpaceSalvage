@@ -20,7 +20,7 @@ public class ItemHolder : MonoBehaviour {
 
 		if (col.GetComponent<Rigidbody2D>() != null) {
 			if (numpackages < maxnumpackages && !col.GetComponent<Rigidbody2D>().isKinematic && col.GetComponent<Loot>() && col.GetComponent<Loot>().timesincekinematic > 8) {
-				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * numpackages), this.transform.position.y + packagearea.y ,-1);
+				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * numpackages), this.transform.position.y + packagearea.y ,-1 + (.01f * numpackages));
 				this.GetComponent<AudioSource>().Play();
 
 				col.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -33,7 +33,7 @@ public class ItemHolder : MonoBehaviour {
 
 				numpackages++;
 
-				((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).grabbed = false;
+				((CraneController)GameObject.Find("Player").GetComponentInChildren<CraneController>()).SendMessage("ObjectTakenByShip", col.gameObject);
 
 
 			}

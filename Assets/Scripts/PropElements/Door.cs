@@ -5,10 +5,11 @@ public class Door : MonoBehaviour {
 	private float time;
 	private Vector3 open, close;
 	public bool opened;
+	public float buffer = .1f;
 	private bool moving;
 	// Use this for initialization
 	void Start () {
-
+		buffer = .1f;
 		open = transform.FindChild("DoorOpen").transform.position;
 		close = transform.FindChild("DoorClose").transform.position;
 
@@ -26,17 +27,19 @@ public class Door : MonoBehaviour {
 
 
 
-				if (Mathf.Abs(this.transform.position.y - close.y) > .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (close.y - open.y)), this.transform.position.z);
-				if (Mathf.Abs(this.transform.position.x - close.x) > .1f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (close.x - open.x)), this.transform.position.y, this.transform.position.z);
-				moving = ((Mathf.Abs(this.transform.position.x - close.x) > .1f) || (Mathf.Abs(this.transform.position.y - close.y) > .1f));
+				if (Mathf.Abs(this.transform.position.y - close.y) > buffer) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (close.y - open.y)), this.transform.position.z);
+				else this.transform.position = new Vector3(this.transform.position.x, close.y, this.transform.position.z);
+				if (Mathf.Abs(this.transform.position.x - close.x) > buffer) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (close.x - open.x)), this.transform.position.y, this.transform.position.z);
+				else this.transform.position = new Vector3(close.x, this.transform.position.y, this.transform.position.z);
+				moving = ((Mathf.Abs(this.transform.position.x - close.x) > buffer) || (Mathf.Abs(this.transform.position.y - close.y) > .1f));
 				//if (moving) print("Whatttt");
 			} else {
 				if (transform.parent.name == "Button") this.SendMessageUpwards("ChangeWord", "close door");
 
 
-				if (Mathf.Abs(this.transform.position.y - open.y) > .1f) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (open.y - close.y)), this.transform.position.z);
-				if (Mathf.Abs(this.transform.position.x - open.x) > .1f) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (open.x - close.x)), this.transform.position.y, this.transform.position.z);
-				moving = ((Mathf.Abs(this.transform.position.x - open.x) > .1f) || (Mathf.Abs(this.transform.position.y - open.y) > .1f));
+				if (Mathf.Abs(this.transform.position.y - open.y) > buffer) this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (Time.deltaTime * (open.y - close.y)), this.transform.position.z);
+				if (Mathf.Abs(this.transform.position.x - open.x) > buffer) this.transform.position = new Vector3(this.transform.position.x + (Time.deltaTime * (open.x - close.x)), this.transform.position.y, this.transform.position.z);
+				moving = ((Mathf.Abs(this.transform.position.x - open.x) > buffer) || (Mathf.Abs(this.transform.position.y - open.y) > .1f));
 				//if (moving) print("Whatttt");
 
 			}

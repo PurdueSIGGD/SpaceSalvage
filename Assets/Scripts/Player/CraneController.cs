@@ -160,7 +160,6 @@ public class CraneController : MonoBehaviour {
 					JointScript[] jss = Player.GetComponents<JointScript>();
 					foreach (JointScript jass in jss) {
 						if (!jass.shiprope) 	Destroy(jass);
-						
 					}
 }
 			} 
@@ -301,5 +300,22 @@ public class CraneController : MonoBehaviour {
 	}
 	void PauseGame(bool b) {
 		pause = b;
+	}
+	void ObjectTakenByShip(GameObject g) {
+		if (grabbed && focus.Equals(g)) {
+			grabbed = false;
+			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+			Destroy(focus.GetComponent<LineRenderer>());
+			
+			//Player.GetComponent<LineRenderer>().enabled = false;
+			// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
+			firing = false;
+			retracting = true;
+			focus.BroadcastMessage("DestroyRope");
+			JointScript[] jss = Player.GetComponents<JointScript>();
+			foreach (JointScript jass in jss) {
+				if (!jass.shiprope) 	Destroy(jass);
+			}
+		}
 	}
 }

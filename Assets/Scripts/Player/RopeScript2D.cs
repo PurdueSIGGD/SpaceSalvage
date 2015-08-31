@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class RopeScript2D : MonoBehaviour {
+	public KeyCode keject = KeyCode.G;
+
 	public GameObject hinger; //the hinge to make the connector stick out instead of being on the center
 	public Vector3 vec; //where our cable starts
 	public Transform target;
@@ -420,7 +422,7 @@ public class RopeScript2D : MonoBehaviour {
 					js.material = this.ropemat;
 
 					rg.gravityScale = 0;
-					cc.radius = .1f;
+					cc.radius = .15f;
 					Physics2D.IgnoreCollision(GameObject.Find("Player").GetComponent<Collider2D>(), cc.GetComponent<Collider2D>());
 					LineRenderer[] lers = target.GetComponentsInChildren<LineRenderer>();
 					LineRenderer luhr = null;

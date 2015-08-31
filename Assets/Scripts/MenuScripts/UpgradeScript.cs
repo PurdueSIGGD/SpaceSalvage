@@ -88,7 +88,7 @@ public class UpgradeScript : MonoBehaviour {
 
 		//for health
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Suit Integrity:  = " + suitintegrity + " ($5)");
-		if (suitintegrity >= 100) {
+		if (suitintegrity >= 100 || cash < 5) {
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 5");
 		} else {
 			if (cash >= 5 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 5")) {
@@ -118,7 +118,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Armor = " + armor + " ($20)");
-		if (armor >= 200) { //200 being max armor
+		if (armor >= 200 || cash < 20) { //200 being max armor
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 5");
 		} else {
 			if (cash >= 20 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 5")) {
@@ -144,7 +144,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Engine Power = " + thrustermoverate + "  ($10)");
-		if (thrustermoverate >= 6) { // 6 being max speed
+		if (thrustermoverate >= 6 || cash < 10) { // 6 being max speed
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ .1");
 		} else {
 			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ .1")) {
@@ -166,7 +166,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Oxy Capacity = " + startingoxy + "  ($10)");
-		if (startingoxy >= 180) { //180 being max oxy
+		if (startingoxy >= 180 || cash < 10) { //180 being max oxy
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 1");
 		} else {
 			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 1")) {
@@ -186,7 +186,7 @@ public class UpgradeScript : MonoBehaviour {
 			
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "EMP Recovery = " + emprechargetime + "  ($40)");
-		if (emprechargetime == 2) { //180 being min time
+		if (emprechargetime == 2 || cash < 40) { //180 being min time
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.5");
 		} else {
 			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "- 0.5")) {
@@ -219,7 +219,7 @@ public class UpgradeScript : MonoBehaviour {
 			cranesucks = "Crane length = " + cranelength;
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), cranesucks + "  ($40)");
-		if (cranelength == 6) { //6 being max length
+		if (cranelength == 6 || cash < 40) { //6 being max length
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.25");
 		} else {
 			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.2")) {
@@ -245,7 +245,7 @@ public class UpgradeScript : MonoBehaviour {
 		}
 		
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Tube Length= " + tubesleft + "m  ($10)");
-		if (tubesleft == 500) { //4 being max time
+		if (tubesleft == 500 || cash < 10) { //4 being max time
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m");
 		} else {
 			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m")) {
@@ -265,7 +265,7 @@ public class UpgradeScript : MonoBehaviour {
 		}
 		
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Item Capacity = " + capacity + "  ($200)");
-		if (capacity == 10) { //4 being max time
+		if (capacity == 10 || cash < 200) { //4 being max time
 			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 1");
 		} else {
 			if (cash >= 200 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 1")) {

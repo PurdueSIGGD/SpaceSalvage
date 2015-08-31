@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class RopeTubeController : MonoBehaviour {
+	public KeyCode kextend = KeyCode.E;
+	public KeyCode kretract = KeyCode.Q;
+	public KeyCode keject = KeyCode.G;
+
 	public bool ejected;
 	private bool add, sub;
 	private float timepassed;
@@ -39,7 +43,7 @@ public class RopeTubeController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		ejected = (((RopeScript2D)this.GetComponent("RopeScript2D")).ejected);
-		if (Input.GetKeyDown (KeyCode.G) && !emp && !ejected) {
+		if (Input.GetKeyDown (keject) && !emp && !ejected) {
 			GameObject.Find("Ship").SendMessage("Eject");
 		}
 		if (ejected) {
@@ -47,8 +51,8 @@ public class RopeTubeController : MonoBehaviour {
 		}
 		GameObject.Find("Player").SendMessage("GetTubesLeft",tubesleft);
 		timepassed += Time.deltaTime;
-		add = (Input.GetKey(KeyCode.E));
-		sub = (Input.GetKey(KeyCode.Q));
+		add = (Input.GetKey(kextend));
+		sub = (Input.GetKey(kretract));
 	}
 	void FixedUpdate() {
 		if (add && timepassed > rate && !ejected && !emp && tubesleft > 0) {
@@ -70,7 +74,7 @@ public class RopeTubeController : MonoBehaviour {
 	void ReconnectAdd() {
 		SendMessage("AddRope");
 		timepassed = 0;
-		tubesleft--;
+	
 	}
 	void SubTheRopeAmt() {
 		tubesleft++;

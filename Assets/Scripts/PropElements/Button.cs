@@ -29,9 +29,9 @@ public class Button : MonoBehaviour {
 	}
 	void Use() {
 		this.GetComponent<AudioSource>().Play();
-
 		open = !open;
-		if (!open) {
+
+		if (open) {
 			//BroadcastMessage("Open");
 			if (this.transform.parent != null) this.transform.parent.SendMessage("Open");
 			else BroadcastMessage("Open");
@@ -40,6 +40,7 @@ public class Button : MonoBehaviour {
 			if (this.transform.parent != null) this.transform.parent.SendMessage("Close");
 			else BroadcastMessage("Close");
 		}
+
 		//do whatever you want your code to do if the player "uses" it
 	}
 	
