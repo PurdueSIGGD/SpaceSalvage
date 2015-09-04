@@ -79,14 +79,29 @@ public class ProcGen : MonoBehaviour {
 	}
 	void Generate(float startX, float startY, float endX, float endY) { // generate from (startX, startY) to (endX, endY)
 		Vector2 newitembuffer = Vector2.zero;
-		for (float i = startX; i < endX; i = i + newitembuffer.x + density * Random.value) {
-			newitembuffer.x = 0;
-			for (float j = startY; j < endY; j = j + newitembuffer.y + density * Random.value) {
-				if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
-					newitembuffer = FindToGenerate(i, j);
-				}
+		int numspawned = 0;
+		while (numspawned < initial_distance * density/10) {
+			float i = initial_distance * Random.value * (Random.value > .5f?-1:1);
+			float j = initial_distance * Random.value * (Random.value > .5f?-1:1);
+
+			numspawned++;
+			if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
+				newitembuffer = FindToGenerate(i, j);
+				j+=newitembuffer.y;
+				i+=newitembuffer.x;
 			}
 		}
+		/*for (float i = startX; i < endX; i = i + density * Random.value) {
+			newitembuffer.x = 0;
+			for (float j = startY; j < endY; j = j + density * Random.value) {
+				i += 10 * Random.value * (Random.value > .5f?-1:1);
+				if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
+					newitembuffer = FindToGenerate(i, j);
+					j+=newitembuffer.y;
+					i+=newitembuffer.x;
+				}
+			}
+		}*/
 	}
 	void SpawnInside(GameObject g) {
 			/*	Each prefab will have a script called "SpawnVals" and several values such as

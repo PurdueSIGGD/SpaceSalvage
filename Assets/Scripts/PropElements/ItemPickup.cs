@@ -16,7 +16,7 @@ public class ItemPickup : MonoBehaviour {
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		colliding = true;
-		if ((CraneController)Player.GetComponentInChildren<CraneController>() && ((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
+		if (Player != null && ((CraneController)Player.GetComponentInChildren<CraneController>()).grabbed) {
 			if (col.collider.GetComponent("Rigidbody2D") != null) {
 				((Rigidbody2D)col.collider.GetComponent("Rigidbody2D")).AddForce(40 * (col.transform.position - this.transform.position));
 			}
