@@ -54,33 +54,26 @@ public float inside_enemy_DMGTurret_chance;
 public float inside_enemy_EMPTurret_chance;
 public float inside_enemy_chaser_chance;
 
-public float buffer //distance in between player and bounds before we generate
-public float density 
+public float density  //density of each builds
 public float initial_distance //how big we spawn the beginning
-private float min_extentX;
-private float max_extentX;
-private float min_extentY;
-private float max_extentY;
+
 
 
 
 void Start() {
 	//we load up the initial level, which will consist of the player, the ship, the guitext, a random gameobject containing this script, and the camera.
 	//camera has the focus set to the player, the ship has the focus set to the player
+	Generate(initial_distance * -1, initial_distance * -1, initial_distance, initial_distance); //generate a square of width = initial_distance * 2;
 	
-	for (float i = initial_distance * -1; i < initial_distance; i+= density * (random)) {
-		for (float j = initial_distance * -1; j < initial_distance; j+= density) * (random) {
+}
+void Generate(int startX, int startY, int endX, int endY) { // generate from (startX, startY) to (endX, endY)
+	for (float i = startX * -1; i < endX; i+= density * (random)) {
+		for (float j = startY * -1; j < endY; j+= density) * (random) {
 			//the spot focused on now will be (i, j)
 			FindToGenerate(i, j);
 		}
 	}
-	min_extentX = initial_distance * -1;
-	min_extentY = initial_distance * -1;
-	max_extentX = initial_distance;
-	max_extentY = initial_distance;
-	
 }
-
 void SpawnInside(GameObject g) {
 		/*	Each prefab will have a script called "SpawnVals" and several values such as
 		/	int count;
@@ -92,11 +85,11 @@ void SpawnInside(GameObject g) {
 		/	float turret_chance
 		/	float all_loot_chance
 		*/
-		int spawner_cnt = g.getComponent<SpawnVals>().count;
-		GameObject[spawner_cnt] spawners;
+		
+		GameObject[g.getComponent<SpawnVals>().count] spawners;
 		
 		int i = 0;
-		for each transform c in g.getallchildren() {
+		foreach (transform c in g.GetComponentsInChildren<Transform>()) {
 			if (c.name == "Spawner") {
 				spawners[i] = c;
 				i++;
@@ -114,88 +107,88 @@ void SpawnInside(GameObject g) {
 		/	Each item will have its own weighted chances as well from the spawner script itself
 		/	So once again, the 2 factors at most will be weighted chance and spawner chance.
 		*/
-		for each gameobject c in spawners {
+		foreach (gameobject c in spawners) {
 			// spawn small_loot
-			if (rand < (tmp_inside_loot_chance + inside_small_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
+			if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
 				GameObject thingy = (GameObject)Instantiate(small_loot, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				continue;
 			}
 			// spawn med loot
-			if (rand < (tmp_inside_loot_chance + inside_med_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
+			if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
 				GameObject thingy = (GameObject)Instantiate(med_loot, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_loot_chance *= 1.5;
 				continue;
 			}
 			// spawn large1 loot
-			if (rand < (tmp_inside_loot_chance + inside_large1_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
+			if (Random.value < (tmp_inside_loot_chance + inside_large1_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
 				GameObject thingy = (GameObject)Instantiate(large1_loot, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_loot_chance *= 1.5;
 				continue;
 			}
 			// spawn large2 loot
-			if (rand < (tmp_inside_loot_chance + inside_large2_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
+			if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
 				GameObject thingy = (GameObject)Instantiate(large2_loot, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_loot_chance *= 2;
 				continue;
 			}
 			// spawn large3 loot
-			if (rand < (tmp_inside_loot_chance + inside_large2_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
+			if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.getComponent<Spawner>().all_loot_chance)) {
 				GameObject thingy = (GameObject)Instantiate(large2_loot, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_loot_chance *= 3;
 				continue;
 			}
 			// spawn debris chance
-			if (rand < (inside_debris_chance)) {
+			if (Random.value < (inside_debris_chance)) {
 				GameObject thingy = (GameObject)Instantiate(small_debris, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				continue;
 			}
 			// spawn laser hazard_chance
-			if (rand < (tmp_inside_hazard_laser_chance + c.getComponent<Spawner>().hazard_chance)) {
+			if (Random.value < (tmp_inside_hazard_laser_chance + c.getComponent<Spawner>().hazard_chance)) {
 				GameObject thingy = (GameObject)Instantiate(laser, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_hazard_laser_chance *= 5;
 				continue;
 			}
 			// spawn emp 
-			if (rand < (tmp_inside_hazard_emp_chance + c.getComponent<Spawner>().hazard_chance)) {
+			if (Random.value < (tmp_inside_hazard_emp_chance + c.getComponent<Spawner>().hazard_chance)) {
 				GameObject thingy = (GameObject)Instantiate(emp, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_hazard_emp_chance *= 5;
 				continue;
 			}
 			// spawn airjet
-			if (rand < (tmp_inside_hazard_airjet_chance + c.getComponent<Spawner>().hazard_chance)) {
+			if (Random.value < (tmp_inside_hazard_airjet_chance + c.getComponent<Spawner>().hazard_chance)) {
 				GameObject thingy = (GameObject)Instantiate(airjet, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_hazard_airjet_chance *= 5;
 				continue;
 			}
 			// spawn spinturret
-			if (rand < (inside_enemy_spinturret_chance + c.getComponent<Spawner>().turret_chance)) {
+			if (Random.value < (inside_enemy_spinturret_chance + c.getComponent<Spawner>().turret_chance)) {
 				GameObject thingy = (GameObject)Instantiate(spinturret, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				continue;
 			}
 			// spawn dmgturret
-			if (rand < (inside_enemy_DMGturret_chance + c.getComponent<Spawner>().turret_chance)) {
+			if (Random.value < (inside_enemy_DMGturret_chance + c.getComponent<Spawner>().turret_chance)) {
 				GameObject thingy = (GameObject)Instantiate(DMGTurret, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				continue;
 			}
 			// spawn empturret
-			if (rand < (inside_enemy_EMPturret_chance + c.getComponent<Spawner>().turret_chance)) {
+			if (Random.value < (inside_enemy_EMPturret_chance + c.getComponent<Spawner>().turret_chance)) {
 				GameObject thingy = (GameObject)Instantiate(EMPTurret, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				continue;
 			}
 			// spawn chaser
-			if (rand < (tmp_inside_enemy_chaser_chance + c.getComponent<Spawner>().turret_chance)) {
+			if (Random.value < (tmp_inside_enemy_chaser_chance + c.getComponent<Spawner>().turret_chance)) {
 				GameObject thingy = (GameObject)Instantiate(chaser, c.transform.position, Quaternion.identity);
 				thingy.transform = c.transform;
 				tmp_inside_enemy_chaser_chance *= 5;
@@ -206,52 +199,52 @@ void SpawnInside(GameObject g) {
 }
 
 void FindToGenerate(float i, float j) { //separate so we can use it later on
-			if (rand == small_ship_chance) {
+			if (Random.value == small_ship_chance) {
 				//spawn small ship
 				GameObject thingy = (GameObject)Instantiate(small_ship, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			} 
-			if (rand == large_ship_chance) {
+			if (Random.value == large_ship_chance) {
 				GameObject thingy = (GameObject)Instantiate(large_ship, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == small_debris_chance) { //cannot spawn inside
+			if (Random.value == small_debris_chance) { //cannot spawn inside
 				GameObject thingy = (GameObject)Instantiate(small_debris, new Vector3(i, j, 0), Quaternion.identity);
 				continue;
 			}
-			if (rand == med_debris_chance) {
+			if (Random.value == med_debris_chance) {
 				GameObject thingy = (GameObject)Instantiate(med_debris, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == large_debris_chance) {
+			if (Random.value == large_debris_chance) {
 				GameObject thingy = (GameObject)Instantiate(large_debris, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == small_loot_chance) { //cannot spawn inside, may spawn some debris around it
+			if (Random.value == small_loot_chance) { //cannot spawn inside, may spawn some debris around it
 				GameObject thingy = (GameObject)Instantiate(small_loot, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == med_loot_chance) {
+			if (Random.value == med_loot_chance) {
 				GameObject thingy = (GameObject)Instantiate(med_loot, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == large1_loot_chance) {
+			if (Random.value == large1_loot_chance) {
 				GameObject thingy = (GameObject)Instantiate(large1_loot, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == large2_loot_chance) {
+			if (Random.value == large2_loot_chance) {
 				GameObject thingy = (GameObject)Instantiate(large2_loot, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
 			}
-			if (rand == large3_loot_chance) {
+			if (Random.value == large3_loot_chance) {
 				GameObject thingy = (GameObject)Instantiate(large3_loot, new Vector3(i, j, 0), Quaternion.identity);
 				SpawnInside(thingy);
 				continue;
@@ -259,16 +252,5 @@ void FindToGenerate(float i, float j) { //separate so we can use it later on
 }
 
 void Update() {
-	if (player.transform.position.x + buffer > max_extentX) {
-		//generate around there
-	}
-	if (player.transform.position.x - buffer > min_extentX) {
-		//generate around there
-	}
-	if (player.transform.position.y + buffer > max_extentY) {
-		//generate around there
-	}
-	if (player.transform.position.y - buffer > min_extentY) {
-		//generate around there
-	}
+	//update area outside
 }

@@ -20,9 +20,10 @@ public class SmoothCamera2D : MonoBehaviour {
 	{
 		if (target)
 		{
-			dampTime = 8/Vector2.Distance(this.transform.position, target.transform.position);
-			Vector3 point = GetComponent<Camera>().WorldToViewportPoint(target.position);                                      //get the target's position
-			Vector3 delta = target.position - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(.05f, .05f, point.z));   //change in distance
+			Vector3 MouseandTarget =(target.transform.position + Camera.main.ScreenToWorldPoint(Input.mousePosition))/2;
+			dampTime = 8/Vector2.Distance(this.transform.position, MouseandTarget);
+			Vector3 point = GetComponent<Camera>().WorldToViewportPoint(MouseandTarget);                                      //get the target's position
+			Vector3 delta = MouseandTarget - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(.05f, .05f, point.z));   //change in distance
 			Vector3 destination = transform.position + delta;												   //destination vector (messy)
 			destination.Set (destination.x + bufferX, destination.y + bufferY, destination.z);				   //destinatino vector (fixed)
 			transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);  //function to move
