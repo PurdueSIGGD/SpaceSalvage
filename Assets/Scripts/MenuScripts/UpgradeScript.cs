@@ -78,7 +78,7 @@ public class UpgradeScript : MonoBehaviour {
 			PlayerPrefs.SetInt("tubesleft", tubesleft);
 			PlayerPrefs.SetFloat("movespeed", cranemovespeed);
 			PlayerPrefs.SetFloat("cranelength", cranelength);
-			Application.LoadLevel("TrialLevel1");
+			Application.LoadLevel("ProcGen");
 		}
 		
 		GUI.Box (new Rect (Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Upgrade Menu");

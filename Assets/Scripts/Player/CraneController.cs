@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class CraneController : MonoBehaviour {
+
+	public bool opened;
 	public AudioClip firecrane;
 	public GameObject Player, focus;
 	public Material ropemat;
@@ -10,7 +12,7 @@ public class CraneController : MonoBehaviour {
 	public bool emp, debugmode, grabbed = false, ended = false, broken, deadThrusters = false;
 	public float rotspeed = 300, movespeed = .5f, changedmovespeed, cranelength = 2, HarpoonSpeed, linewidth;
 	private Vector3 pz, delta, playerdelta, difference;
-	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime;
+	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime;
 	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
 
@@ -44,6 +46,38 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//print(ending.FindChild("TopCranePart").transform.eulerAngles.z - ending.transform.eulerAngles.z);
+		Transform BottomCranePart = ending.FindChild("BottomCranePart").transform;
+		Transform TopCranePart = ending.FindChild("TopCranePart").transform;
+
+		if (opened) {
+			if (TopCranePart.localRotation.eulerAngles.z < 30) {
+				Quaternion BottomRot = BottomCranePart.localRotation;
+				BottomRot.eulerAngles = new Vector3(0,0,BottomRot.eulerAngles.z - 100 * Time.deltaTime);
+				BottomCranePart.localRotation = BottomRot;
+				Quaternion TopRot = TopCranePart.localRotation	;
+				TopRot.eulerAngles = new Vector3(0,0,TopRot.eulerAngles.z + 100 * Time.deltaTime); 
+				TopCranePart.localRotation = TopRot;
+				ClosingTime = 0;
+			}
+
+		} else {
+			if (Mathf.Abs(BottomCranePart.localRotation.eulerAngles.z) > 10 || TopCranePart.localRotation.eulerAngles.z > 300) {
+				ClosingTime+=Time.deltaTime;
+				//print(ClosingTime);
+				Quaternion BottomRot = BottomCranePart.localRotation;
+				BottomRot.eulerAngles = new Vector3(0,0,BottomRot.eulerAngles.z + 100 * Time.deltaTime);
+				Quaternion TopRot = TopCranePart.localRotation	;
+				TopRot.eulerAngles = new Vector3(0,0,TopRot.eulerAngles.z - 100 * Time.deltaTime);
+				if (ClosingTime > .25f) {
+					TopRot.eulerAngles = new Vector3(0,0,0);
+					BottomRot.eulerAngles = new Vector3(0,0,0);
+				}
+				BottomCranePart.localRotation = BottomRot;
+				TopCranePart.localRotation = TopRot;
+
+			}
+		}
 
 		SpringJoint2D[] myjoints = Player.GetComponents<SpringJoint2D>();
 		foreach (SpringJoint2D j in myjoints) {
@@ -90,6 +124,7 @@ public class CraneController : MonoBehaviour {
 				grabbed = false;
 				firing = false;
 				retracting = true;
+				opened = false;
 			}	
 
 		}
@@ -118,23 +153,32 @@ public class CraneController : MonoBehaviour {
 
 					launchangle = thetaersnenig;
 					if (!broken) Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
-
+					
+					this.opened = true;
 					ending.GetComponent<Rigidbody2D>().AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
+					ending.GetComponent<Rigidbody2D>().AddForce(-1 * Player.GetComponent<Rigidbody2D>().velocity);
 				}
 				firing = true;
 				if (dist > cranelength) {
 					retracting = true;
+					opened = false;
 				}
 			} else {
 
 				if (firing) {
 					firing = false;
 					retracting = true;
+					opened = false;
 				}
 
 				if (retracting) {
 					//this.GetComponent<LineRenderer>().enabled = !broken;
 					ending.GetComponent<Rigidbody2D>().velocity = (Vector3)Player.GetComponent<Rigidbody2D>().velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
+					//ending.GetComponent<Rigidbody2D>().velocity = (-10 * ending.transform.localPosition);
+					//Quaternion q = ending.transform.rotation;
+					//print(ending.transform.position + "  " + ending.transform.localPosition + " " + ending.localPosition);
+					//q.eulerAngles = new Vector3(0,0,180 + Vector2.Angle(ending.transform.position, Player.transform.position));
+					//ending.transform.rotation = q;
 					if (Mathf.Abs(this.transform.position.x - ending.position.x) < .5f && Mathf.Abs(this.transform.position.y - ending.position.y) < .5f) {
 						releaseready = false;
 						retracting = false;
@@ -151,12 +195,13 @@ public class CraneController : MonoBehaviour {
 					grabbed = false;
 					Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
 					Destroy(focus.GetComponent<LineRenderer>());
-
+					this.opened = false;					
 					//Player.GetComponent<LineRenderer>().enabled = false;
 					// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
 					firing = false;
 					retracting = true;
 					focus.BroadcastMessage("DestroyRope");
+					Player.GetComponent<LineRenderer>().material = this.ropemat; //so player isnt left with crane mat
 					JointScript[] jss = Player.GetComponents<JointScript>();
 					foreach (JointScript jass in jss) {
 						if (!jass.shiprope) 	Destroy(jass);
@@ -165,12 +210,15 @@ public class CraneController : MonoBehaviour {
 			} 
 
 			if (!firing && !retracting && !grabbed && !pause && !emp) {
+				
+				this.opened = false;
 				ending.position = this.transform.position + new Vector3(0,0,.01f);
-				ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
+				//ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
 			} else {
 				if (grabbed) {
 					if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
-
+						
+						this.opened = false;
 						ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
 						if (!pause) {
 							ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
@@ -196,6 +244,7 @@ public class CraneController : MonoBehaviour {
 				foreach (Collider2D c in hitColliders) {
 					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 						retracting = true;
+						this.opened = false;
 						firing = false;
 						if (c.GetComponent("ItemPickup") != null) {
 							Physics2D.IgnoreCollision(c, ending.GetComponent<Collider2D>());
@@ -205,6 +254,7 @@ public class CraneController : MonoBehaviour {
 							retracting = false;
 							focus.GetComponent<Rigidbody2D>().isKinematic = false;
 							grabbed = true;
+
 							this.lastendingangle = ending.eulerAngles.z;
 							firstfocusangle = focus.transform.eulerAngles.z;
 							LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
@@ -252,6 +302,7 @@ public class CraneController : MonoBehaviour {
 							//brokentime = 0;
 							firing = false;
 							retracting = true;
+							this.opened = false;
 							//LineRenderer lr = this.GetComponent<LineRenderer>();
 							//lr.SetVertexCount(0);
 						}
@@ -306,12 +357,13 @@ public class CraneController : MonoBehaviour {
 			grabbed = false;
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
 			Destroy(focus.GetComponent<LineRenderer>());
-			
-			//Player.GetComponent<LineRenderer>().enabled = false;
+			this.opened = false;	
+					//Player.GetComponent<LineRenderer>().enabled = false;
 			// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
 			firing = false;
 			retracting = true;
 			focus.BroadcastMessage("DestroyRope");
+			Player.GetComponent<LineRenderer>().material = this.ropemat; //so player isnt stuck with crane mat
 			JointScript[] jss = Player.GetComponents<JointScript>();
 			foreach (JointScript jass in jss) {
 				if (!jass.shiprope) 	Destroy(jass);

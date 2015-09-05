@@ -18,9 +18,13 @@ public class SmoothCamera2D : MonoBehaviour {
 
 	void Update () 
 	{
+		//print(Input.mouseScrollDelta + " " + this.GetComponent<Camera> ().orthographicSize);
+		//float size = Camera.main.main.orthographicSize + Input.mouseScrollDelta.y;
+		//Camera.main.main.orthographicSize = size;
+
 		if (target)
 		{
-			Vector3 MouseandTarget =(target.transform.position + Camera.main.ScreenToWorldPoint(Input.mousePosition))/2;
+			Vector3 MouseandTarget =(((Vector3)target.GetComponent<Rigidbody2D>().velocity) + 2*target.transform.position + Camera.main.ScreenToWorldPoint(Input.mousePosition))/3;
 			dampTime = 8/Vector2.Distance(this.transform.position, MouseandTarget);
 			Vector3 point = GetComponent<Camera>().WorldToViewportPoint(MouseandTarget);                                      //get the target's position
 			Vector3 delta = MouseandTarget - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(.05f, .05f, point.z));   //change in distance

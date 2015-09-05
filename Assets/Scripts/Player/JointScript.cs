@@ -112,7 +112,7 @@ public class JointScript : MonoBehaviour {
 				LineRenderer[] ls = this.GetComponentsInChildren<LineRenderer>();
 				foreach (LineRenderer ell in ls) {
 					if (ell.name == "SubLine" && !this.shiprope) {
-						print(this.name + "  " + this.shiprope + "" + this.linewidth);
+						//print(this.name + "  " + this.shiprope + "" + this.linewidth);
 						ell.SetWidth(this.linewidth,this.linewidth);
 						ell.SetVertexCount(2);
 						ell.SetPosition(0,this.transform.position);
