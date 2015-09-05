@@ -8,6 +8,7 @@ public class ExplosionScript : MonoBehaviour {
 	public Color cee;
 	public bool damageoremp = true; //true for damage, false for emp
 	public float radius = 1;
+	public GameObject particle;
 	// Use this for initialization
 	void Start () {
 		this.GetComponent<AudioSource>().Play();
@@ -35,6 +36,12 @@ public class ExplosionScript : MonoBehaviour {
 				if (c.name.Equals("Player") || c.GetComponent<WallTurret>() != null || c.GetComponent<Chaser>()) c.SendMessage("EMP");
 			}
 		}
+		for (int i = 0; i < damage; i++) {
+			GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
+			thingy.GetComponent<SpriteRenderer>().color = this.GetComponent<SpriteRenderer>().color;
+			thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+		}
+
 	}
 	
 	// Update is called once per frame

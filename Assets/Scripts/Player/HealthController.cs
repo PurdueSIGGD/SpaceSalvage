@@ -28,8 +28,9 @@ public class HealthController : MonoBehaviour {
 	private float rechargetime;
 	private bool pause;
 	public GameObject particle;
-	public bool acceptingOxy, emp = false; //is oxy less than startingoxy?
+	public bool acceptingOxy, emp = false, gettingOxy; //is oxy less than startingoxy?
 	public float emptime = 0;
+	public Sprite j1, j2, j3, j4, j5;
 	// Use this for initialization
 	void Start () {
 		timesincelastdamage = -1;
@@ -160,7 +161,25 @@ public class HealthController : MonoBehaviour {
 		if (!pause) {
 			if (time > .25f && particle != null) {				
 				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
-				thingy.GetComponent<SpriteRenderer>().color = new Color(1 - (health/100), 0, 0);
+				float r = Random.value;
+				if (r >= 0 && r < .2f) { //find random damage sprite
+					thingy.GetComponent<SpriteRenderer>().sprite = j1;
+				} 
+				if (r >= .2f && r < .4f) {
+					thingy.GetComponent<SpriteRenderer>().sprite = j2;
+				} 
+				if (r >= .4f && r < .6f) {
+					thingy.GetComponent<SpriteRenderer>().sprite = j3;
+				} 
+				if (r >= .6f && r < .8f) {
+					thingy.GetComponent<SpriteRenderer>().sprite = j4;
+				} 
+				if (r >= .8f && r < 1) {
+					thingy.GetComponent<SpriteRenderer>().sprite = j5;
+				} 
+				//thingy.GetComponent<SpriteRenderer>().sprite = ;
+				thingy.transform.localScale = new Vector3(3,3,1); //typical scale is 5, dont want parts too big or small
+				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100));
 				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 				time = 0;
 			}
@@ -180,7 +199,9 @@ public class HealthController : MonoBehaviour {
 		}
 	}
 	void changeOxy(float f) {
+		print(oxy);
 		if (!pause) {
+			if (f < 0 && gettingOxy) return; //if getting oxygen and losing some, forget about the losing oxygen
 			if (f + oxy > startingoxy) {
 				oxy = startingoxy;
 			} else if (f + oxy <= 0) {
@@ -210,6 +231,9 @@ public class HealthController : MonoBehaviour {
 	}
 	void GetTubesLeft(int tubes) {
 		tubesleft = tubes;
+	}
+	void GettingOxy(bool b) {
+		gettingOxy = b;
 	}
 	void Im_Leaving() {
 		PlayerPrefs.SetInt ("wallet", wallet);

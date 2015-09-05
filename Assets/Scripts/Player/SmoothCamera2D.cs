@@ -8,12 +8,14 @@ public class SmoothCamera2D : MonoBehaviour {
 	public Transform target;
 	public float bufferX = 0, bufferY = 0;
 	private float shakeQuantity = 0;
-	private float startingSize;
+	public float startingSize;
+	public float focusSize;
 	private bool onoff = false;
 	//static float timeIndex = .005f;
 
 	void Start() {
 		startingSize = this.GetComponent<Camera> ().orthographicSize;
+		focusSize = startingSize;
 	}
 
 	void Update () 
@@ -21,7 +23,27 @@ public class SmoothCamera2D : MonoBehaviour {
 		//print(Input.mouseScrollDelta + " " + this.GetComponent<Camera> ().orthographicSize);
 		//float size = Camera.main.main.orthographicSize + Input.mouseScrollDelta.y;
 		//Camera.main.main.orthographicSize = size;
+		if (Input.mouseScrollDelta.y > 0 && focusSize > 4) {
+			focusSize -= 1;
 
+		} else {
+			if (Input.mouseScrollDelta.y < 0 && focusSize < 25) {
+				focusSize += 1;
+			} else {
+				//if (focusSize + .5f > startingSize || focusSize - .5f < startingSize);
+				float factor = ((focusSize - startingSize) * Time.deltaTime)/startingSize;
+				startingSize += ((focusSize - startingSize) * Time.deltaTime); //move smoothly to zoom in our out
+				bufferX += factor*bufferX; //to affect buffers in the correct scale
+				bufferY += factor*bufferY;
+				Vector3 Background = this.transform.FindChild("Background").localScale; //to make sure the background does not change
+				Background = new Vector3(Background.x += Background.x * factor, Background.y += Background.y * factor, 1);
+				this.transform.FindChild("Background").localScale = Background;
+
+				Vector3 Faders = this.transform.FindChild("Fader").localScale; //to make sure the background does not change
+				Faders = new Vector3(Faders.x += Faders.x * factor, Faders.y += Faders.y * factor, 1);
+				this.transform.FindChild("Fader").localScale = Faders;
+			}
+		}
 		if (target)
 		{
 			Vector3 MouseandTarget =(((Vector3)target.GetComponent<Rigidbody2D>().velocity) + 2*target.transform.position + Camera.main.ScreenToWorldPoint(Input.mousePosition))/3;

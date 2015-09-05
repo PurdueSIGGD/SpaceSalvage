@@ -6,7 +6,7 @@ public class CraneController : MonoBehaviour {
 	public bool opened;
 	public AudioClip firecrane;
 	public GameObject Player, focus;
-	public Material ropemat;
+	public Material ropemat, shipmat;
 	public PhysicsMaterial2D mate;
 	public Vector3 current;
 	public bool emp, debugmode, grabbed = false, ended = false, broken, deadThrusters = false;
@@ -156,7 +156,7 @@ public class CraneController : MonoBehaviour {
 					
 					this.opened = true;
 					ending.GetComponent<Rigidbody2D>().AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
-					ending.GetComponent<Rigidbody2D>().AddForce(-1 * Player.GetComponent<Rigidbody2D>().velocity);
+					//ending.GetComponent<Rigidbody2D>().AddForce(-1 * Player.GetComponent<Rigidbody2D>().velocity);
 				}
 				firing = true;
 				if (dist > cranelength) {
@@ -201,7 +201,7 @@ public class CraneController : MonoBehaviour {
 					firing = false;
 					retracting = true;
 					focus.BroadcastMessage("DestroyRope");
-					Player.GetComponent<LineRenderer>().material = this.ropemat; //so player isnt left with crane mat
+					Player.GetComponent<LineRenderer>().material = this.shipmat; //so player isnt left with crane mat
 					JointScript[] jss = Player.GetComponents<JointScript>();
 					foreach (JointScript jass in jss) {
 						if (!jass.shiprope) 	Destroy(jass);
@@ -254,7 +254,7 @@ public class CraneController : MonoBehaviour {
 							retracting = false;
 							focus.GetComponent<Rigidbody2D>().isKinematic = false;
 							grabbed = true;
-
+							Player.GetComponent<LineRenderer>().material = this.ropemat; //change it back if we grabbed again
 							this.lastendingangle = ending.eulerAngles.z;
 							firstfocusangle = focus.transform.eulerAngles.z;
 							LineRenderer lr = focus.gameObject.GetComponent<LineRenderer>();
@@ -363,7 +363,7 @@ public class CraneController : MonoBehaviour {
 			firing = false;
 			retracting = true;
 			focus.BroadcastMessage("DestroyRope");
-			Player.GetComponent<LineRenderer>().material = this.ropemat; //so player isnt stuck with crane mat
+			Player.GetComponent<LineRenderer>().material = this.shipmat; //so player isnt stuck with crane mat
 			JointScript[] jss = Player.GetComponents<JointScript>();
 			foreach (JointScript jass in jss) {
 				if (!jass.shiprope) 	Destroy(jass);

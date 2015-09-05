@@ -42,14 +42,20 @@ public class OxygenStation : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D col){
 		if (col.gameObject.Equals(Player)){
-
 			if(Player.GetComponent<HealthController>().acceptingOxy && oxygenAmt > 0) {
 				oxygenAmt -= 3 * Time.deltaTime;
 				col.SendMessage("changeOxy", 10 * Time.deltaTime);
-
+				col.SendMessage("GettingOxy", true);
 			} 
 
 		}
+
+	}
+	void OnTriggerExit2D(Collider2D col) {
+		if (col.gameObject.Equals(Player)){
+			col.SendMessage("GettingOxy", false);	
+		}
+
 
 	}
 }
