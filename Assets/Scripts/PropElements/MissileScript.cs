@@ -11,12 +11,15 @@ public class MissileScript : MonoBehaviour {
 	public Color damagecolor;
 	public GameObject explosion;
 	public bool damageoremp = true; //damage if true, emp if false
+	public AudioClip missileengine;
+	public AudioClip missileexplosion;
 	private bool homing;
 	private GameObject target;
 	private Transform thruster;
 	private float time = 0;
 	private float flashing;
 	private bool flashingb;
+	private AudioClip defaultClip;
 	// Use this for initialization
 	void Start () {
 
@@ -38,6 +41,14 @@ public class MissileScript : MonoBehaviour {
 		Light ccc = thruster.GetComponentInChildren<Light>();
 		time += Time.deltaTime;
 		if (thrusting) {
+			if (!this.gameObject.GetComponent<AudioSource>().isPlaying)
+			{
+				defaultClip = this.gameObject.GetComponent<AudioSource>().clip;
+				this.gameObject.GetComponent<AudioSource>().clip = missileengine;
+				this.gameObject.GetComponent<AudioSource>().Play();
+			}
+
+
 			if (c.color.a < 1) {
 
 				c.color = new Color(c.color.r, c.color.g, c.color.b, c.color.a + Time.deltaTime);
@@ -90,7 +101,7 @@ public class MissileScript : MonoBehaviour {
 			if (c.color.a >= 0) {
 				c.color = new Color(c.color.r, c.color.g, c.color.b, c.color.a - Time.deltaTime);
 				cc.color = new Color(cc.color.r, cc.color.g, cc.color.b, cc.color.a - Time.deltaTime);
-
+				this.gameObject.GetComponent<AudioSource>().clip = defaultClip;
 			} 
 		}
 		if (time > 300) explode();
@@ -117,6 +128,10 @@ public class MissileScript : MonoBehaviour {
 		GameObject thingy = (GameObject)Instantiate(explosion,transform.position, Quaternion.identity);
 		thingy.GetComponent<ExplosionScript>().damageoremp = this.damageoremp;
 		thingy.GetComponent<ExplosionScript>().damage = damage;
+		if (this.gameObject.GetComponent<AudioSource> ().isPlaying) {
+			this.gameObject.GetComponent<AudioSource> ().Stop ();
+		}
+		this.gameObject.GetComponent<AudioSource> ().PlayOneShot (missileexplosion);
 		if (this.GetComponent<RopeScript2D>() != null) {
 			this.BroadcastMessage("DestroyRope");
 
