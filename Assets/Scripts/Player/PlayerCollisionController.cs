@@ -22,12 +22,16 @@ public class PlayerCollisionController : MonoBehaviour {
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.GetComponent<SpringJoint2D>() == null) {
+			this.gameObject.GetComponent<AudioSource>().volume = .5f;
 			if (Vector3.Magnitude(col.relativeVelocity) > .5f) {
+				if (Vector3.Magnitude(col.relativeVelocity) > 4) {
+					this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
+					this.gameObject.GetComponent<AudioSource>().volume = 1f;
+				}
 				this.GetComponent<AudioSource>().PlayOneShot(bump);
+				this.gameObject.GetComponent<AudioSource>().volume = 1f;
 			}
-			if (Vector3.Magnitude(col.relativeVelocity) > 4) {
-				this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
-			}
+
 			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity));
 
 		}

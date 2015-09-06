@@ -83,6 +83,14 @@ public class PlayerMovement : MonoBehaviour {
 		down = Input.GetKey (kdown);
 		right = Input.GetKey (kleft);
 		left = Input.GetKey (kright);
+
+		if ((left || right || up || down) && !this.gameObject.GetComponent<AudioSource> ().isPlaying) {
+			this.gameObject.GetComponent<AudioSource> ().clip = move;
+			this.gameObject.GetComponent<AudioSource> ().Play ();
+		} else if (!right && !left && !up && !down) {
+			this.gameObject.GetComponent<AudioSource> ().Stop ();
+		}
+
 	}
 	bool inRange(double d, double rangestart, double rangeend) {
 		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
