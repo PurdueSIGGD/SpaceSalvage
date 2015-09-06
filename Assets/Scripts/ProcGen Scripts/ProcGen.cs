@@ -9,27 +9,18 @@ using System.Collections;
 
 
 public class ProcGen : MonoBehaviour {
+	public GameObject asterioid;
 	public GameObject small_ship;
-	public Vector2 small_ship_bounds;
 	public GameObject large_ship;
-	public Vector2 large_ship_bounds;
 	public GameObject small_debris;
-	public Vector2 small_debris_bounds;
 	public GameObject med_debris;
-	public Vector2 med_debris_bounds;
 	public GameObject large_debris;
-	public Vector2 large_debris_bounds;
 	public GameObject small_loot;
-	public Vector2 small_loot_bounds;
 	public GameObject med_loot;
-	public Vector2 med_loot_bounds;
 	public GameObject large1_loot;
-	public Vector2 large1_loot_bounds;
 	public GameObject large2_loot;
-	public Vector2 large2_loot_bounds;
 	public GameObject large3_loot;
-	public Vector2 large3_loot_bounds;
-	
+
 	public GameObject laser;
 	public GameObject emp;
 	public GameObject airjet;
@@ -40,7 +31,8 @@ public class ProcGen : MonoBehaviour {
 	public GameObject DMGTurret;
 	
 	//chance values must be small, at least .05 for now
-	
+
+	public float asteroid_chance;
 	public float small_ship_chance;
 	public float large_ship_chance;
 	public float small_debris_chance;
@@ -83,13 +75,23 @@ public class ProcGen : MonoBehaviour {
 		while (numspawned < initial_distance * density/10) {
 			float i = initial_distance * Random.value * (Random.value > .5f?-1:1);
 			float j = initial_distance * Random.value * (Random.value > .5f?-1:1);
-
-			numspawned++;
-			if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
-				newitembuffer = FindToGenerate(i, j);
-				j+=newitembuffer.y;
-				i+=newitembuffer.x;
+			//Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(i,j), 4); 
+			bool flag = false;
+			/*foreach (Collider2D c in hitColliders) {
+				if (c.GetComponent<SpawnVals>() != null) {
+					flag = true;
+				}
+			}*/
+			if (!flag) {
+				if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
+					newitembuffer = FindToGenerate(i, j);
+					j+=newitembuffer.y;
+					i+=newitembuffer.x;
+					numspawned++;
+				}
 			}
+
+
 		}
 		/*for (float i = startX; i < endX; i = i + density * Random.value) {
 			newitembuffer.x = 0;
@@ -243,52 +245,63 @@ public class ProcGen : MonoBehaviour {
 	}
 
 	Vector2 FindToGenerate(float i, float j) { //separate so we can use it later on
-				
+				if (Random.value < asteroid_chance) {
+					//spawn asteriod
+					GameObject thingy = (GameObject)Instantiate(asterioid, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
+					SpawnInside(thingy);
+					return Vector2.zero;
+				} 
 				if (Random.value < small_ship_chance) {
 					//spawn small ship
-					GameObject thingy = (GameObject)Instantiate(small_ship, new Vector3(i, j, 0), Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(small_ship, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();					
 					SpawnInside(thingy);
-					return small_ship_bounds;
+					return Vector2.zero;
 				} 
 				if (Random.value < large_ship_chance) {
-					GameObject thingy = (GameObject)Instantiate(large_ship, new Vector3(i, j, 0), Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(large_ship, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
 					SpawnInside(thingy);
-					return large_ship_bounds;
+					return Vector2.zero;
 				}
 				if (Random.value < small_debris_chance) { //cannot spawn inside
-					GameObject thingy = (GameObject)Instantiate(small_debris, new Vector3(i, j, 0), Quaternion.identity);
-					return small_debris_bounds;
+					GameObject thingy = (GameObject)Instantiate(small_debris, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
+					return Vector2.zero;
 				}
 				if (Random.value < med_debris_chance) {
-					GameObject thingy = (GameObject)Instantiate(med_debris, new Vector3(i, j, 0), Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(med_debris, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
 					SpawnInside(thingy);
-					return med_debris_bounds;
+					return Vector2.zero;
 				}
 				if (Random.value < large_debris_chance) {
-					GameObject thingy = (GameObject)Instantiate(large_debris, new Vector3(i, j, 0), Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(large_debris, new Vector3(i, j, 1), Quaternion.identity);
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
 					SpawnInside(thingy);
-					return large_debris_bounds;
+					return Vector2.zero;
 				}
 				if (Random.value < small_loot_chance) { //cannot spawn inside, may spawn some debris around it
-					GameObject thingy = (GameObject)Instantiate(small_loot, new Vector3(i, j, 0), Quaternion.identity);
-					return small_loot_bounds;
+					GameObject thingy = (GameObject)Instantiate(small_loot, new Vector3(i, j, 1), Quaternion.identity);
+					return Vector2.zero;
 				}
 				if (Random.value < med_loot_chance) {
-					GameObject thingy = (GameObject)Instantiate(med_loot, new Vector3(i, j, 0), Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(med_loot, new Vector3(i, j, 1), Quaternion.identity);
 					//SpawnInside(thingy); //for multiple coins in a bunch
-					return med_loot_bounds;
+					return Vector2.zero;
 				}
 				if (Random.value < large1_loot_chance) {
-					GameObject thingy = (GameObject)Instantiate(large1_loot, new Vector3(i, j, 0), Quaternion.identity);
-					return large1_loot_bounds;
+					GameObject thingy = (GameObject)Instantiate(large1_loot, new Vector3(i, j, 1), Quaternion.identity);
+					return Vector2.zero;
 				}
 				if (Random.value < large2_loot_chance) {
-					GameObject thingy = (GameObject)Instantiate(large2_loot, new Vector3(i, j, 0), Quaternion.identity);
-					return large2_loot_bounds;
+					GameObject thingy = (GameObject)Instantiate(large2_loot, new Vector3(i, j, 1), Quaternion.identity);
+					return Vector2.zero;
 				}
 				if (Random.value < large3_loot_chance) {
-					GameObject thingy = (GameObject)Instantiate(large3_loot, new Vector3(i, j, 0), Quaternion.identity);
-					return large3_loot_bounds;
+					GameObject thingy = (GameObject)Instantiate(large3_loot, new Vector3(i, j, 1), Quaternion.identity);
+					return Vector2.zero;
 				}
 		return Vector2.zero;
 	}

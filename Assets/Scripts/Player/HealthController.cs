@@ -199,7 +199,7 @@ public class HealthController : MonoBehaviour {
 		}
 	}
 	void changeOxy(float f) {
-		print(oxy);
+		//print(oxy);
 		if (!pause) {
 			if (f < 0 && gettingOxy) return; //if getting oxygen and losing some, forget about the losing oxygen
 			if (f + oxy > startingoxy) {

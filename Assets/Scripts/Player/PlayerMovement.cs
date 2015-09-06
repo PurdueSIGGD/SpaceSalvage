@@ -79,10 +79,26 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
-		up = Input.GetKey (kup);
-		down = Input.GetKey (kdown);
-		right = Input.GetKey (kleft);
-		left = Input.GetKey (kright);
+		if (this.GetComponent<Rigidbody2D>().velocity.y < 10) {
+			up = Input.GetKey (kup);
+		} else {
+			up = false;
+		}
+		if (this.GetComponent<Rigidbody2D>().velocity.y > -	10) {
+			down = Input.GetKey (kdown);
+		} else {
+			down = false;
+		}
+		if (this.GetComponent<Rigidbody2D>().velocity.x < 10) {
+			right = Input.GetKey (kleft);
+		} else {
+			right = false;
+		}
+		if (this.GetComponent<Rigidbody2D>().velocity.x > -10) {
+			left = Input.GetKey (kright);
+		} else {
+			left = false;
+		}
 	}
 	bool inRange(double d, double rangestart, double rangeend) {
 		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
@@ -103,6 +119,7 @@ public class PlayerMovement : MonoBehaviour {
 		double rangestart = 0;
 		double rangeend = 0;
 		bool flying = false;
+
 		if (right)
 		{
 			this.GetComponent<Rigidbody2D>().AddForce(new Vector2( moverate /  (70 * Time.deltaTime), 0));

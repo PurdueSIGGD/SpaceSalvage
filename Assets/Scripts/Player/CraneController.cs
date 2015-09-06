@@ -46,6 +46,7 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 		//print(ending.FindChild("TopCranePart").transform.eulerAngles.z - ending.transform.eulerAngles.z);
 		Transform BottomCranePart = ending.FindChild("BottomCranePart").transform;
 		Transform TopCranePart = ending.FindChild("TopCranePart").transform;
@@ -141,8 +142,9 @@ public class CraneController : MonoBehaviour {
 				thetaersnenig+= Mathf.PI/2;
 			}
 			thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
+			ending.GetComponent<Rigidbody2D>().velocity = (Vector3)Player.GetComponent<Rigidbody2D>().velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 
-
+			
 		}
 		if (!emp && !pause) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
@@ -206,7 +208,7 @@ public class CraneController : MonoBehaviour {
 					foreach (JointScript jass in jss) {
 						if (!jass.shiprope) 	Destroy(jass);
 					}
-}
+				}
 			} 
 
 			if (!firing && !retracting && !grabbed && !pause && !emp) {
@@ -242,6 +244,7 @@ public class CraneController : MonoBehaviour {
 			if (!grabbed && (firing || retracting)) {
 				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .25f); 
 				foreach (Collider2D c in hitColliders) {
+
 					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
 						retracting = true;
 						this.opened = false;
