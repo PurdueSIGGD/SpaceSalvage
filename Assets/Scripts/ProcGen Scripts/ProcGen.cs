@@ -147,6 +147,7 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(small_loot, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.transform.parent = g.transform;
 					continue;
 				}
 				// spawn med loot
@@ -155,6 +156,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 1.5f;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn large1 loot
@@ -163,6 +166,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 1.5f;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn large2 loot
@@ -171,6 +176,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 2;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn large3 loot
@@ -179,6 +186,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 3;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn debris chance
@@ -186,6 +195,8 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(small_debris, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn laser hazard_chance
@@ -194,6 +205,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_hazard_laser_chance *= 5;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn emp 
@@ -202,6 +215,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_hazard_emp_chance *= 5;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn airjet
@@ -210,6 +225,8 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_hazard_airjet_chance *= 5;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn spinturret
@@ -217,6 +234,11 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
+					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn dmgturret
@@ -224,6 +246,11 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
+					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn empturret
@@ -231,6 +258,11 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
+					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+					thingy.transform.parent = g.transform;
+
 					continue;
 				}
 				// spawn chaser
@@ -238,6 +270,8 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
+					thingy.transform.parent = g.transform;
+
 					tmp_inside_enemy_chaser_chance *= 5;
 				}
 			}

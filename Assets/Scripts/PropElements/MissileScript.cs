@@ -101,6 +101,7 @@ public class MissileScript : MonoBehaviour {
 			if (c.color.a >= 0) {
 				c.color = new Color(c.color.r, c.color.g, c.color.b, c.color.a - Time.deltaTime);
 				cc.color = new Color(cc.color.r, cc.color.g, cc.color.b, cc.color.a - Time.deltaTime);
+				ccc.intensity -= 5 * Time.deltaTime;
 				this.gameObject.GetComponent<AudioSource>().clip = defaultClip;
 			} 
 		}

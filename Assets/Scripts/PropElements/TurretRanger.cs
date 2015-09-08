@@ -20,6 +20,7 @@ public class TurretRanger : MonoBehaviour {
 	void OnTriggerExit2D(Collider2D col) {
 		if (col.gameObject.Equals(Player)) {
 			this.SendMessageUpwards("Focus",false);
+
 		}
 	}
 }

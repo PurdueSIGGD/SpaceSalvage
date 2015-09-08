@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class RopeScript2D : MonoBehaviour {
 	public KeyCode keject = KeyCode.G;
@@ -368,6 +369,7 @@ public class RopeScript2D : MonoBehaviour {
 				this.GetComponent<RopeTubeController>().tubesleft = this.GetComponent<RopeTubeController>().tubesleft - segs - 1 ;
 
 			}
+			//EditorApplication.isPaused = true;
 		}
 	}
 
@@ -384,7 +386,7 @@ public class RopeScript2D : MonoBehaviour {
 		{
 			Destroy((GameObject)joints[dj]);	
 		}
-
+		this.line.SetVertexCount(0);
 		Destroy(spree);
 		segmentPos.Clear();
 		joints.Clear();

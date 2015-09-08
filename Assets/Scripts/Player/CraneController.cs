@@ -12,7 +12,7 @@ public class CraneController : MonoBehaviour {
 	public bool emp, debugmode, grabbed = false, ended = false, broken, deadThrusters = false;
 	public float rotspeed = 300, movespeed = .5f, changedmovespeed, cranelength = 2, HarpoonSpeed, linewidth;
 	private Vector3 pz, delta, playerdelta, difference;
-	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime;
+	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime, closingDistance;
 	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
 
@@ -46,10 +46,14 @@ public class CraneController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 
 		//print(ending.FindChild("TopCranePart").transform.eulerAngles.z - ending.transform.eulerAngles.z);
 		Transform BottomCranePart = ending.FindChild("BottomCranePart").transform;
 		Transform TopCranePart = ending.FindChild("TopCranePart").transform;
+
+		BottomCranePart.position =  new Vector3(BottomCranePart.position.x, BottomCranePart.position.y, -1.5f); //This is so we don't have the material for the rope in front of the crane, makes it look better
+		TopCranePart.position =  new Vector3(TopCranePart.position.x, TopCranePart.position.y, -1.5f);
 
 		if (opened) {
 			if (TopCranePart.localRotation.eulerAngles.z < 30) {
@@ -112,6 +116,7 @@ public class CraneController : MonoBehaviour {
 		} else {
 			// release grip
 			if (grabbed) {
+				ending.transform.position = ending.transform.position + Vector3.back * .3f;
 				Physics2D.IgnoreCollision(focus.GetComponent<Collider2D>(), ending.GetComponent<Collider2D>(), false);
 				//Player.GetComponent<LineRenderer>().enabled = false;
 				JointScript[] jss = Player.GetComponents<JointScript>();
@@ -125,6 +130,7 @@ public class CraneController : MonoBehaviour {
 				grabbed = false;
 				firing = false;
 				retracting = true;
+				closingDistance = dist;
 				opened = false;
 			}	
 
@@ -147,7 +153,6 @@ public class CraneController : MonoBehaviour {
 			
 		}
 		if (!emp && !pause) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
-		float dist = Vector3.Distance(new Vector3(ending.transform.position.x, ending.transform.position.y, 0) - new Vector3(Player.transform.position.x, Player.transform.position.y, 0), Vector3.zero);
 
 		if (!broken) {
 			if (Input.GetMouseButton(0) && !grabbed && !retracting && !emp) {
@@ -163,7 +168,7 @@ public class CraneController : MonoBehaviour {
 				firing = true;
 				if (dist > cranelength) {
 					retracting = true;
-					opened = false;
+
 				}
 			} else {
 
@@ -174,6 +179,14 @@ public class CraneController : MonoBehaviour {
 				}
 
 				if (retracting) {
+
+					if (dist > 3 * closingDistance / 4 && closingDistance != 0) {
+						
+						opened = true;
+					} else {
+						opened = false;
+						closingDistance = 0;
+					}
 					//this.GetComponent<LineRenderer>().enabled = !broken;
 					ending.GetComponent<Rigidbody2D>().velocity = (Vector3)Player.GetComponent<Rigidbody2D>().velocity + ((this.transform.position - ending.position) + ( (.5f) * (this.transform.position - ending.position )));
 					//ending.GetComponent<Rigidbody2D>().velocity = (-10 * ending.transform.localPosition);
@@ -195,6 +208,7 @@ public class CraneController : MonoBehaviour {
 				}
 				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					grabbed = false;
+					Player.GetComponent<LineRenderer>().SetVertexCount(0);
 					Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
 					Destroy(focus.GetComponent<LineRenderer>());
 					this.opened = false;					
@@ -202,6 +216,7 @@ public class CraneController : MonoBehaviour {
 					// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
 					firing = false;
 					retracting = true;
+					closingDistance = dist;
 					focus.BroadcastMessage("DestroyRope");
 					Player.GetComponent<LineRenderer>().material = this.shipmat; //so player isnt left with crane mat
 					JointScript[] jss = Player.GetComponents<JointScript>();
@@ -215,7 +230,7 @@ public class CraneController : MonoBehaviour {
 				
 				this.opened = false;
 				ending.position = this.transform.position + new Vector3(0,0,.01f);
-				//ending.rotation = Quaternion.Euler(0,0,  (thetaersnenig));
+				ending.localRotation = Quaternion.Euler(0,0,-90);
 			} else {
 				if (grabbed) {
 					if (focus.GetComponent<RopeScript2D>().hinger != null) { //update while connected
@@ -245,11 +260,12 @@ public class CraneController : MonoBehaviour {
 				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .25f); 
 				foreach (Collider2D c in hitColliders) {
 
-					if (c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) {
+					if (c.gameObject.layer == this.gameObject.layer && c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) { //see if colliding
 						retracting = true;
 						this.opened = false;
 						firing = false;
-						if (c.GetComponent("ItemPickup") != null) {
+						if (c.GetComponent("ItemPickup") != null) { // see if we can grab it
+
 							Physics2D.IgnoreCollision(c, ending.GetComponent<Collider2D>());
 							releaseready = false;
 							focus = c.gameObject;
@@ -288,8 +304,8 @@ public class CraneController : MonoBehaviour {
 							rp.target = Player.transform;
 							rp.frequency = .5f;
 							rp.dampening = 10;
-							rp.resolution = 2;
-							rp.ropeDrag = 0.01f;
+							rp.resolution = 1;
+							rp.ropeDrag = 0.1f;
 							rp.ropeMass = .5f;
 							rp.ropeColRadius = 0.1f;
 							rp.rope = true;
@@ -305,6 +321,7 @@ public class CraneController : MonoBehaviour {
 							//brokentime = 0;
 							firing = false;
 							retracting = true;
+							closingDistance = 0;
 							this.opened = false;
 							//LineRenderer lr = this.GetComponent<LineRenderer>();
 							//lr.SetVertexCount(0);
@@ -356,9 +373,12 @@ public class CraneController : MonoBehaviour {
 		pause = b;
 	}
 	void ObjectTakenByShip(GameObject g) {
-		if (grabbed && focus.Equals(g)) {
+		if (grabbed && focus ==g) {
 			grabbed = false;
+			GameObject subline = Player.transform.FindChild("SubLine").gameObject;
+			print(subline.name);
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().SetVertexCount(0);
 			Destroy(focus.GetComponent<LineRenderer>());
 			this.opened = false;	
 					//Player.GetComponent<LineRenderer>().enabled = false;
@@ -366,6 +386,7 @@ public class CraneController : MonoBehaviour {
 			firing = false;
 			retracting = true;
 			focus.BroadcastMessage("DestroyRope");
+			opened = true;
 			Player.GetComponent<LineRenderer>().material = this.shipmat; //so player isnt stuck with crane mat
 			JointScript[] jss = Player.GetComponents<JointScript>();
 			foreach (JointScript jass in jss) {

@@ -24,7 +24,7 @@ public class ItemHolder : MonoBehaviour {
 				this.GetComponent<AudioSource>().Play();
 
 				col.GetComponent<Rigidbody2D>().isKinematic = true;
-				if (col.GetComponent<RopeScript2D>() != null) col.gameObject.BroadcastMessage("DestroyRope");
+				//if (col.GetComponent<RopeScript2D>() != null) col.gameObject.BroadcastMessage("DestroyRope");
 				col.GetComponent<Loot>().isbelonging = true;
 				col.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
 				col.GetComponent<Rigidbody2D>().angularVelocity = 0;

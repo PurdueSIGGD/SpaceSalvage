@@ -181,6 +181,7 @@ public class HealthController : MonoBehaviour {
 				thingy.transform.localScale = new Vector3(3,3,1); //typical scale is 5, dont want parts too big or small
 				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100));
 				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+				thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
 				time = 0;
 			}
 			if (health > 1 && health + f > 0) {

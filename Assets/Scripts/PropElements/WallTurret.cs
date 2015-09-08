@@ -8,26 +8,39 @@ public class WallTurret : MonoBehaviour {
 	public bool homig;
 	public float shotsperburst = 3;
 	public float firingspeed = 1.5f;
+	public float angleStart = 0;
+	public float angleEnd = 0;
+	public bool startBigSide;
+	public bool clockwise, resetting, resettingStep;
 	private bool focused, emp;
 	private float timebetweenshots;
 	private float shots;
 	private float emprecharge;
+
 	// Use this for initialization
 	void Start () {
 		if (homig) shotsperburst = 1;
 		focused = false;
 		barrel = this.transform.FindChild("Barrel").gameObject;
 		Player = GameObject.Find("Player");
+		if (startBigSide) {
+			barrel.transform.eulerAngles = new Vector3(0,0,(angleStart + angleEnd)/2 + 180);
+		} else {
+			barrel.transform.eulerAngles = new Vector3(0,0,(angleStart + angleEnd)/2);
+		}
+		clockwise = true;
 	}
 
 	void Focus(bool b) {
 		focused = b;
+		if (!b) resetting = true;
 	}
 	void EMP() {
 		emp = true;
 	}
 	// Update is called once per frame
 	void Update () {
+		print(resetting);
 		if (!emp) {
 			if (focused) {
 				timebetweenshots+=Time.deltaTime;
@@ -42,7 +55,7 @@ public class WallTurret : MonoBehaviour {
 				if (pz.y - Player.transform.position.y < 0) {
 					thetaersnenig+= Mathf.PI/2;
 				}
-				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting
+				thetaersnenig = thetaersnenig * 2 * Mathf.Rad2Deg; //fooooormatting, make it move around in circles
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
 				if ((timebetweenshots >= .75f && shots < shotsperburst)|| (timebetweenshots > firingspeed)) { //fire
 					this.GetComponent<AudioSource>().Play();
@@ -61,9 +74,20 @@ public class WallTurret : MonoBehaviour {
 						thingy.GetComponent<MissileScript>().damageoremp = !empshooty;
 					}
 				}
+
 			} else {
 				timebetweenshots = 0;
-				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+ 30 * Time.deltaTime);
+				print(barrel.transform.eulerAngles.z + " " + angleStart + " " + angleEnd);
+				if (resetting) {
+					barrel.transform.eulerAngles = new Vector3(0,0,(angleStart + angleEnd)/2);
+					resetting = false;
+				}
+				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart) < 10 || Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd) < 10) {
+
+					clockwise = !clockwise;
+				}
+				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z + (clockwise?-1:1) * 30 * Time.deltaTime);
+				
 			}
 		} else {
 			emprecharge += Time.deltaTime;

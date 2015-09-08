@@ -1,3 +1,6 @@
-Player (and all children[ crane(ending), All 6 thrusters, fader])
-Main Camera (the special one)
+Player (and all children)
+Camera (the special one with children)
 GuiText
+ProcGenController
+GuiText
+Ship
