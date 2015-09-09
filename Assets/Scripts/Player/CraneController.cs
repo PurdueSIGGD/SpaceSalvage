@@ -37,7 +37,7 @@ public class CraneController : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetFloat("cranelength", cranelength);
 		}
-		if (false && PlayerPrefs.HasKey("Claw")) {
+		if (PlayerPrefs.HasKey("Claw")) {
 			claw = PlayerPrefs.GetString("Claw");
 		} else {
 			PlayerPrefs.SetString("Claw",claw);
