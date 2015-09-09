@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CraneController : MonoBehaviour {
-
+	
 	public bool opened;
 	public AudioClip firecrane;
 	public GameObject Player, focus;
@@ -15,6 +15,7 @@ public class CraneController : MonoBehaviour {
 	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime, closingDistance;
 	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
+	private string claw = "Mouse 1";
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -36,6 +37,12 @@ public class CraneController : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetFloat("cranelength", cranelength);
 		}
+		if (false && PlayerPrefs.HasKey("Claw")) {
+			claw = PlayerPrefs.GetString("Claw");
+		} else {
+			PlayerPrefs.SetString("Claw",claw);
+		}
+
 		Player = GameObject.Find("Player");
 		ending = transform.FindChild("Ending"); //sprite at the end 
 
@@ -154,8 +161,14 @@ public class CraneController : MonoBehaviour {
 		}
 		if (!emp && !pause) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 
+		bool buttonClicked;
+		if (claw == "Mouse 1") {
+			buttonClicked = Input.GetMouseButton(0);
+		} else {
+			buttonClicked = Input.GetKey((KeyCode)(System.Enum.Parse(typeof(KeyCode), this.claw)));
+		}
 		if (!broken) {
-			if (Input.GetMouseButton(0) && !grabbed && !retracting && !emp) {
+			if (buttonClicked && !grabbed && !retracting && !emp) {
 				if (!firing) {
 
 					launchangle = thetaersnenig;
@@ -202,11 +215,11 @@ public class CraneController : MonoBehaviour {
 					}
 				} 
 				if (focus != null) {
-					if (!Input.GetMouseButton(0) && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
+					if (!buttonClicked && grabbed && !focus.GetComponent<RopeScript2D>().brokenrope) {
 						releaseready = true;
 					}
 				}
-				if (grabbed && Input.GetMouseButton(0) && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
+				if (grabbed && buttonClicked && releaseready && !focus.GetComponent<RopeScript2D>().brokenrope) {
 					grabbed = false;
 					Player.GetComponent<LineRenderer>().SetVertexCount(0);
 					Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;

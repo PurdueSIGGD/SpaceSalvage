@@ -40,7 +40,7 @@ public class WallTurret : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		print(resetting);
+		//print(resetting);
 		if (!emp) {
 			if (focused) {
 				timebetweenshots+=Time.deltaTime;
@@ -77,14 +77,21 @@ public class WallTurret : MonoBehaviour {
 
 			} else {
 				timebetweenshots = 0;
-				print(barrel.transform.eulerAngles.z + " " + angleStart + " " + angleEnd);
+				//print(barrel.transform.eulerAngles.z + " " + angleStart + " " + angleEnd);
 				if (resetting) {
 					barrel.transform.eulerAngles = new Vector3(0,0,(angleStart + angleEnd)/2);
 					resetting = false;
 				}
-				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart) < 10 || Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd) < 10) {
-
+				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart) < 10) {
+					print("angleStart");
 					clockwise = !clockwise;
+					barrel.transform.eulerAngles = new Vector3(0,0,this.transform.parent.eulerAngles.z + angleStart + (clockwise?-1:1) * Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart));
+				}
+				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd) < 10) {
+					print("angleEnd");
+					clockwise = !clockwise;
+					barrel.transform.eulerAngles = new Vector3(0,0,this.transform.parent.eulerAngles.z + angleEnd + (clockwise?-1:1) * Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd));
+
 				}
 				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z + (clockwise?-1:1) * 30 * Time.deltaTime);
 				

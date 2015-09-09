@@ -29,7 +29,9 @@ public class ExplosionScript : MonoBehaviour {
 				//damage
 				if (c.GetComponent<HealthController>() != null) c.SendMessage("changeHealth",-1 * damage * Vector3.Distance(c.transform.position, this.transform.position));
 				//break
-				if (c.GetComponent<JointScript>() != null) c.SendMessage("BrokenJoint");
+				if (c.GetComponent<JointScript>() != null) {
+					foreach (JointScript j in c.GetComponents<JointScript>()) j.SendMessage("BrokenJoint");
+				}
 				//explode
 				if (c.GetComponent<MissileScript>() != null)  c.SendMessage("explode");
 			} else {

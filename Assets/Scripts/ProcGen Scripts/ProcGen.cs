@@ -166,7 +166,7 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 1.5f;
-					thingy.transform.parent = g.transform;
+				//	thingy.transform.parent = g.transform;
 
 					continue;
 				}
@@ -176,7 +176,7 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 2;
-					thingy.transform.parent = g.transform;
+				//	thingy.transform.parent = g.transform;
 
 					continue;
 				}
@@ -186,7 +186,7 @@ public class ProcGen : MonoBehaviour {
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					thingy.transform.rotation = c.rotation;
 					tmp_inside_loot_chance *= 3;
-					thingy.transform.parent = g.transform;
+				//	thingy.transform.parent = g.transform;
 
 					continue;
 				}
@@ -230,10 +230,10 @@ public class ProcGen : MonoBehaviour {
 					continue;
 				}
 				// spawn spinturret
-				if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance)) {
+			if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0) {
 					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
+					//thingy.transform.rotation = c.rotation;
 					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
 					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
 					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
@@ -242,10 +242,10 @@ public class ProcGen : MonoBehaviour {
 					continue;
 				}
 				// spawn dmgturret
-				if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance)) {
+			if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0) {
 					GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
+					//thingy.transform.rotation = c.rotation;
 					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
 					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
 					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
@@ -254,10 +254,10 @@ public class ProcGen : MonoBehaviour {
 					continue;
 				}
 				// spawn empturret
-				if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance)) {
+			if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0) {
 					GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
+				//	thingy.transform.rotation = c.rotation;
 					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
 					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
 					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
@@ -269,7 +269,7 @@ public class ProcGen : MonoBehaviour {
 				if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance)) {
 					GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
+					//thingy.transform.rotation = c.rotation;
 					thingy.transform.parent = g.transform;
 
 					tmp_inside_enemy_chaser_chance *= 5;

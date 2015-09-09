@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class RopeTubeController : MonoBehaviour {
-	public KeyCode kextend = KeyCode.E;
-	public KeyCode kretract = KeyCode.Q;
+	public KeyCode kextend = KeyCode.LeftShift;
+	public KeyCode kretract = KeyCode.LeftControl;
 	public KeyCode keject = KeyCode.G;
 
 	public bool ejected;
@@ -28,6 +28,23 @@ public class RopeTubeController : MonoBehaviour {
 			startingtubes = tubesleft;
 
 		}
+
+		if (PlayerPrefs.HasKey("Extend")) {
+			kextend = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Extend")) ;
+		} else {
+			PlayerPrefs.SetString("Extend",kextend.ToString());
+		}
+		if (PlayerPrefs.HasKey("Retract")) {
+			kretract = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Retract")) ;
+		} else {
+			PlayerPrefs.SetString("Retract",kextend.ToString());
+		}
+		if (PlayerPrefs.HasKey("Eject")) {
+			keject = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Eject")) ;
+		} else {
+			PlayerPrefs.SetString("Eject",kextend.ToString());
+		}
+
 		if (tubesleft == 0)  {
 			this.gameObject.GetComponent<RopeScript2D>().SendMessage("DeathIsSoon");
 		} 

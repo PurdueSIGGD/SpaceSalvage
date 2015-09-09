@@ -41,6 +41,28 @@ public class PlayerMovement : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetFloat("emprechargetime", emprechargetime);
 		}
+
+		if (PlayerPrefs.HasKey("Up")) {
+			kup = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Up")) ; //casting from string to keycode
+		} else {
+			PlayerPrefs.SetString("Up",kup.ToString());
+		}
+		if (PlayerPrefs.HasKey("Down")) {
+			kdown = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down")) ;
+		} else {
+			PlayerPrefs.SetString("Down",kup.ToString());
+		}
+		if (PlayerPrefs.HasKey("Left")) {
+			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
+		} else {
+			PlayerPrefs.SetString("Left",kup.ToString());
+		}
+		if (PlayerPrefs.HasKey("Right")) {
+			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
+		} else {
+			PlayerPrefs.SetString("Right",kup.ToString());
+		}
+
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
 		FrontThruster = GameObject.Find ("FrontThruster").GetComponent<SpriteRenderer> ();
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
