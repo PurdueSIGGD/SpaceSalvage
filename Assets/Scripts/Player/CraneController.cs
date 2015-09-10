@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/*	ATTENTION
+ * 	THIS CODE IS HEREBY CONDEMNED
+ * 	DO NOT ATTEMPT TO DEBUG UNLESS YOU ARE DESPERATE AND IT IS GAME BREAKING
+ * 	SERIOUSLY. DON'T EVEN TRY, IT WAS WHAT I TRIED DOING 
+ * 
+ * */
 public class CraneController : MonoBehaviour {
 	
 	public bool opened;

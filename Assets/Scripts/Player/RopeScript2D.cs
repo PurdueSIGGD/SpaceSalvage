@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
+//using UnityEditor;
 
 public class RopeScript2D : MonoBehaviour {
 	public KeyCode keject = KeyCode.G;
