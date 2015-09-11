@@ -8,12 +8,18 @@ public class ExitScript : MonoBehaviour {
 	private GameObject faderObject;
 	private SpriteRenderer Fader;
 	private GameObject Player;
+	public KeyCode usekey = KeyCode.F;
 	public string usestring = "Press 'f' to exit map";
 	public Vector3 playerseat;
 	void Start () {
 		Player = GameObject.Find ("Player");
 		if (transform.FindChild("PlayerSeat") != null) {
 			playerseat = transform.FindChild("PlayerSeat").position;
+		}
+		if (PlayerPrefs.HasKey("Use")) {
+			usekey = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Use")) ;
+		} else {
+			PlayerPrefs.SetString("Use",usekey.ToString());
 		}
 		faderObject = GameObject.Find ("Fader");
 		Fader = faderObject.GetComponent<SpriteRenderer> ();
@@ -28,12 +34,14 @@ public class ExitScript : MonoBehaviour {
 	}
 	void OnTriggerExit2D (Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
+
 			col.SendMessage("GetMessage", "");
+			col.SendMessage("LoseGO");
 		}
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
-			col.SendMessage("GetMessage", this.usestring);
+			col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map!");
 			col.SendMessage("GetGO", this.gameObject);
 
 		}
@@ -43,7 +51,7 @@ public class ExitScript : MonoBehaviour {
 			if (exiting) {
 				col.SendMessage("GetMessage", "");
 			} else {
-					col.SendMessage("GetMessage", this.usestring);
+				col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map!");
 					col.SendMessage("GetGO", this.gameObject);
 					
 

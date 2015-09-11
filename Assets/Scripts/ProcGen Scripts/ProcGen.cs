@@ -343,4 +343,6 @@ public class ProcGen : MonoBehaviour {
 	void Update() {
 		//update area outside
 	}
+
+
 }

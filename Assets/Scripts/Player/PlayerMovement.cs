@@ -50,17 +50,17 @@ public class PlayerMovement : MonoBehaviour {
 		if (PlayerPrefs.HasKey("Down")) {
 			kdown = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down")) ;
 		} else {
-			PlayerPrefs.SetString("Down",kup.ToString());
+			PlayerPrefs.SetString("Down",kdown.ToString());
 		}
 		if (PlayerPrefs.HasKey("Left")) {
 			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
 		} else {
-			PlayerPrefs.SetString("Left",kup.ToString());
+			PlayerPrefs.SetString("Left",kleft.ToString());
 		}
 		if (PlayerPrefs.HasKey("Right")) {
 			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
 		} else {
-			PlayerPrefs.SetString("Right",kup.ToString());
+			PlayerPrefs.SetString("Right",kright.ToString());
 		}
 
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();

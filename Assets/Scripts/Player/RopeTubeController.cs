@@ -37,12 +37,12 @@ public class RopeTubeController : MonoBehaviour {
 		if (PlayerPrefs.HasKey("Retract")) {
 			kretract = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Retract")) ;
 		} else {
-			PlayerPrefs.SetString("Retract",kextend.ToString());
+			PlayerPrefs.SetString("Retract",kretract.ToString());
 		}
 		if (PlayerPrefs.HasKey("Eject")) {
 			keject = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Eject")) ;
 		} else {
-			PlayerPrefs.SetString("Eject",kextend.ToString());
+			PlayerPrefs.SetString("Eject",keject.ToString());
 		}
 
 		if (tubesleft == 0)  {
