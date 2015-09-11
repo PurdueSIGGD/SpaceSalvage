@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float currentemptime;
 	public bool debugmode;
 	public AudioClip move;
+    private AudioClip defaultClip;
 
 	// Use this for initialization
 	void Start () {
@@ -69,6 +70,7 @@ public class PlayerMovement : MonoBehaviour {
 		RightThruster = GameObject.Find ("RightThruster").GetComponent<SpriteRenderer> ();
 		currentemptime = 0;
 		startingmoverate = moverate;
+        defaultClip = this.gameObject.GetComponent<AudioSource>().clip;
 	}
 	void EMP() {
 		currentemptime = 0;
@@ -101,6 +103,22 @@ public class PlayerMovement : MonoBehaviour {
 			}
 			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
+
+        if ((left || right || up || down) && !this.gameObject.GetComponent<AudioSource>().isPlaying)
+        {
+            this.gameObject.GetComponent<AudioSource>().clip = move;
+            this.gameObject.GetComponent<AudioSource>().Play();
+        }
+        else if (!left && !right && !up && !down)
+        {
+            this.gameObject.GetComponent<AudioSource>().Stop();
+        }
+        else
+        {
+            //this.gameObject.GetComponent<AudioSource>().Stop();
+            this.gameObject.GetComponent<AudioSource>().clip = defaultClip;
+        }
+
 		if (this.GetComponent<Rigidbody2D>().velocity.y < 10) {
 			up = Input.GetKey (kup);
 		} else {
