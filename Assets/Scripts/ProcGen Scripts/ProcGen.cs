@@ -63,11 +63,27 @@ public class ProcGen : MonoBehaviour {
 	
 	public float density;  //density of each builds
 	public float initial_distance; //how big we spawn the beginning
-	
+
+	//The EdgeBoundaries
+	public Edgebounds topEdge;
+	public Edgebounds bottomEdge;
+	public Edgebounds rightEdge;
+	public Edgebounds leftEdge;
+
 	void Start() {
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
 		Generate(initial_distance * -1, initial_distance * -1, initial_distance, initial_distance); //generate a square of width = initial_distance * 2;
+		//Create the EdgeCollider2D boundaries for the initial area
+		topEdge.initialDistance = initial_distance;
+		topEdge.GetComponent<EdgeCollider2D> ().isTrigger = true;
+		Edgebounds topnewEdge = (Edgebounds)Instantiate (topEdge,new Vector3(0,initial_distance,0),new Quaternion(0,0,90,0)); 
+		Edgebounds bottomnewEdge = (Edgebounds)Instantiate (bottomEdge,new Vector3(0,-initial_distance,0),new Quaternion(0,0,-90,0));
+		bottomEdge.initialDistance = initial_distance;
+		Edgebounds leftnewEdge = (Edgebounds)Instantiate (leftEdge,new Vector3(initial_distance,0,0),new Quaternion(0,0,180,0));
+		rightEdge.initialDistance = initial_distance;
+		Edgebounds rightnewEdge = (Edgebounds)Instantiate (rightEdge,new Vector3(-initial_distance,0,0),new Quaternion(0,0,0,0));
+		leftEdge.initialDistance = initial_distance;
 	}
 	void Generate(float startX, float startY, float endX, float endY) { // generate from (startX, startY) to (endX, endY)
 		Vector2 newitembuffer = Vector2.zero;
