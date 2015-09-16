@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Loot : MonoBehaviour {
-	//Just to show that this item is loot
+	//Just to show that this item is loot, and can be taken by the ship
 	public bool isbelonging = false;
 	public string itemtype;
 	public float timesincekinematic;

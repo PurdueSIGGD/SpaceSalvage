@@ -3,13 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class JointScript : MonoBehaviour {
+	/* Code meant for each joint we would have in any rope
+	 * Can be cut or changed
+	 * Similar to a linkedlist
+	 */
+
 	private LineRenderer lr;
 	private SpringJoint2D sp;
 	private EdgeCollider2D eg;
 	private bool broken;
 	public bool shiprope;
 	public bool severed;
-	public string connector;
 	public float linewidth = .02f;
 	public Material material;
 	private GameObject focus, subline;
@@ -18,7 +22,8 @@ public class JointScript : MonoBehaviour {
 	void Start () {
 		severed = false;
 		if (this.name == "Player" && !shiprope && this.transform.FindChild("SubLine") == null) {
-			subline = new GameObject("SubLine");
+			subline = new GameObject("SubLine"); //we have to create another gameobject to connect our line to if the player grabs an object.
+			//I was unable to find a way to make the line renderer have two dfferent materials, however I know it can.
 			subline.transform.parent = this.transform;
 			subline.transform.position = this.transform.position;
 			lr = subline.AddComponent<LineRenderer>();
@@ -39,7 +44,7 @@ public class JointScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.name == "Player" && !shiprope && subline != null	) subline.transform.position = this.transform.position;
+		if (this.name == "Player" && !shiprope && subline != null	) subline.transform.position = this.transform.position; //keep subline close
 
 		//if (focus != null) print(focus.name);
 		if (!broken) {
@@ -79,7 +84,7 @@ public class JointScript : MonoBehaviour {
 					i++;
 					print("setting the first");
 				}*/
-				if (sp != null && sp.connectedBody != null) {
+				if (sp != null && sp.connectedBody != null) { //update the line renderer from our point to points around it, so the lines don't look bulky
 					lr.SetPosition(1,new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y, this.transform.position.z));
 					/*if (this.name != "Player") {
 						thepoints[i] = (new Vector3(sp.connectedBody.transform.position.x, sp.connectedBody.transform.position.y)- this.transform.position);
@@ -136,7 +141,7 @@ public class JointScript : MonoBehaviour {
 		}
 
 	}
-	void BrokenJoint() {
+	void BrokenJoint() { //get rid of the joint
 
 		Destroy(sp);
 		lr.SetVertexCount(0);
@@ -147,14 +152,12 @@ public class JointScript : MonoBehaviour {
 		}
 
 	}
-	void OnCollisionEnter2D(Collision2D col) {
+	void OnCollisionEnter2D(Collision2D col) { //just to confirm we ignore the collision with the player
 		if (col.gameObject.name == "Player") Physics2D.IgnoreCollision(col.collider.GetComponent<Collider2D>(), this.GetComponent<Collider2D>());
-
-		connector = col.gameObject.name;
 		//print(col.gameObject.name);
 
 	}
-	void GiveFocus(GameObject g) {
+	void GiveFocus(GameObject g) { //to understand where the rope is headed
 		focus = g;
 	}
 	/*void GiveConnected(GameObject g) {

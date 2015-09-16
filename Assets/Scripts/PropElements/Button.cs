@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class Button : MonoBehaviour {
+	/* Currently for using doors
+	 * Can be adapted for more other things if really really necessary
+	 */
+
 	string usestring = "Press 'f' to open door";
 	public bool open;
 	// Use this for initialization

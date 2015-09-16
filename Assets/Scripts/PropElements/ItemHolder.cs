@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 
 public class ItemHolder : MonoBehaviour {
+	//to hold items in the ship
+
 	public int numpackages;
 	public int maxnumpackages = 3;
 	public Vector2 packagearea;
@@ -18,7 +20,7 @@ public class ItemHolder : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 
-		if (col.GetComponent<Rigidbody2D>() != null) {
+		if (col.GetComponent<Rigidbody2D>() != null) { //attach the item to the ship
 			if (numpackages < maxnumpackages && !col.GetComponent<Rigidbody2D>().isKinematic && col.GetComponent<Loot>() && col.GetComponent<Loot>().timesincekinematic > 8) {
 				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * numpackages), this.transform.position.y + packagearea.y ,-1 + (.01f * numpackages));
 				this.GetComponent<AudioSource>().Play();
@@ -44,7 +46,7 @@ public class ItemHolder : MonoBehaviour {
 
 
 	}
-	void OnTriggerExit2D(Collider2D col) {
+	void OnTriggerExit2D(Collider2D col) { //reset the item to work
 		if (col.GetComponent<Loot>() != null) {
 			if (col.GetComponent<Loot>().isbelonging) {
 				col.GetComponent<Loot>().isbelonging = false;
@@ -60,7 +62,7 @@ public class ItemHolder : MonoBehaviour {
 	void Update () {
 
 	}
-	void Im_Leaving() {
+	void Im_Leaving() { //leave the map, save items
 		Collider2D[] hitColliders = Physics2D.OverlapAreaAll(this.GetComponent<BoxCollider2D>().bounds.max, this.GetComponent<BoxCollider2D>().bounds.min);
 		String[] itemnames = new String[maxnumpackages];
 		int i = 0;
@@ -78,6 +80,7 @@ public class ItemHolder : MonoBehaviour {
 				i++;
 			}
 		}
+		//save the items in a PlayerPrefs item, an external script similar to PlayerPrefs
 		PlayerPrefsX.SetStringArray("Items", returnarray);
 
 	}

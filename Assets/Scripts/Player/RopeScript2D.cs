@@ -3,6 +3,8 @@ using System.Collections;
 //using UnityEditor;
 
 public class RopeScript2D : MonoBehaviour {
+	//this code is funky. I would not recommend re-using it, unless you take out a lot.
+	//based off of http://wiki.unity3d.com/index.php/3D_Physics_Based_Rope, except used for 2d and many, many more things changed.
 	public KeyCode keject = KeyCode.G;
 
 	public GameObject hinger; //the hinge to make the connector stick out instead of being on the center
@@ -56,7 +58,7 @@ public class RopeScript2D : MonoBehaviour {
 
 	void Start() {
 		Transform tee;
-		if ((tee = transform.FindChild("RopeStart")) != null) {
+		if ((tee = transform.FindChild("RopeStart")) != null) { 
 			vec = tee.transform.position;
 		}
 		rope = true;
@@ -79,7 +81,7 @@ public class RopeScript2D : MonoBehaviour {
 			}
 
 		}
-		if (retract_on_death && brokenrope) {
+		if (retract_on_death && brokenrope) { //code in order to retract the cable if shit goes down and one is broken
 			if (timepassed > .8f) {
 				if (joints != null) {
 					if (joints[retractindex]!= null) {
@@ -122,7 +124,7 @@ public class RopeScript2D : MonoBehaviour {
 					dj.distance = 0;
 					if (!shiprope || true) {
 						Vector2 vectorry = new Vector2((this.vec.x - this.transform.position.x)/this.transform.localScale.x,(this.vec.y-this.transform.position.y)/this.transform.localScale.y);
-						float _x = vectorry.x;
+						float _x = vectorry.x; //math
 						float _y = vectorry.y;
 
 						float _angle = -1 * this.transform.eulerAngles.z * Mathf.Deg2Rad;
@@ -196,7 +198,7 @@ public class RopeScript2D : MonoBehaviour {
 
 
 		}
-		if (ejected) {
+		if (ejected) { //the pulsing light of the connector
 			if (increasing) {
 				lightintensity += Time.deltaTime;
 				if (lightintensity >= 1) {
@@ -215,6 +217,7 @@ public class RopeScript2D : MonoBehaviour {
 		if (connector != null) {
 			SpriteRenderer sp = connector.GetComponent<SpriteRenderer>();
 			if (sp != null) {
+				// add light properties here
 				connector.transform.localScale = new Vector3(2 * lightintensity,2 * lightintensity,2 * lightintensity);
 				sp.color = new Color(sp.color.r, sp.color.g, sp.color.b, 1);
 			}
@@ -284,7 +287,7 @@ public class RopeScript2D : MonoBehaviour {
 	}
 	GameObject AddJointPhysics(int n)
 	{
-
+		//creating the game objects to initiate physics, function called upon earlier
 		GameObject newie = new GameObject("Joint_" + n);
 		joints.Add (newie);
 		lastnew = newie;
@@ -403,7 +406,7 @@ public class RopeScript2D : MonoBehaviour {
 	void Eject() {
 		if (!isgenerating) {
 			if (!ejected) {
-				if (!brokenrope) {
+				if (!brokenrope) { //spawn a connector, float away
 					ejected = true;
 					connector = new GameObject ("Connector");
 					GameObject innercol = new GameObject("Innercol");
@@ -462,7 +465,7 @@ public class RopeScript2D : MonoBehaviour {
 			}
 		}
 	}
-	void Connect() {
+	void Connect() { //reconnect if we register
 		if (ejected && !death) {
 			if (!brokenrope) {
 				if ((spree = target.gameObject.GetComponent<SpringJoint2D>()) == null) {
@@ -495,7 +498,7 @@ public class RopeScript2D : MonoBehaviour {
 
 		}
 	}
-	void DeathIsSoon() {
+	void DeathIsSoon() { 
 		brokenrope = true;
 		Eject();
 		death = true;

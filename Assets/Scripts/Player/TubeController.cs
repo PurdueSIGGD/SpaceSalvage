@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 
 public class TubeController : MonoBehaviour {
+	//obselete, old code, you can admire it and realize how crappy it was
 	public int tubesleft = 50;
 	public Vector3 tubeorigin;
 	private float ejectcooldown;

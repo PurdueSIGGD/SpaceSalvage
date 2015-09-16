@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ShadowySprites : MonoBehaviour {
-
+	//trying to make sprites have shadows
 	// Use this for initialization
 	void Start () {
 

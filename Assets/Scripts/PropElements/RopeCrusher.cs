@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class RopeCrusher : MonoBehaviour {
-
+	//to make rope stop moving when encountering doors
 	private bool isclosing;
 	public GameObject partner;
 	// Use this for initialization

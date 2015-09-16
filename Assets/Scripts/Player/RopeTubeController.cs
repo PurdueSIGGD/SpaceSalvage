@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class RopeTubeController : MonoBehaviour {
+	//Controls the rope extending or contracting
+
 	public KeyCode kextend = KeyCode.LeftShift;
 	public KeyCode kretract = KeyCode.LeftControl;
 	public KeyCode keject = KeyCode.G;

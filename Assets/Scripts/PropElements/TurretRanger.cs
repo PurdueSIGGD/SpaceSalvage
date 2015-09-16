@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class TurretRanger : MonoBehaviour {
+	// To find the player, used with the chaser and turrets
+
 	GameObject Player;
 	// Use this for initialization
 	void Start () {
@@ -13,12 +15,12 @@ public class TurretRanger : MonoBehaviour {
 	
 	}
 	void OnTriggerEnter2D(Collider2D col) {
-		if (col.gameObject.Equals(Player)) {
+		if (Player != null && col.gameObject.Equals(Player)) {
 			this.SendMessageUpwards("Focus",true);
 		}
 	}
 	void OnTriggerExit2D(Collider2D col) {
-		if (col.gameObject.Equals(Player)) {
+		if (Player != null && col.gameObject.Equals(Player)) {
 			this.SendMessageUpwards("Focus",false);
 
 		}

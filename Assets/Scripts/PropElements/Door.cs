@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Door : MonoBehaviour {
+	//used with button
 	private float time;
 	private Vector3 open, close;
 	public bool opened;
@@ -80,6 +81,7 @@ public class Door : MonoBehaviour {
 	void OnCollisionExit2D(Collision2D col) {
 		if (col.rigidbody != null && col.gameObject.GetComponent<JointScript>() != null && col.transform.name != "Player") {
 			col.rigidbody.isKinematic = false;
+			col.gameObject.SendMessage("LoseGO");
 			
 		}
 	}

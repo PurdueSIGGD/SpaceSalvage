@@ -2,8 +2,11 @@
 using System.Collections;
 
 public class BehindWall : MonoBehaviour {
+	/* If the player enters a certain area, the roof will fade away and fade back when they leave.
+	 * Meant for inside ships, so they don't look like they always have a hole in the top of them.
+	 * 
+	 */
 	private bool exiting;
-	// Use this for initialization
 	void Start () {
 		SpriteRenderer focus = (SpriteRenderer)this.GetComponent("SpriteRenderer");
 		if (focus != null) {

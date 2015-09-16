@@ -6,13 +6,11 @@ public class TextMessageScript : MonoBehaviour {
 	public string usestring2 = "";
 	public string usestring3 = "";
 	public string usestring4 = "";
-	private bool overlapping = false;
-
+	//uses the interact script to show items, but cannot be used for anything
 
 	// Use this for initialization
 	void Use() {
 		// can't use this
-		//do whatever you want your code to do if the player "uses" it
 	}
 	void Update() {
 
@@ -20,14 +18,11 @@ public class TextMessageScript : MonoBehaviour {
 	void OnTriggerExit2D (Collider2D col) {
 
 		if (col.GetComponent<InteractController>() != null && col.GetComponent<InteractController>().message == this.usestring1 + "\n" + this.usestring2 + "\n" + this.usestring3 + "\n" + this.usestring4) {
-			overlapping = false;
 			col.SendMessage("GetMessage", "");
 		}
 	}
 	void OnTriggerStay2D(Collider2D col) {
 		if (col.GetComponent<InteractController>() != null && col.GetComponent<InteractController>().message == "") {
-			overlapping = true;
-
 			col.SendMessage("GetMessage", this.usestring1 + "\n" + this.usestring2 + "\n" + this.usestring3 + "\n" + this.usestring4);
 			col.SendMessage("GetGO", this.gameObject);
 		}

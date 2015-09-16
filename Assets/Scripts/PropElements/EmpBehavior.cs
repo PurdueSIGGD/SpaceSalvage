@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EmpBehavior : MonoBehaviour {
-
+	//Basically an emp field.
 	// Use this for initialization
 	void Start () {
 	

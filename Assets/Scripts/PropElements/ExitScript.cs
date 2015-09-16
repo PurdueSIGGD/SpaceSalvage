@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class ExitScript : MonoBehaviour {
-	//private GameObject display;
-	// Use this for initialization
+	//Attached to the ship, interacted to exit the area and take items home
+
 	private bool exiting;
 	private GameObject faderObject;
 	private SpriteRenderer Fader;
@@ -77,8 +77,8 @@ public class ExitScript : MonoBehaviour {
 			} else {
 			
 				PlayerPrefs.Save(); 
-				GameObject.Find("Ship").BroadcastMessage("Im_Leaving");
-				GameObject.Find("Player").BroadcastMessage("Im_Leaving");
+				GameObject.Find("Ship").BroadcastMessage("Im_Leaving"); //get items from the ship
+				GameObject.Find("Player").BroadcastMessage("Im_Leaving"); //get player information
 				
 				
 				Application.LoadLevel("MissionResults");

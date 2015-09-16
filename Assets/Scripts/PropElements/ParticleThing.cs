@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ParticleThing : MonoBehaviour {
 	private float time;
+	//particle that will move away and get smaller
 
 	// Update is called once per frame
 	void Update () {

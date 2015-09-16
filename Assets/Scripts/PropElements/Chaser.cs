@@ -2,15 +2,19 @@
 using System.Collections;
 
 public class Chaser : MonoBehaviour {
+
+	/* An enemy that will chase you until... you know.... You're dead.
+	 * 
+	 */
 	GameObject Player, barrel;
 	bool focused, emp;
 	float emprecharge;
 	// Use this for initialization
 	void Start () {
 		barrel = this.transform.FindChild("Barrel").gameObject;
-		Player = GameObject.Find("Player");
+		if (GameObject.Find ("Player")) Player = GameObject.Find("Player");
 	}
-	void Focus(bool b) {
+	void Focus(bool b) { //dictated by the barrel, which uses a TurretRanger scipt. Uses that collision to identify the player
 		if (!focused || Vector3.Distance(this.transform.position,Player.transform.position) > 4) focused = b;
 	}
 	void EMP() {
@@ -19,7 +23,7 @@ public class Chaser : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!emp) {
-			this.transform.FindChild("Beam").transform.eulerAngles = new Vector3(0,0,this.transform.FindChild("Beam").transform.eulerAngles.z + Time.deltaTime * 150);
+			this.transform.FindChild("Beam").transform.eulerAngles = new Vector3(0,0,this.transform.FindChild("Beam").transform.eulerAngles.z + Time.deltaTime * 150); //spin child
 			if (focused) {
 
 				float thetaersnenig;
@@ -37,8 +41,8 @@ public class Chaser : MonoBehaviour {
 				barrel.transform.eulerAngles = new Vector3(0,0,thetaersnenig);
 				this.GetComponent<Rigidbody2D>().AddForce(6 * Time.deltaTime * (Player.transform.position - this.transform.position) * Vector3.Distance(Player.transform.position, this.transform.position));
 			} else {
-				this.GetComponent<Rigidbody2D>().AddForce(-1 * this.GetComponent<Rigidbody2D>().velocity);
-				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+ 30 * Time.deltaTime);
+				this.GetComponent<Rigidbody2D>().AddForce(-1 * this.GetComponent<Rigidbody2D>().velocity); //slow down 
+				barrel.transform.eulerAngles = new Vector3(0,0,barrel.transform.eulerAngles.z+ 30 * Time.deltaTime); //spin ourselves
 			}
 		} else {
 			emprecharge += Time.deltaTime;

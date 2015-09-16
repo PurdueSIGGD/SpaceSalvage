@@ -21,7 +21,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
 	}
 	void OnCollisionEnter2D(Collision2D col) {
-		if (col.gameObject.GetComponent<SpringJoint2D>() == null) {
+		if (col.gameObject.GetComponent<SpringJoint2D>() == null) { //not cord
 			this.gameObject.GetComponent<AudioSource>().volume = .5f;
 			if (Vector3.Magnitude(col.relativeVelocity) > .5f) {
 				if (Vector3.Magnitude(col.relativeVelocity) > 4) {
@@ -32,16 +32,16 @@ public class PlayerCollisionController : MonoBehaviour {
 				this.gameObject.GetComponent<AudioSource>().volume = 1f;
 			}
 
-			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity));
+			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity)); //shake the camera and jiggle
 
 		}
 		
 	}
-	void OnCollisionExit2D(Collision2D col) {}
+	void OnCollisionExit2D(Collision2D col) {} //no uses yet
 	void OnTriggerStay2D(Collider2D col) {
 		if (ejected) {
 
-			if (col.name.Equals("Innercol")) {
+			if (col.name.Equals("Innercol")) { //find the connector if ejected
 				if (ejectcooldown > 5) {
 					ejectcooldown = 0;
 					GameObject.Find("Ship").BroadcastMessage("Connect");
@@ -91,9 +91,9 @@ public class PlayerCollisionController : MonoBehaviour {
 
 	}
 	void FaderTime(float f) {
-		Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
+		Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10); //large
 
-		if (f <= 0) {
+		if (f <= 0) { // if we are dead
 
 			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/3);
 			this.SendMessage("EMP");
