@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class GaseousJet : MonoBehaviour {
+	// to push the player
+	// has to transform children, and they choose where the airjet will be blowing
 	public float maxspeed = 20;
 	public float force = 1;
 	private Vector2 top;

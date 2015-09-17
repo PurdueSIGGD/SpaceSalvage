@@ -2,6 +2,12 @@
 using System.Collections;
 
 public class HealthController : MonoBehaviour {
+
+	/* This controls several different values inside of the player, including:
+	 * Health, oxygen, armor, tubesleft.
+	 * It also controls the GUIText values displayed in-game.
+	 * It will also save values at the end of the game
+	 */
 	private float health = 100; //suit integrity
 	private float med = 100; //actual health
 	private float startingoxy = 30;
@@ -32,9 +38,9 @@ public class HealthController : MonoBehaviour {
 	public float emptime = 0;
 	public Sprite j1, j2, j3, j4, j5;
 	// Use this for initialization
-	void Start () {
+	void Start () { 
 		timesincelastdamage = -1;
-		if (PlayerPrefs.HasKey("startingoxy")) {
+		if (PlayerPrefs.HasKey("startingoxy")) { //getting initial values
 			startingoxy = PlayerPrefs.GetFloat("startingoxy");
 		} else {
 			PlayerPrefs.SetFloat("startingoxy",startingoxy);
@@ -66,8 +72,8 @@ public class HealthController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//if (this.cranewarning) cranetime+=Time.deltaTime;
-		time+=Time.deltaTime;
-		acceptingOxy = (oxy < startingoxy);
+		if (time < .5f) time+=Time.deltaTime; //used for particles later
+		acceptingOxy = (oxy < startingoxy); //if we are able to take in oxygen
 		string words = "";
 		if (timesincelastdamage >= 0) {
 			timesincelastdamage += Time.deltaTime;
@@ -78,11 +84,11 @@ public class HealthController : MonoBehaviour {
 			}
 
 		}
-		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) {
+		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) { //no warnings
 			emergency = false;
 			words += okmessage;
 
-		} else {
+		} else { //see what issue we may have
  			emergency = true;
 			if (emp && !pause) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
 			if (suitwarning) words += suitmessage;
@@ -107,7 +113,7 @@ public class HealthController : MonoBehaviour {
 				}
 			}
 		}
-		string m = "m";
+		string m = "m"; //for meters
 		string tubesmessage = ejected?" (disconnected)":"";
 		float newoxy = (oxy >= startingoxy - 3*Time.deltaTime)?startingoxy:oxy; //so it doesnt go from 29 to 30 constantly
 		string final = 
@@ -119,20 +125,20 @@ public class HealthController : MonoBehaviour {
 				words;
 		((GUIText)text.GetComponent("GUIText")).text = final;
 
-		if (med != 100 && !pause) {
-			this.SendMessage("FaderTime",med/100);
+		if (med != 100 && !pause) { 
+			this.SendMessage("FaderTime",med/100); //so the screen can fade, sends to playercollisioncontroller and kills the player if necessary
 		}
 		medwarning = (med < 35);
 		suitwarning = (health < 20 && health > 0);
 		suiterror = (health <= 0);
 		oxyerror  = (oxy <= 0);
 
-		if (emp && !pause && med <= 0) emp = false;
-		cranewarning = (this.GetComponentInChildren<CraneController>().broken);
-		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope;
+		if (emp && !pause && med <= 0) emp = false; //we cannot be affected by an emp if we aren't paused or dead
+		cranewarning = (this.GetComponentInChildren<CraneController>().broken); 
+		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope; //finding if rope is disconneted
 		if (ejected) { //change oxygen from being ejected
 			if ((health < 50 && health > 1 )|| health == 0) {
-				changeOxy(-1 * Time.deltaTime * (50 - health)/10 );
+				changeOxy(-1 * Time.deltaTime * (50 - health)/10 ); 
 			} else {
 				changeOxy(-1 * Time.deltaTime);
 			}
@@ -158,9 +164,9 @@ public class HealthController : MonoBehaviour {
 	void changeHealth(float f) { //not actual health, this is just the suit itegrity
 
 
-		if (!pause) {
+		if (!pause) { //pause is set if we are in the ship, leaving
 			if (time > .25f && particle != null) {				
-				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity);
+				GameObject thingy = (GameObject)Instantiate(particle, this.transform.position, Quaternion.identity); //spawning particles
 				float r = Random.value;
 				if (r >= 0 && r < .2f) { //find random damage sprite
 					thingy.GetComponent<SpriteRenderer>().sprite = j1;
@@ -179,19 +185,19 @@ public class HealthController : MonoBehaviour {
 				} 
 				//thingy.GetComponent<SpriteRenderer>().sprite = ;
 				thingy.transform.localScale = new Vector3(3,3,1); //typical scale is 5, dont want parts too big or small
-				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100));
+				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100)); //make it redder if necessary
 				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 				thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
 				time = 0;
 			}
 			if (health > 1 && health + f > 0) {
-				if (med >= 3*f/health) { //your health can be damaged by attacks, but your suit works like armor
+				if (med >= 3*f/health) { //your health can be damaged by attacks, but your suit works like armor plus your armor already
 					med += 3*f/health;
 				} else {
 					med = 0;
 				}
 			} else {
-				health = 0;
+				health = 0; //if no armor left, change your actual health
 				changeMed(f);
 			}
 			if (health != 0) {
@@ -205,7 +211,7 @@ public class HealthController : MonoBehaviour {
 			if (f < 0 && gettingOxy) return; //if getting oxygen and losing some, forget about the losing oxygen
 			if (f + oxy > startingoxy) {
 				oxy = startingoxy;
-			} else if (f + oxy <= 0) {
+			} else if (f + oxy <= 0) { // if it is more than we can give, so no negatives
 				oxy = 0;
 			} else {
 				oxy += f;
@@ -227,16 +233,16 @@ public class HealthController : MonoBehaviour {
 	void changeWallet(int i) {
 		wallet += i;
 	}
-	void StopDoingThat() {
+	void StopDoingThat() { //from the ship
 		pause = true;
 	}
 	void GetTubesLeft(int tubes) {
 		tubesleft = tubes;
 	}
-	void GettingOxy(bool b) {
+	void GettingOxy(bool b) { //accepting oxygen, look in oxygenstation.cs
 		gettingOxy = b;
 	}
-	void Im_Leaving() {
+	void Im_Leaving() { //last function to pass
 		PlayerPrefs.SetInt ("wallet", wallet);
 		PlayerPrefs.SetFloat ("health", health);
 		PlayerPrefs.SetInt ("startingwallet", startingwallet);

@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class WallTurret : MonoBehaviour {
+
+	//Needs to be redone
+
 	private GameObject barrel, Player;
 	public GameObject ammo;
 	public bool empshooty = false; //false if damage, true if emp	
@@ -83,12 +86,12 @@ public class WallTurret : MonoBehaviour {
 					resetting = false;
 				}
 				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart) < 10) {
-					print("angleStart");
+					//print("angleStart");
 					clockwise = !clockwise;
 					barrel.transform.eulerAngles = new Vector3(0,0,this.transform.parent.eulerAngles.z + angleStart + (clockwise?-1:1) * Mathf.Abs(barrel.transform.localEulerAngles.z - angleStart));
 				}
 				if (Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd) < 10) {
-					print("angleEnd");
+					//print("angleEnd");
 					clockwise = !clockwise;
 					barrel.transform.eulerAngles = new Vector3(0,0,this.transform.parent.eulerAngles.z + angleEnd + (clockwise?-1:1) * Mathf.Abs(barrel.transform.localEulerAngles.z - angleEnd));
 

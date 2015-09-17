@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class SlowStation : MonoBehaviour {
+	//to slow the player down, like a thick goo
 
 	private Rigidbody2D rigid;
 	private GameObject Player;

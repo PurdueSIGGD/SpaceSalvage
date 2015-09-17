@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class Airlock : MonoBehaviour {
+	/* Meant to be permanent structure concepts, and not to be spawned randomly
+	 * 
+	 */
+
 	public GameObject particle;
 	public bool on = true;
 	public bool closed;
@@ -24,7 +28,7 @@ public class Airlock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		// several different children for specifying positions within the airlock
 		spawner1 = transform.FindChild("Spawner1");
 		spawner2 = transform.FindChild("Spawner2");
 		Door1left = transform.FindChild("Door1Left");
@@ -66,7 +70,7 @@ public class Airlock : MonoBehaviour {
 	void Close() {
 		if (cooldowntime > 10)	buttontrigger = true;
 	}
-	void OnTriggerStay2D(Collider2D col) {
+	void OnTriggerStay2D(Collider2D col) { //happens when player stays in the airlock area
 		if (on && col.name.Equals ("Player")) {
 
 			time+=Time.deltaTime;

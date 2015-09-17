@@ -3,6 +3,8 @@ using System.Collections;
 
 public class SmoothCamera2D : MonoBehaviour {
 
+	//camera that controls zooming and moves smoothly, and shaking
+
 	public float dampTime = 0.15f;
 	private Vector3 velocity = Vector3.zero;
 	public Transform target;

@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 
 public class DebrisStart : MonoBehaviour {
+	//For floaters and stuff
 	public float startVal = 1;
 	// Use this for initialization
 	void Start () {

@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class ItemPickup : MonoBehaviour {
+	//Items able to be grabbed
+
 	public Transform bulletPrefab;
 	public GameObject Player;
 	private Vector3 delta;
@@ -12,7 +14,7 @@ public class ItemPickup : MonoBehaviour {
 	void Start () {
 		colliding = false;
 		Player = GameObject.Find("Player");
-		//4i;	
+
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		colliding = true;

@@ -11,7 +11,9 @@ using System.Collections;
 	void OnTriggerExit2D (Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
 			col.SendMessage("GetMessage", "");
+			col.SendMessage("LoseGO");
 		}
+
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
@@ -35,10 +37,10 @@ public class InteractController : MonoBehaviour {
 		gu.text = "";
 		message = "";
 		gu.color = new Color(1,1,1);
-		gu.pixelOffset = new Vector2(Screen.width * 4 / 6, Screen.height/2);
+		gu.pixelOffset = new Vector2(Screen.width * 4 / 6, Screen.height/2); //positioning in screen
 		gu.fontSize = 15;
 
-		if (PlayerPrefs.HasKey("Use")) {
+		if (PlayerPrefs.HasKey("Use")) { //get key we use for the use function
 			use = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Use")) ;
 		} else {
 			PlayerPrefs.SetString("Use",use.ToString());

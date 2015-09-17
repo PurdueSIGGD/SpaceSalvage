@@ -299,25 +299,37 @@ public class ProcGen : MonoBehaviour {
 					//spawn asteriod
 					GameObject thingy = (GameObject)Instantiate(asterioid, new Vector3(i, j, 1), Quaternion.identity);
 					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					SpawnInside(thingy);
 					return Vector2.zero;
 				} 
 				if (Random.value < small_ship_chance) {
 					//spawn small ship
 					GameObject thingy = (GameObject)Instantiate(small_ship, new Vector3(i, j, 1), Quaternion.identity);
-					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();					
+					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();	
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					SpawnInside(thingy);
 					return Vector2.zero;
 				} 
 				if (Random.value < large_ship_chance) {
 					GameObject thingy = (GameObject)Instantiate(large_ship, new Vector3(i, j, 1), Quaternion.identity);
 					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					SpawnInside(thingy);
 					return Vector2.zero;
 				}
 				if (Random.value < small_debris_chance) { //cannot spawn inside
 					GameObject thingy = (GameObject)Instantiate(small_debris, new Vector3(i, j, 1), Quaternion.identity);
 					thingy = thingy.GetComponent<MultiResultStarter>().poopedOut();
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					return Vector2.zero;
 				}
 				if (Random.value < med_debris_chance) {
@@ -334,23 +346,38 @@ public class ProcGen : MonoBehaviour {
 				}
 				if (Random.value < small_loot_chance) { //cannot spawn inside, may spawn some debris around it
 					GameObject thingy = (GameObject)Instantiate(small_loot, new Vector3(i, j, 1), Quaternion.identity);
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					return Vector2.zero;
 				}
 				if (Random.value < med_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(med_loot, new Vector3(i, j, 1), Quaternion.identity);
 					//SpawnInside(thingy); //for multiple coins in a bunch
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					return Vector2.zero;
 				}
 				if (Random.value < large1_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(large1_loot, new Vector3(i, j, 1), Quaternion.identity);
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;					
 					return Vector2.zero;
 				}
 				if (Random.value < large2_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(large2_loot, new Vector3(i, j, 1), Quaternion.identity);
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					return Vector2.zero;
 				}
 				if (Random.value < large3_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(large3_loot, new Vector3(i, j, 1), Quaternion.identity);
+					Quaternion q = new Quaternion();
+					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
+					thingy.transform.rotation = q;
 					return Vector2.zero;
 				}
 		return Vector2.zero;

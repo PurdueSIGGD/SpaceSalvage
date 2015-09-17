@@ -96,10 +96,10 @@ public class CraneController : MonoBehaviour {
 			}
 		}
 
-		SpringJoint2D[] myjoints = Player.GetComponents<SpringJoint2D>();
-		foreach (SpringJoint2D j in myjoints) {
+		//SpringJoint2D[] myjoints = Player.GetComponents<SpringJoint2D>();
+		//foreach (SpringJoint2D j in myjoints) {
 			//if (j.connectedBody == null) Destroy(j); //see line 136
-		}
+		//}
 		if (emp && ending != null) {
 			ending.transform.localPosition = Vector3.zero;
 		}
@@ -394,7 +394,7 @@ public class CraneController : MonoBehaviour {
 		if (grabbed && focus ==g) {
 			grabbed = false;
 			GameObject subline = Player.transform.FindChild("SubLine").gameObject;
-			print(subline.name);
+//			print(subline.name);
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().SetVertexCount(0);
 			Destroy(focus.GetComponent<LineRenderer>());

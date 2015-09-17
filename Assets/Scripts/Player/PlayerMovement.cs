@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 
 
-		if (emp) {
+		if (emp) { //controls if we can get control or not
 			currentemptime+= Time.deltaTime;
 			if (currentemptime > emprechargetime) {
 				emp = false;
@@ -140,7 +140,7 @@ public class PlayerMovement : MonoBehaviour {
 			left = false;
 		}
 	}
-	bool inRange(double d, double rangestart, double rangeend) {
+	bool inRange(double d, double rangestart, double rangeend) { //math for rotation. If you realllllly wanna know how this works, ask me.
 		return (!left && (d + this.transform.rotation.eulerAngles.z + 180) % 360  > rangestart % 360 && (d + this.transform.rotation.eulerAngles.z + 180) % 360 < rangeend % 360);
 	}
 	bool inRangeLeft(double d, double rangestart, double rangeend) {
@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour {
 	//Handles movement and stuff
 	void FixedUpdate () {
 		if (emp){
-			moverate = startingmoverate / 4;
+			moverate = startingmoverate / 4; //still can move if under attack
 		} else  {
 			moverate = startingmoverate;
 		}
@@ -219,13 +219,13 @@ public class PlayerMovement : MonoBehaviour {
 		Light FLight = this.transform.FindChild("FrontLight").GetComponent<Light>();
 		Light LLight = this.transform.FindChild("LeftLight").GetComponent<Light>();
 		Light RLight = this.transform.FindChild("RightLight").GetComponent<Light>();
-		Light CLight = this.transform.FindChild("CWLight").GetComponent<Light>();
-		Light CCLight = this.transform.FindChild("CCWLight").GetComponent<Light>();
+		//Light CLight = this.transform.FindChild("CWLight").GetComponent<Light>();
+		//Light CCLight = this.transform.FindChild("CCWLight").GetComponent<Light>();
 		if (flying) {
 
 
 			//this.GetComponent<AudioSource>().Play();
-			if (!emp) {
+			if (!emp) { //this is for getting the correct lights and sprites for the ship
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
@@ -320,7 +320,7 @@ public class PlayerMovement : MonoBehaviour {
 				}
 			}
 				
-		} else {
+		} else { //if nothing is happening
 				if (BackThruster.color.a > 0) {
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 				}

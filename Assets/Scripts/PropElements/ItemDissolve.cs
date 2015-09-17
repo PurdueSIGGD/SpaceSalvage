@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ItemDissolve : MonoBehaviour {
-
+	// AKA coin
 	private GameObject Player;
 	// Use this for initialization
 	void Start () {

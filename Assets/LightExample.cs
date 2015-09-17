@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class LightExample : MonoBehaviour {
+	//what we would use for lights, say in the environment
 	public bool on = true;
 	public bool spinning = true;
 	public bool twolights;

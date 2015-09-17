@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class ExplosionScript : MonoBehaviour {
+	// Explosion that is spawned by missiles
+
 	private float time = 0;
 	public float speed = 1;
 	public float damage = 3;
@@ -48,7 +50,7 @@ public class ExplosionScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		time += Time.deltaTime;
+		time += Time.deltaTime; //meant for the explosion, and the sprite showing
 		if (time <  .5f/speed) {
 			this.GetComponentInChildren<Light>().intensity = 2;
 			this.transform.localScale = new Vector3(this.transform.localScale.x + 6 * Time.deltaTime, this.transform.localScale.y + 6 * Time.deltaTime, 1);

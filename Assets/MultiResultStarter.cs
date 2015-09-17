@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class MultiResultStarter : MonoBehaviour {
+	//For spawning an item that can have multiple possibilities
 	private bool done;
 	public GameObject[] possibilities;
 	// Use this for initialization

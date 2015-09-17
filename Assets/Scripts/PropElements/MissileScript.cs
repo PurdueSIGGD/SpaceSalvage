@@ -58,7 +58,7 @@ public class MissileScript : MonoBehaviour {
 			if (ccc.intensity < 1.5) {
 				ccc.intensity += Time.deltaTime;
 			}
-			if (homing) {
+			if (homing) { //making the homing light turn on/off
 				if (flashingb) {
 					flashing+= Time.deltaTime;
 				} else {
