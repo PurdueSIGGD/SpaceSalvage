@@ -77,8 +77,8 @@ public class ProcGen : MonoBehaviour {
 		//Create the EdgeCollider2D boundaries for the initial area
 		topEdge.initialDistance = initial_distance;
 		topEdge.GetComponent<EdgeCollider2D> ().isTrigger = true;
-		Edgebounds topnewEdge = (Edgebounds)Instantiate (topEdge,new Vector3(0,initial_distance,0),new Quaternion(0,0,90,0)); 
-		Edgebounds bottomnewEdge = (Edgebounds)Instantiate (bottomEdge,new Vector3(0,-initial_distance,0),new Quaternion(0,0,-90,0));
+		GameObject topnewEdge = (GameObject)Instantiate (topEdge,new Vector3(0,initial_distance,0),new Quaternion(0,0,90,0)); 
+		Edgebounds bottomEdge = (Edgebounds)Instantiate (Resources.Load("Edgebounds"),new Vector3(0,-initial_distance,0),new Quaternion(0,0,-90,0));
 		bottomEdge.initialDistance = initial_distance;
 		Edgebounds leftnewEdge = (Edgebounds)Instantiate (leftEdge,new Vector3(initial_distance,0,0),new Quaternion(0,0,180,0));
 		rightEdge.initialDistance = initial_distance;

@@ -6,9 +6,9 @@ public class Edgebounds : MonoBehaviour
 	GameObject p;
 	int dir;
 	Edgebounds newEdge;
-	Edgebounds leftEdge;
-	Edgebounds rightEdge;
-	Edgebounds fowardEdge;
+	public Edgebounds leftEdge;
+	public Edgebounds rightEdge;
+	public Edgebounds fowardEdge;
 	Quaternion facing;
 	Vector3 edgePos;
 	public GameObject nextSpawn;
@@ -20,7 +20,6 @@ public class Edgebounds : MonoBehaviour
 		edgePos = GetComponentInParent<Transform> ().position;
 		p = GameObject.Find ("Player");
 		facing = GetComponentInParent<Transform> ().rotation;
-
 		if(-180 > facing.z){
 			facing.z = 90;
 		}
@@ -132,7 +131,7 @@ public class Edgebounds : MonoBehaviour
 			leftEdge = (Edgebounds)Instantiate(leftEdge,leftCoords(facing),facing);
 			leftEdge.facing.SetFromToRotation(new Vector3(facing.x,facing.y,facing.z),new Vector3(facing.x,facing.y,facing.z-90));
 			leftEdge.initialDistance = this.initialDistance;
-			Destroy (this);
+			//Destroy (this);
 		}
 	}
 	//implement later
