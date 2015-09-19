@@ -54,6 +54,7 @@ public class CraneController : MonoBehaviour {
 		current = Player.transform.position;
 		changedmovespeed = movespeed;
 		lastTheta = Player.transform.rotation.z;
+		broken = cranelength == 0;
 	}
 
 	// Update is called once per frame
@@ -104,7 +105,7 @@ public class CraneController : MonoBehaviour {
 			ending.transform.localPosition = Vector3.zero;
 		}
 		if (broken) brokentime+=Time.deltaTime;
-		if (brokentime > 5) {
+		if (brokentime > 5 && cranelength > 0) {
 			grabbed = false;
 			Destroy(focus.GetComponent<LineRenderer>());
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
@@ -393,7 +394,7 @@ public class CraneController : MonoBehaviour {
 	void ObjectTakenByShip(GameObject g) {
 		if (grabbed && focus ==g) {
 			grabbed = false;
-			GameObject subline = Player.transform.FindChild("SubLine").gameObject;
+			//GameObject subline = Player.transform.FindChild("SubLine").gameObject;
 //			print(subline.name);
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
 			Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().SetVertexCount(0);

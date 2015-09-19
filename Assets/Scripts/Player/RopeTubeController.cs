@@ -13,7 +13,7 @@ public class RopeTubeController : MonoBehaviour {
 	private float timepassed;
 	private float rate = .2f;
 	public bool emp, debugmode;
-	public int tubesleft = 100;
+	public int tubesleft = 100, tubecut, endingtubes;
 	private int startingtubes;
 	// Use this for initialization
 	void Start () {
@@ -26,9 +26,17 @@ public class RopeTubeController : MonoBehaviour {
 			}
 			startingtubes = tubesleft;
 		} else {
+			print(tubesleft);
 			PlayerPrefs.SetInt("tubesleft",tubesleft);
 			startingtubes = tubesleft;
 
+		}
+
+		if (PlayerPrefs.HasKey("tubecut")) {
+			tubecut = PlayerPrefs.GetInt("tubecut");
+		} else {
+			PlayerPrefs.SetInt("tubecut",0);
+			
 		}
 
 		if (PlayerPrefs.HasKey("Extend")) {
@@ -47,17 +55,16 @@ public class RopeTubeController : MonoBehaviour {
 			PlayerPrefs.SetString("Eject",keject.ToString());
 		}
 
-		if (tubesleft == 0)  {
+		if (tubesleft == 0 || tubecut == 1)  {
 			this.gameObject.GetComponent<RopeScript2D>().SendMessage("DeathIsSoon");
 		} 
 		GameObject.Find("Player").SendMessage("GetTubesLeft",tubesleft);
-
 	}
 	void GiveTubesLeft(int i) {
-		if (i + tubesleft > 0) PlayerPrefs.SetInt ("tubesleft",i + tubesleft);
-		else PlayerPrefs.SetInt("tubesleft",0);
-
-
+		//print(i);
+		if (i > 0) tubecut = 1;
+		endingtubes = tubesleft + i;
+		//print("endingtubes: " + endingtubes);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -98,6 +105,17 @@ public class RopeTubeController : MonoBehaviour {
 	void SubTheRopeAmt() {
 		tubesleft++;
 	}
+	void Im_Leaving() {
+		GiveTubesLeft(0); //so we don't have an ending tube amount of 0;
+		if (tubecut == 1) {
+			//print(tubesleft);
+			PlayerPrefs.SetInt("tubesleft",endingtubes);
+			PlayerPrefs.SetInt("tubecut",1);
+
+
+		}
+	}
+
 	void RopeIsBuilt() {
 
 	}

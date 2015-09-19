@@ -16,6 +16,7 @@ public class UpgradeScript : MonoBehaviour {
 	private float thrustermoverate;
 	private float emprechargetime;
 	private int tubesleft;
+	private int tubecut;
 	private float armor;
 	private float cranemovespeed;
 	private float cranelength;
@@ -35,6 +36,7 @@ public class UpgradeScript : MonoBehaviour {
 		thrustermoverate = PlayerPrefs.GetFloat("moverate");
 		emprechargetime = PlayerPrefs.GetFloat("emprechargetime");
 		tubesleft = PlayerPrefs.GetInt("tubesleft");
+		tubecut = PlayerPrefs.GetInt("tubecut");
 		cranemovespeed = PlayerPrefs.GetFloat("movespeed");
 		cranelength = PlayerPrefs.GetFloat("cranelength");
 		startingcapacity = capacity;
@@ -75,7 +77,9 @@ public class UpgradeScript : MonoBehaviour {
 			PlayerPrefs.SetFloat("startingoxy", startingoxy);
 			PlayerPrefs.SetFloat("moverate", thrustermoverate);
 			PlayerPrefs.SetFloat("emprechargetime", emprechargetime);
+			//print(tubesleft);
 			PlayerPrefs.SetInt("tubesleft", tubesleft);
+			PlayerPrefs.SetInt("tubecut", tubecut);
 			PlayerPrefs.SetFloat("movespeed", cranemovespeed);
 			PlayerPrefs.SetFloat("cranelength", cranelength);
 			Application.LoadLevel("ProcGen");
@@ -212,17 +216,19 @@ public class UpgradeScript : MonoBehaviour {
 			}
 			
 		}
-		string cranesucks;
+		string cranesucks, cranerep;
 		if (cranelength == 0 && startingcranelength == 0) {
-			cranesucks = "Crane is broken";
+			cranesucks = "Repair Crane";
+			cranerep = "Fix";
 		} else {
-			cranesucks = "Crane length = " + cranelength;
+			cranesucks = "Crane length = " + cranelength.ToString("F2");
+			cranerep = "+ 0.2";
 		}
 		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), cranesucks + "  ($40)");
 		if (cranelength == 6 || cash < 40) { //6 being max length
-			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.25");
+			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), cranerep);
 		} else {
-			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+ 0.2")) {
+			if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), cranerep)) {
 				if (startingcranelength == 0 && cranelength == 0) {
 					cranelength += 1;
 					cash -= 40;
@@ -243,14 +249,26 @@ public class UpgradeScript : MonoBehaviour {
 			}
 			
 		}
-		
-		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), "Tube Length= " + tubesleft + "m  ($10)");
-		if (tubesleft == 500 || cash < 10) { //4 being max time
-			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m");
+		string ropesucks, roperep;
+		if (tubecut == 1) {
+			ropesucks = "Repair Tube";
+			roperep = "Fix";
 		} else {
-			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), "+10m")) {
-				tubesleft += 10;
-				cash -= 10;
+			ropesucks = "Tube length = " + tubesleft + "m";
+			roperep = "+10m";
+		}
+		GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .2f, Screen.height * .06f), ropesucks + " ($10)");
+		if (tubesleft == 500 || cash < 10) { //4 being max time
+			GUI.Box (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), roperep);
+		} else {
+			if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), roperep)) {
+				if (tubecut == 1) {
+					tubecut = 0;
+					cash -= 10;
+				} else {
+					tubesleft += 10;
+					cash -= 10;
+				}
 			}
 		}
 		yval1+= .08f;
