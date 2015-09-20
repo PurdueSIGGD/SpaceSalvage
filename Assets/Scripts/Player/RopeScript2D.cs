@@ -54,9 +54,16 @@ public class RopeScript2D : MonoBehaviour {
 	private int retractindex;
 	private SpringJoint2D spree;
 	private float startingdistance;
-
+	private int tubecut;
 
 	void Start() {
+		if (PlayerPrefs.HasKey("tubecut")) {
+			tubecut = PlayerPrefs.GetInt("tubecut");
+		} else {
+			PlayerPrefs.SetInt("tubecut",0);
+		}
+
+
 		Transform tee;
 		if ((tee = transform.FindChild("RopeStart")) != null) { 
 			vec = tee.transform.position;
@@ -69,8 +76,13 @@ public class RopeScript2D : MonoBehaviour {
 		}
 		ropeColRadius = 0.03f;
 		//line = this.GetComponent<LineRenderer>();
-		if (startmade) {
+		if (startmade && tubecut == 0) {
 			BuildRope();
+		} 
+		//print(tubecut);
+		if (tubecut == 1) {
+			this.brokenrope = true;
+
 		}
 	}
 	void Update()
@@ -90,6 +102,7 @@ public class RopeScript2D : MonoBehaviour {
 							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.GetComponent<Rigidbody2D>();
 							Destroy((GameObject)joints[retractindex]);
 							retractindex++;
+							if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
 						} else {
 							Destroy((GameObject)joints[retractindex]); 
 							if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
