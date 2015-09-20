@@ -13,6 +13,9 @@
 /*.pidb
 /*.booproj
 /*.db
+/Library/assetDatabase3
+/*.dwlt
+/Library/metadata/*/*
 
 
 #Unity3D Generated File On Crash Reports
