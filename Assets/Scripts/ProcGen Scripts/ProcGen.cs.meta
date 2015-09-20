@@ -1,10 +1,32 @@
 fileFormatVersion: 2
 guid: 33d0e4bf907ef6746a7aff389f18eded
-timeCreated: 1441317222
+timeCreated: 1442536331
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - asterioid: {instanceID: 0}
+  - small_ship: {instanceID: 0}
+  - large_ship: {instanceID: 0}
+  - small_debris: {instanceID: 0}
+  - med_debris: {instanceID: 0}
+  - large_debris: {instanceID: 0}
+  - small_loot: {instanceID: 0}
+  - med_loot: {instanceID: 0}
+  - large1_loot: {instanceID: 0}
+  - large2_loot: {instanceID: 0}
+  - large3_loot: {instanceID: 0}
+  - laser: {instanceID: 0}
+  - emp: {instanceID: 0}
+  - airjet: {instanceID: 0}
+  - chaser: {instanceID: 0}
+  - spinturret: {instanceID: 0}
+  - EMPTurret: {instanceID: 0}
+  - DMGTurret: {instanceID: 0}
+  - topNewEdge: {fileID: 193064, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
+  - bottomNewEdge: {fileID: 193064, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
+  - rightNewEdge: {fileID: 193064, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
+  - leftNewEdge: {fileID: 193064, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

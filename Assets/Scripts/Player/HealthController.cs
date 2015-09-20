@@ -33,6 +33,7 @@ public class HealthController : MonoBehaviour {
 	private float timesincelastdamage;
 	private float rechargetime;
 	private bool pause;
+	private float rechargeEmpDiff; // This is the difference between the recharge time/emp time, which is never negative -- Anna
 	public GameObject particle;
 	public bool acceptingOxy, emp = false, gettingOxy; //is oxy less than startingoxy?
 	public float emptime = 0;
@@ -90,7 +91,11 @@ public class HealthController : MonoBehaviour {
 
 		} else { //see what issue we may have
  			emergency = true;
-			if (emp && !pause) words += (empmessage2 +  (rechargetime - emptime).ToString("F2") + "\n" + empmessage);
+			if (emp && !pause){
+				rechargeEmpDiff = rechargetime - emptime;
+				if(rechargeEmpDiff < 0.0f) rechargeEmpDiff=0.0f;
+				words += (empmessage2 +  (rechargeEmpDiff).ToString("F2") + "\n" + empmessage);
+			}
 			if (suitwarning) words += suitmessage;
 			if (suiterror) words += suitmessagegone;
 			if (oxywarning) words += oxymessage;
@@ -106,7 +111,12 @@ public class HealthController : MonoBehaviour {
 			if (timesince > .25f) {
 				if (timesince > .5f) timesince = 0;
 				if (emp && !pause) {
-					words = empmessage2 + (rechargetime - emptime).ToString("F2") + "\n";
+
+					
+					rechargeEmpDiff = rechargetime - emptime;
+					if(rechargeEmpDiff < 0.0f) rechargeEmpDiff=0.0f;
+
+					words = empmessage2 + (rechargeEmpDiff).ToString("F2") + "\n";
 
 				} else {
 					words = "";

@@ -70,21 +70,27 @@ public class ProcGen : MonoBehaviour {
 	public Edgebounds rightEdge;
 	public Edgebounds leftEdge;
 
+	GameObject topNewEdge;
+	
 	void Start() {
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
 		Generate(initial_distance * -1, initial_distance * -1, initial_distance, initial_distance); //generate a square of width = initial_distance * 2;
 		//Create the EdgeCollider2D boundaries for the initial area
 		topEdge.initialDistance = initial_distance;
-		topEdge.GetComponent<EdgeCollider2D> ().isTrigger = true;
-		GameObject topnewEdge = (GameObject)Instantiate (topEdge,new Vector3(0,initial_distance,0),new Quaternion(0,0,90,0)); 
-		Edgebounds bottomEdge = (Edgebounds)Instantiate (Resources.Load("Edgebounds"),new Vector3(0,-initial_distance,0),new Quaternion(0,0,-90,0));
-		bottomEdge.initialDistance = initial_distance;
-		Edgebounds leftnewEdge = (Edgebounds)Instantiate (leftEdge,new Vector3(initial_distance,0,0),new Quaternion(0,0,180,0));
-		rightEdge.initialDistance = initial_distance;
-		Edgebounds rightnewEdge = (Edgebounds)Instantiate (rightEdge,new Vector3(-initial_distance,0,0),new Quaternion(0,0,0,0));
-		leftEdge.initialDistance = initial_distance;
+
+//		topEdge.GetComponent<EdgeCollider2D> ().isTrigger = true;
+//		topEdge.GetComponent<Transform> ().position = new Vector3 (0, initial_distance, 0);
+//		topEdge.GetComponent<Transform> ().rotation = new Quaternion (0, 0, 90, 0);
+		topEdge = (Edgebounds)Instantiate (topEdge,new Vector3(0,initial_distance,0),new Quaternion(0,0,0,0));
+		bottomEdge = (Edgebounds)Instantiate (bottomEdge,new Vector3(0,-initial_distance,0),new Quaternion(0,0,0,0));
+		bottomEdge.transform.Rotate (new Vector3 (0, 0, 180));
+		leftEdge = (Edgebounds)Instantiate (leftEdge,new Vector3(-initial_distance,0,0),new Quaternion(0,0,0,0));
+		leftEdge.transform.Rotate (new Vector3 (0, 0, 90));
+		rightEdge = (Edgebounds)Instantiate (rightEdge,new Vector3(initial_distance,0,0),new Quaternion(0,0,0,0));
+		rightEdge.transform.Rotate (new Vector3 (0, 0, 270));
 	}
+
 	void Generate(float startX, float startY, float endX, float endY) { // generate from (startX, startY) to (endX, endY)
 		Vector2 newitembuffer = Vector2.zero;
 		int numspawned = 0;
