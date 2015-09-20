@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: 5b1624b4fb352b64f85cf95bd94c0085
-timeCreated: 1442096824
+timeCreated: 1442539549
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - leftEdge: {fileID: 11416420, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
+  - rightEdge: {fileID: 11416420, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
+  - fowardEdge: {fileID: 11416420, guid: 02edd7f233d9ed646bd56162d5e0b6e3, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
