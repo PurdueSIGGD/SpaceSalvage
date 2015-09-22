@@ -75,7 +75,7 @@ public class ProcGen : MonoBehaviour {
 	void Start() {
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
-		Generate(initial_distance * -1, initial_distance * -1, initial_distance, initial_distance); //generate a square of width = initial_distance * 2;
+		Generate(0,0); //generate a square of width = initial_distance * 2;
 		//Create the EdgeCollider2D boundaries for the initial area
 		topEdge.initialDistance = initial_distance;
 
@@ -91,12 +91,12 @@ public class ProcGen : MonoBehaviour {
 		rightEdge.transform.Rotate (new Vector3 (0, 0, 270));
 	}
 
-	void Generate(float startX, float startY, float endX, float endY) { // generate from (startX, startY) to (endX, endY)
+	public void Generate(float originX, float originY) { // generate from (startX, startY) to (endX, endY)
 		Vector2 newitembuffer = Vector2.zero;
 		int numspawned = 0;
 		while (numspawned < initial_distance * density/10) {
-			float i = initial_distance * Random.value * (Random.value > .5f?-1:1);
-			float j = initial_distance * Random.value * (Random.value > .5f?-1:1);
+			float i = initial_distance * Random.value * (Random.value > .5f?-1:1) + originX;
+			float j = initial_distance * Random.value * (Random.value > .5f?-1:1) + originY;
 			//Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(i,j), 4); 
 			bool flag = false;
 			/*foreach (Collider2D c in hitColliders) {
@@ -104,13 +104,19 @@ public class ProcGen : MonoBehaviour {
 					flag = true;
 				}
 			}*/
-			if (!flag) {
+
+			if (originX == 0 && originY == 0) {
 				if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
 					newitembuffer = FindToGenerate(i, j);
 					j+=newitembuffer.y;
 					i+=newitembuffer.x;
 					numspawned++;
 				}
+			}else{
+				newitembuffer = FindToGenerate(i, j);
+				j+=newitembuffer.y;
+				i+=newitembuffer.x;
+				numspawned++;
 			}
 
 

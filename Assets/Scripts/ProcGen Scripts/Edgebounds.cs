@@ -12,6 +12,7 @@ public class Edgebounds : MonoBehaviour
 	public Quaternion facing;
 	public Vector3 facingVect;
 	public Vector3 edgePos;
+	public Edgebounds eC;
 	enum sides{
 		up = 0,
 		down = 180,
@@ -121,8 +122,18 @@ public class Edgebounds : MonoBehaviour
 
 	//create new script for this
 	void OnTriggerEnter2D(Collider2D thing){
-		//It detects every object in the map before activating the update and not
-		//the player. will probably need to change it. just trying to get it working now
+		// detecting if it is in the same space as another EdgeCollider2D
+		// if it is it will delete that object and itself
+		if(thing.GetComponentInParent<Edgebounds>() != null){
+			eC = thing.GetComponentInParent<Edgebounds>();
+			if(this.edgePos.x == eC.edgePos.x){
+				if(this.edgePos.y == eC.edgePos.y){
+					Destroy(eC.gameObject);
+					Destroy(this.gameObject);
+				}
+			}
+		}
+		// Creates the 3 borders then destroys itself
 		if (thing == p.GetComponent<PolygonCollider2D>()) {
 			//instantiates the foward one
 			fowardEdge = (Edgebounds)Instantiate(fowardEdge,fowardCoords(facingVect),facing);
@@ -135,7 +146,25 @@ public class Edgebounds : MonoBehaviour
 			leftEdge = (Edgebounds)Instantiate(leftEdge,leftCoords(facingVect),facing);
 			leftEdge.transform.Rotate(new Vector3(0,0,90));
 			leftEdge.initialDistance = this.initialDistance;
-			Destroy (this);
+
+			//Generates stuff within the boundaries
+			//needs to generate from bottom left to top right
+			switch((int)facingVect.z){
+			case(270):
+				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x+initialDistance,edgePos.y);
+				break;
+			case(0):
+				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x,edgePos.y+initialDistance);
+				break;
+			case(180):
+				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x,edgePos.y-initialDistance);
+				break;
+			case(90):
+				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x-initialDistance,edgePos.y);
+				break;
+			}
+
+			Destroy (this.gameObject);
 		}
 	}
 	//implement later
