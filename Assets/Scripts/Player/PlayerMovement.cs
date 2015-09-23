@@ -104,12 +104,12 @@ public class PlayerMovement : MonoBehaviour {
 			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
 
-        if ((left || right || up || down) && !this.gameObject.GetComponent<AudioSource>().isPlaying)
+        if ((left || right || up || down) && !emp && !this.gameObject.GetComponent<AudioSource>().isPlaying)
         {
             this.gameObject.GetComponent<AudioSource>().clip = move;
             this.gameObject.GetComponent<AudioSource>().Play();
         }
-        else if (!left && !right && !up && !down)
+        else if ((!left && !right && !up && !down) || emp)
         {
             this.gameObject.GetComponent<AudioSource>().Stop();
         }
