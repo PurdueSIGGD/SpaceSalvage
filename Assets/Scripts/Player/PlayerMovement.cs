@@ -53,15 +53,15 @@ public class PlayerMovement : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetString("Down",kdown.ToString());
 		}
-		if (PlayerPrefs.HasKey("Left")) {
-			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
-		} else {
-			PlayerPrefs.SetString("Left",kleft.ToString());
-		}
 		if (PlayerPrefs.HasKey("Right")) {
-			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
+			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
 		} else {
 			PlayerPrefs.SetString("Right",kright.ToString());
+		}
+		if (PlayerPrefs.HasKey("Left")) {
+			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
+		} else {
+			PlayerPrefs.SetString("Left",kleft.ToString());
 		}
 
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
@@ -130,12 +130,12 @@ public class PlayerMovement : MonoBehaviour {
 			down = false;
 		}
 		if (this.GetComponent<Rigidbody2D>().velocity.x < 10) {
-			right = Input.GetKey (kleft);
+			right = Input.GetKey (kright);
 		} else {
 			right = false;
 		}
 		if (this.GetComponent<Rigidbody2D>().velocity.x > -10) {
-			left = Input.GetKey (kright);
+			left = Input.GetKey (kleft);
 		} else {
 			left = false;
 		}

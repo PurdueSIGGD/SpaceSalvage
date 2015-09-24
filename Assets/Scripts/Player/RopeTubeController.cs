@@ -14,7 +14,7 @@ public class RopeTubeController : MonoBehaviour {
 	private float rate = .2f;
 	public bool emp, debugmode;
 	public int tubesleft = 100, tubecut, endingtubes;
-	private int startingtubes;
+	public int startingtubes;
 	// Use this for initialization
 	void Start () {
 

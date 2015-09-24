@@ -72,12 +72,12 @@ public class MainMenu : MonoBehaviour {
 		if (PlayerPrefs.HasKey("Left")) {
 			KeyCodeLeft = PlayerPrefs.GetString("Left");
 		} else {
-			PlayerPrefs.SetString("Left","A");
+			PlayerPrefs.SetString("Left","D");
 		}
 		if (PlayerPrefs.HasKey("Right")) {
 			KeyCodeRight = PlayerPrefs.GetString("Right");
 		} else {
-			PlayerPrefs.SetString("Right","D");
+			PlayerPrefs.SetString("Right","A");
 		}
 
 
