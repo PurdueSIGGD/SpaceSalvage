@@ -9,6 +9,8 @@ using System.Collections;
 
 
 public class ProcGen : MonoBehaviour {
+	private float time;
+
 	public GameObject asterioid;
 	public GameObject small_ship;
 	public GameObject large_ship;
@@ -405,6 +407,27 @@ public class ProcGen : MonoBehaviour {
 	}
 
 	void Update() {
+		time += Time.deltaTime;
+
+		if (time > 3) { //optimisation, makes the physics grid ignore objects that are too far away
+			time = 0;
+			GameObject player = GameObject.Find("Player");
+			Rigidbody2D[] gs = GameObject.FindObjectsOfType<Rigidbody2D>();
+			foreach (Rigidbody2D r in gs) {
+				bool isRope = r.GetComponent<JointScript>() != null;
+				if (Vector3.Distance(player.transform.position, r.transform.position) > 100) { //everthing outside of a 100 radius will stop
+					if (r.GetComponent<DebrisStart>()) {
+						r.SendMessage("Stop");
+					}
+					r.Sleep();
+				} else {
+					r.WakeUp();
+					if (r.GetComponent<DebrisStart>()) {
+						r.SendMessage("ReStart");
+					}
+				}
+			}
+		}
 		//update area outside
 	}
 

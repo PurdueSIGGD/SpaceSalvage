@@ -12,8 +12,10 @@ public class JointScript : MonoBehaviour {
 	private SpringJoint2D sp;
 	private EdgeCollider2D eg;
 	private bool broken;
+	public int shipRopeIndex;
 	public bool shiprope;
 	public bool severed;
+	public bool sleeping;
 	public float linewidth = .02f;
 	public Material material;
 	private GameObject focus, subline;
@@ -21,6 +23,7 @@ public class JointScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		severed = false;
+		if (!shiprope) shipRopeIndex = -1;
 		if (this.name == "Player" && !shiprope && this.transform.FindChild("SubLine") == null) {
 			subline = new GameObject("SubLine"); //we have to create another gameobject to connect our line to if the player grabs an object.
 			//I was unable to find a way to make the line renderer have two dfferent materials, however I know it can.
@@ -44,6 +47,7 @@ public class JointScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		sleeping = this.GetComponent<Rigidbody2D>().IsSleeping();
 		if (this.name == "Player" && !shiprope && subline != null	) subline.transform.position = this.transform.position; //keep subline close
 
 		//if (focus != null) print(focus.name);

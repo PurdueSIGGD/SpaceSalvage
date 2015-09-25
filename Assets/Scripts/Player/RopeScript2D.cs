@@ -184,6 +184,7 @@ public class RopeScript2D : MonoBehaviour {
 					end.frequency = frequency;
 					LineRenderer lr = target.gameObject.GetComponent<LineRenderer>();
 					JointScript js = target.gameObject.AddComponent<JointScript>();
+					js.shipRopeIndex = indexovertime;
 					js.material = this.ropemat;
 					js.shiprope = this.shiprope;
 					js.SendMessage("GiveFocus",this.gameObject);
@@ -315,7 +316,8 @@ public class RopeScript2D : MonoBehaviour {
 		js.linewidth = this.linewidth;					
 		js.material = this.ropemat;
 
-
+		js.shipRopeIndex = indexovertime;
+		if (!this.isgenerating) indexovertime++;
 		line = parent.GetComponent<LineRenderer> ();
 		ln.material = line.material;
 		ln.SetWidth(linewidth,linewidth);
