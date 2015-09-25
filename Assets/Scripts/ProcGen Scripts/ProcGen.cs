@@ -77,7 +77,16 @@ public class ProcGen : MonoBehaviour {
 	void Start() {
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
-		Generate(0,0); //generate a square of width = initial_distance * 2;
+		Generate (0, 0); //generate a square of width = initial_distance * 2;
+		Generate (initial_distance * 2, 0);
+		Generate (initial_distance * 2, initial_distance * 2);
+		Generate (0, initial_distance * 2);
+		Generate (initial_distance * -2, 0);
+		Generate (initial_distance * -2, initial_distance * -2);
+		Generate (0, initial_distance * -2);
+		Generate (initial_distance * 2, initial_distance * -2);
+		Generate (initial_distance * -2, initial_distance * 2);
+
 		//Create the EdgeCollider2D boundaries for the initial area
 		topEdge.initialDistance = initial_distance;
 

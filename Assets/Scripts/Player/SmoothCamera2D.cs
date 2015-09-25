@@ -29,7 +29,7 @@ public class SmoothCamera2D : MonoBehaviour {
 			focusSize -= 1;
 
 		} else {
-			if (Input.mouseScrollDelta.y < 0 && focusSize < 25) {
+			if (Input.mouseScrollDelta.y < 0 && focusSize < 15) {
 				focusSize += 1;
 			} else {
 				//if (focusSize + .5f > startingSize || focusSize - .5f < startingSize);
