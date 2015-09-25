@@ -149,18 +149,27 @@ public class Edgebounds : MonoBehaviour
 
 			//Generates stuff within the boundaries
 			//needs to generate from bottom left to top right
+			GameObject ProcGenController = GameObject.Find ("ProcGenController");
 			switch((int)facingVect.z){
-			case(270):
-				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x+initialDistance,edgePos.y);
+			case(270):	//generate a 1x3 block right of the entered region
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 3, edgePos.y + initialDistance * 2);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 3, edgePos.y + initialDistance * 0);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 3, edgePos.y + initialDistance * -2);
 				break;
-			case(0):
-				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x,edgePos.y+initialDistance);
+			case(0):	//genrate a 3x1 block above the entered region
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 2, edgePos.y + initialDistance * 3);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 0, edgePos.y + initialDistance * 3);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -2, edgePos.y + initialDistance * 3);
 				break;
-			case(180):
-				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x,edgePos.y-initialDistance);
+			case(180):	//genrate a 3x1 block below the entered region
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 2, edgePos.y + initialDistance * -3);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * 0, edgePos.y + initialDistance * -3);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -2, edgePos.y + initialDistance * -3);
 				break;
-			case(90):
-				GameObject.Find ("ProcGenController").GetComponent<ProcGen>().Generate(edgePos.x-initialDistance,edgePos.y);
+			case(90):	//generate a 1x3 block left of the entered region
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -3, edgePos.y + initialDistance * 2);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -3, edgePos.y + initialDistance * 0);
+				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -3, edgePos.y + initialDistance * -2);
 				break;
 			}
 
