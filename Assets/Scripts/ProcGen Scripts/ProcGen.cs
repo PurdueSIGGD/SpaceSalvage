@@ -273,9 +273,8 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					//thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
-					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
 					thingy.transform.parent = g.transform;
 
 					continue;
@@ -285,9 +284,9 @@ public class ProcGen : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					//thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
-					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+				//thingy.transform.rotation = c.rotation;
+					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
 					thingy.transform.parent = g.transform;
 
 					continue;
@@ -296,10 +295,10 @@ public class ProcGen : MonoBehaviour {
 			if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0) {
 					GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
 					thingy.transform.position = c.position + Vector3.up * .01f;
-				//	thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<WallTurret>().angleStart = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<WallTurret>().angleEnd = c.GetComponent<Spawner>().turretEnd;
-					thingy.GetComponent<WallTurret>().startBigSide = c.GetComponent<Spawner>().startBigSide;
+					//	thingy.transform.rotation = c.rotation;
+					//thingy.transform.rotation = c.rotation;
+					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
 					thingy.transform.parent = g.transform;
 
 					continue;
