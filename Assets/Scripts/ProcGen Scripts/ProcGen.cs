@@ -270,7 +270,7 @@ public class ProcGen : MonoBehaviour {
 				}
 				// spawn spinturret
 			if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0) {
-					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, Quaternion.identity);
+					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, c.rotation);
 					thingy.transform.position = c.position + Vector3.up * .01f;
 					//thingy.transform.rotation = c.rotation;
 					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
@@ -411,18 +411,25 @@ public class ProcGen : MonoBehaviour {
 		if (time > 3) { //optimisation, makes the physics grid ignore objects that are too far away
 			time = 0;
 			GameObject player = GameObject.Find("Player");
-			Rigidbody2D[] gs = GameObject.FindObjectsOfType<Rigidbody2D>();
-			foreach (Rigidbody2D r in gs) {
+
+			GameObject[] gs = Resources.FindObjectsOfTypeAll<GameObject>();
+			foreach (GameObject r in gs) {
 				bool isRope = r.GetComponent<JointScript>() != null;
-				if (Vector3.Distance(player.transform.position, r.transform.position) > 100) { //everthing outside of a 100 radius will stop
-					if (r.GetComponent<DebrisStart>()) {
-						r.SendMessage("Stop");
-					}
-					r.Sleep();
-				} else {
-					r.WakeUp();
-					if (r.GetComponent<DebrisStart>()) {
-						r.SendMessage("ReStart");
+				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.GetComponent<GuiTextStarter>() == null) {
+					if (Vector3.Distance(player.transform.position, r.transform.position) > 100) { //everthing outside of a 100 radius will stop
+						r.gameObject.SetActive(false);
+						if (r.GetComponent<DebrisStart>()) {
+
+							//r.SendMessage("Stop");
+						}
+						//r.Sleep();
+					} else {
+						r.SetActive(true);
+						//r.WakeUp();
+						if (r.GetComponent<DebrisStart>()) {
+
+							//r.SendMessage("ReStart");
+						}
 					}
 				}
 			}
