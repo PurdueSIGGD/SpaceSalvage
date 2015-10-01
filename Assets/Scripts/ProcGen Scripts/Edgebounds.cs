@@ -3,40 +3,33 @@ using System.Collections;
 
 public class Edgebounds : MonoBehaviour
 {
-	GameObject p;
-	int dir;
-	Edgebounds newEdge;
+	
 	public Edgebounds leftEdge;
 	public Edgebounds rightEdge;
 	public Edgebounds fowardEdge;
 	public Quaternion facing;
 	public Vector3 facingVect;
 	public Vector3 edgePos;
-	public Edgebounds eC;
-	enum sides{
-		up = 0,
-		down = 180,
-		left = 90,
-		right = 270
-	};
-	sides mySide;
+	
+	GameObject p;
+	int dir;
 	Vector2[] edgeSETTA = new Vector2[2];
-	EdgeCollider2D thing;
 	//should be the initial distance for the beginning spawning bounds of the game
 	public float initialDistance;
 	// Use this for initialization
+	
 	void Start ()
 	{
 		facing = this.transform.rotation;
 		facingVect = this.transform.eulerAngles;
 		edgePos = this.transform.position;
 		p = GameObject.Find ("Player");
-
-//		if (90 < facingVect.z & facingVect.z < 91) {
-//			facingVect.z = 90;
-//		}
-
-		//goes from 0 to -90 so it needs to be changed to 270
+		
+		//		if (90 < facingVect.z & facingVect.z < 91) {
+		//			facingVect.z = 90;
+		//		}
+		
+		//goes from 0 to -90 so it needs to be changed to 
 		if (facingVect.z < 0) {
 			facingVect.z = 270;
 		}
@@ -44,14 +37,14 @@ public class Edgebounds : MonoBehaviour
 		if (facingVect.z > 270) {
 			facingVect.z = 0;
 		}
-
+		
 		edgeSETTA[0] = new Vector2(initialDistance,0);
 		edgeSETTA[1] = new Vector2(-initialDistance,0);
 		this.GetComponent<EdgeCollider2D>().points = edgeSETTA;
-
+		
 		this.GetComponent<EdgeCollider2D> ().isTrigger = true;
 	}
-
+	
 	//gets the moving fowards coordinates to find the location of the
 	//hopefully the 90 degrees will change from 90.00000001 to 90 with the cast change
 	Vector3 fowardCoords(Vector3 f){
@@ -71,11 +64,11 @@ public class Edgebounds : MonoBehaviour
 			break;
 			//i needed to put in the default so the compiler would like me
 		default:
-			return new Vector3(0,0,0);
+			return Vector3.zero;
 			break;
 		}
 	}
-
+	
 	Vector3 rightCoords(Vector3 f){
 		dir = (int)facingVect.z;
 		switch(dir){
@@ -93,11 +86,11 @@ public class Edgebounds : MonoBehaviour
 			break;
 			//i needed to put in the default so the compiler would like me
 		default:
-			return new Vector3(0,0,0);
+			return Vector3.zero;
 			break;
 		}
 	}
-
+	
 	Vector3 leftCoords(Vector3 f){
 		dir = (int)facingVect.z;
 		switch(dir){
@@ -115,13 +108,14 @@ public class Edgebounds : MonoBehaviour
 			break;
 			//i needed to put in the default so the compiler would like me
 		default:
-			return new Vector3(0,0,0);
+			return Vector3.zero;
 			break;
 		}
 	}
-
+	
 	//create new script for this
 	void OnTriggerEnter2D(Collider2D thing){
+		Edgebounds eC;
 		// detecting if it is in the same space as another EdgeCollider2D
 		// if it is it will delete that object and itself
 		if(thing.GetComponentInParent<Edgebounds>() != null){
@@ -146,7 +140,7 @@ public class Edgebounds : MonoBehaviour
 			leftEdge = (Edgebounds)Instantiate(leftEdge,leftCoords(facingVect),facing);
 			leftEdge.transform.Rotate(new Vector3(0,0,90));
 			leftEdge.initialDistance = this.initialDistance;
-
+			
 			//Generates stuff within the boundaries
 			//needs to generate from bottom left to top right
 			GameObject ProcGenController = GameObject.Find ("ProcGenController");
@@ -172,7 +166,7 @@ public class Edgebounds : MonoBehaviour
 				ProcGenController.GetComponent<ProcGen>().Generate(edgePos.x + initialDistance * -3, edgePos.y + initialDistance * -2);
 				break;
 			}
-
+			
 			Destroy (this.gameObject);
 		}
 	}
@@ -184,7 +178,7 @@ public class Edgebounds : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		
 	}
 }
 
