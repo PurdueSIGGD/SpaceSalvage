@@ -159,12 +159,15 @@ public class ProcGen : MonoBehaviour {
 			Transform[] spawners = new Transform[g.GetComponent<SpawnVals>().count];
 			
 			int i = 0;
-			foreach (Transform gc in g.GetComponentInChildren<Transform>()) {
-				if (gc.name == "Spawner") {
-					spawners[i] = gc;
-					i++;
+			
+//			if (g.activeInHierarchy) {
+				foreach (Transform gc in g.GetComponentInChildren<Transform>()) {
+					if (gc.name == "Spawner") {
+						spawners [i] = gc;
+						i++;
+					}
 				}
-			}
+//			}
 			//These values are subject for later level design, so things aren't 100% random and some weighted chance will happen for challenges
 			float tmp_inside_hazard_laser_chance = inside_hazard_laser_chance;
 			float tmp_inside_hazard_emp_chance = inside_hazard_emp_chance;
@@ -415,7 +418,7 @@ public class ProcGen : MonoBehaviour {
 			GameObject[] gs = Resources.FindObjectsOfTypeAll<GameObject>();
 			foreach (GameObject r in gs) {
 				bool isRope = r.GetComponent<JointScript>() != null;
-				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.GetComponent<GuiTextStarter>() == null) {
+				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null) {
 					if (Vector3.Distance(player.transform.position, r.transform.position) > 100) { //everthing outside of a 100 radius will stop
 						r.gameObject.SetActive(false);
 						if (r.GetComponent<DebrisStart>()) {
