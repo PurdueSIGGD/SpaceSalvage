@@ -419,23 +419,25 @@ public class ProcGen : MonoBehaviour {
 			GameObject player = GameObject.Find("Player");
 
 			GameObject[] gs = GameObject.FindObjectsOfType<GameObject>();
-			foreach (GameObject r in gs) {
-				bool isRope = r.GetComponent<JointScript>() != null;
-				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null 
-				    && r.name != "Hinger" && !r.GetComponent<Edgebounds>()) {
-					if (Vector3.Distance(player.transform.position, r.transform.position) > 40) { //everthing outside of a 100 radius will stop
-						r.gameObject.SetActive(false);
-						if (r.GetComponent<DebrisStart>()) {
+			if (player != null) {
+				foreach (GameObject r in gs) {
+					bool isRope = r.GetComponent<JointScript>() != null;
+					if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null 
+					    && r.name != "Hinger" && !r.GetComponent<Edgebounds>()) {
+						if (Vector3.Distance(player.transform.position, r.transform.position) > 40) { //everthing outside of a 100 radius will stop
+							r.gameObject.SetActive(false);
+							if (r.GetComponent<DebrisStart>()) {
 
-							//r.SendMessage("Stop");
-						}
-						//r.Sleep();
-					} else {
-						r.SetActive(true);
-						//r.WakeUp();
-						if (r.GetComponent<DebrisStart>()) {
+								//r.SendMessage("Stop");
+							}
+							//r.Sleep();
+						} else {
+							r.SetActive(true);
+							//r.WakeUp();
+							if (r.GetComponent<DebrisStart>()) {
 
-							//r.SendMessage("ReStart");
+								//r.SendMessage("ReStart");
+							}
 						}
 					}
 				}
