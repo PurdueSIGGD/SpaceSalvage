@@ -63,6 +63,7 @@ public class ProcGen : MonoBehaviour {
 	public float inside_enemy_EMPTurret_chance;
 	public float inside_enemy_chaser_chance;
 	
+
 	public float density;  //density of each builds
 	public float initial_distance; //how big we spawn the beginning
 
@@ -73,6 +74,8 @@ public class ProcGen : MonoBehaviour {
 	public Edgebounds leftEdge;
 
 	GameObject topNewEdge;
+
+	private float distanceLootChance;
 	
 	void Start() {
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
@@ -185,9 +188,10 @@ public class ProcGen : MonoBehaviour {
 			*/
 			foreach (Transform c in spawners) {
 			//print(g.name);
+			distanceLootChance = Vector3.Distance(c.position, GameObject.Find("Player").transform.position)/1000;
 				if (c != null && c.GetComponent<Spawner>()) {
 					// spawn small_loot
-					if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+				if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(small_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -195,7 +199,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn med loot
-					if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+				if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(med_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -205,7 +209,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large1 loot
-					if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+				if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large1_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -215,7 +219,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large2 loot
-					if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -225,7 +229,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large3 loot
-					if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -244,7 +248,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn laser hazard_chance
-					if (bHazards && Random.value < (tmp_inside_hazard_laser_chance + c.GetComponent<Spawner>().hazard_chance)) {
+				if (bHazards && Random.value < (tmp_inside_hazard_laser_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(laser, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -254,7 +258,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn emp 
-					if (bHazards && Random.value < (tmp_inside_hazard_emp_chance + c.GetComponent<Spawner>().hazard_chance)) {
+				if (bHazards && Random.value < (tmp_inside_hazard_emp_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(emp, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -264,7 +268,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn airjet
-						if (bHazards && Random.value < (tmp_inside_hazard_airjet_chance + c.GetComponent<Spawner>().hazard_chance)) {
+				if (bHazards && Random.value < (tmp_inside_hazard_airjet_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(airjet, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						thingy.transform.rotation = c.rotation;
@@ -274,7 +278,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn spinturret
-				if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0) {
+				if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(spinturret, c.position, c.rotation);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						//thingy.transform.rotation = c.rotation;
@@ -285,7 +289,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn dmgturret
-				if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0) {
+				if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						//thingy.transform.rotation = c.rotation;
@@ -297,7 +301,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn empturret
-				if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0) {
+				if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						//	thingy.transform.rotation = c.rotation;
@@ -309,7 +313,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn chaser
-					if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance)) {
+				if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 						//thingy.transform.rotation = c.rotation;
@@ -413,18 +417,17 @@ public class ProcGen : MonoBehaviour {
 
 	void Update() {
 		time += Time.deltaTime;
-
-		if (time > 3) { //optimisation, makes the physics grid ignore objects that are too far away
+		//print (1/GameObject.Find ("Player").GetComponent<Rigidbody2D> ().velocity.magnitude);
+		if (time > 2) { //optimisation, makes the physics grid ignore objects that are too far away
 			time = 0;
 			GameObject player = GameObject.Find("Player");
 
 			GameObject[] gs = GameObject.FindObjectsOfType<GameObject>();
 			if (player != null) {
 				foreach (GameObject r in gs) {
-					bool isRope = r.GetComponent<JointScript>() != null;
-					if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null 
-					    && r.name != "Hinger" && !r.GetComponent<Edgebounds>()) {
-						if (Vector3.Distance(player.transform.position, r.transform.position) > 40) { //everthing outside of a 100 radius will stop
+					//bool isRope = r.GetComponent<JointScript>() != null;
+					if (r.GetComponent<DebrisStart>() || r.GetComponentInParent<DebrisStart>() || r.GetComponent<Loot>() || r.GetComponent<ItemDissolve>()) { //only change active state if it has the debris start or is loot, (ignoring edgebounds, joints, the ship, etc.)
+						if (Vector3.Distance(player.transform.position, r.transform.position) > 70) { //everthing outside of a 100 radius will stop
 							r.gameObject.SetActive(false);
 							if (r.GetComponent<DebrisStart>()) {
 
