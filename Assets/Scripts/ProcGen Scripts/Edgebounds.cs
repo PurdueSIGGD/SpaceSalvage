@@ -128,7 +128,7 @@ public class Edgebounds : MonoBehaviour
 			}
 		}
 		// Creates the 3 borders then destroys itself
-		if (thing == p.GetComponent<PolygonCollider2D>()) {
+		if (p != null && thing == p.GetComponent<PolygonCollider2D>() && !thing.GetComponent<TurretRanger>()) {
 			//instantiates the foward one
 			fowardEdge = (Edgebounds)Instantiate(fowardEdge,fowardCoords(facingVect),facing);
 			fowardEdge.initialDistance = this.initialDistance;

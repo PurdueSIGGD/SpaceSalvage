@@ -29,12 +29,12 @@ public class HealthController : MonoBehaviour {
 	private static string empmessage2 = "TIME UNTIL SYSTEM REBOOT: ";
 	private bool ejected;
 	private bool emergency, on;
-	private float timesince, timeerror;
+	private float timesince, timeerror, oxytime;
 	private float timesincelastdamage;
 	private float rechargetime;
 	private bool pause;
 	private float rechargeEmpDiff; // This is the difference between the recharge time/emp time, which is never negative -- Anna
-	public GameObject particle;
+	public GameObject particle, oxyparticle;
 	public bool acceptingOxy, emp = false, gettingOxy; //is oxy less than startingoxy?
 	public float emptime = 0;
 	public Sprite j1, j2, j3, j4, j5;
@@ -149,13 +149,36 @@ public class HealthController : MonoBehaviour {
 		if (ejected) { //change oxygen from being ejected
 			if ((health < 50 && health > 1 )|| health == 0) {
 				changeOxy(-1 * Time.deltaTime * (50 - health)/10 ); 
+				//spawn particles here
+				oxytime+=Time.deltaTime;
+				if (oxytime > .15f) {
+					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
+					float r = Random.value;
+					//thingy.GetComponent<SpriteRenderer>().sprite = ;
+					thingy.transform.localScale = new Vector3(1,1,1); //typical scale is 5, dont want parts too big or small
+					thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+					thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+					//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
+					oxytime = 0;
+				}
 			} else {
 				changeOxy(-1 * Time.deltaTime);
 			}
 		} else {
 			if (health < 15) {
 				changeOxy(-.2f * Time.deltaTime);
-
+				//spawn particles here
+				oxytime+=Time.deltaTime;
+				if (oxytime > .15f) {
+					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
+					float r = Random.value;
+					//thingy.GetComponent<SpriteRenderer>().sprite = ;
+					thingy.transform.localScale = new Vector3(1,1,1); //typical scale is 5, dont want parts too big or small
+					thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+					thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+					//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
+					oxytime = 0;
+				}
 			} else {
 				changeOxy(3 * 	Time.deltaTime);
 

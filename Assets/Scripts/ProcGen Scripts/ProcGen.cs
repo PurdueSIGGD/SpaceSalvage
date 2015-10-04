@@ -1,4 +1,4 @@
-﻿// Procedural Generation Sudo-Code
+// Procedural Generation Sudo-Code
 
 //Started on 2015-08-31 by Andrew Lonsway
 
@@ -160,14 +160,14 @@ public class ProcGen : MonoBehaviour {
 			
 			int i = 0;
 			
-//			if (g.activeInHierarchy) {
+			if (g.activeInHierarchy) {
 				foreach (Transform gc in g.GetComponentInChildren<Transform>()) {
 					if (gc.name == "Spawner") {
 						spawners [i] = gc;
 						i++;
 					}
 				}
-//			}
+			}
 			//These values are subject for later level design, so things aren't 100% random and some weighted chance will happen for challenges
 			float tmp_inside_hazard_laser_chance = inside_hazard_laser_chance;
 			float tmp_inside_hazard_emp_chance = inside_hazard_emp_chance;
@@ -184,138 +184,141 @@ public class ProcGen : MonoBehaviour {
 			/	So once again, the 2 factors at most will be weighted chance and spawner chance.
 			*/
 			foreach (Transform c in spawners) {
-				// spawn small_loot
-				if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
-					GameObject thingy = (GameObject)Instantiate(small_loot, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					thingy.transform.parent = g.transform;
-					continue;
-				}
-				// spawn med loot
-				if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
-					GameObject thingy = (GameObject)Instantiate(med_loot, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_loot_chance *= 1.5f;
-					thingy.transform.parent = g.transform;
+			//print(g.name);
+				if (c != null && c.GetComponent<Spawner>()) {
+					// spawn small_loot
+					if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+						GameObject thingy = (GameObject)Instantiate(small_loot, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn med loot
+					if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+						GameObject thingy = (GameObject)Instantiate(med_loot, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_loot_chance *= 1.5f;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn large1 loot
-				if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
-					GameObject thingy = (GameObject)Instantiate(large1_loot, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_loot_chance *= 1.5f;
-				//	thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn large1 loot
+					if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+						GameObject thingy = (GameObject)Instantiate(large1_loot, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_loot_chance *= 1.5f;
+					//	thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn large2 loot
-				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
-					GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_loot_chance *= 2;
-				//	thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn large2 loot
+					if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_loot_chance *= 2;
+					//	thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn large3 loot
-				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
-					GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_loot_chance *= 3;
-				//	thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn large3 loot
+					if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance)) {
+						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_loot_chance *= 3;
+					//	thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn debris chance
-				if (Random.value < (inside_debris_chance)) {
-					GameObject thingy = (GameObject)Instantiate(small_debris, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn debris chance
+					if (Random.value < (inside_debris_chance)) {
+						GameObject thingy = (GameObject)Instantiate(small_debris, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn laser hazard_chance
-				if (bHazards && Random.value < (tmp_inside_hazard_laser_chance + c.GetComponent<Spawner>().hazard_chance)) {
-					GameObject thingy = (GameObject)Instantiate(laser, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_hazard_laser_chance *= 5;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn laser hazard_chance
+					if (bHazards && Random.value < (tmp_inside_hazard_laser_chance + c.GetComponent<Spawner>().hazard_chance)) {
+						GameObject thingy = (GameObject)Instantiate(laser, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_hazard_laser_chance *= 5;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn emp 
-				if (bHazards && Random.value < (tmp_inside_hazard_emp_chance + c.GetComponent<Spawner>().hazard_chance)) {
-					GameObject thingy = (GameObject)Instantiate(emp, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_hazard_emp_chance *= 5;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn emp 
+					if (bHazards && Random.value < (tmp_inside_hazard_emp_chance + c.GetComponent<Spawner>().hazard_chance)) {
+						GameObject thingy = (GameObject)Instantiate(emp, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_hazard_emp_chance *= 5;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn airjet
-					if (bHazards && Random.value < (tmp_inside_hazard_airjet_chance + c.GetComponent<Spawner>().hazard_chance)) {
-					GameObject thingy = (GameObject)Instantiate(airjet, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					thingy.transform.rotation = c.rotation;
-					tmp_inside_hazard_airjet_chance *= 5;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn airjet
+						if (bHazards && Random.value < (tmp_inside_hazard_airjet_chance + c.GetComponent<Spawner>().hazard_chance)) {
+						GameObject thingy = (GameObject)Instantiate(airjet, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						thingy.transform.rotation = c.rotation;
+						tmp_inside_hazard_airjet_chance *= 5;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn spinturret
-			if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0) {
-					GameObject thingy = (GameObject)Instantiate(spinturret, c.position, c.rotation);
-					thingy.transform.position = c.position + Vector3.up * .01f;
+						continue;
+					}
+					// spawn spinturret
+				if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0) {
+						GameObject thingy = (GameObject)Instantiate(spinturret, c.position, c.rotation);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						//thingy.transform.rotation = c.rotation;
+						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
+						thingy.transform.parent = g.transform;
+
+						continue;
+					}
+					// spawn dmgturret
+				if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0) {
+						GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						//thingy.transform.rotation = c.rotation;
 					//thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
-					thingy.transform.parent = g.transform;
+						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn dmgturret
-			if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0) {
-					GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					//thingy.transform.rotation = c.rotation;
-				//thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn empturret
+				if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0) {
+						GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						//	thingy.transform.rotation = c.rotation;
+						//thingy.transform.rotation = c.rotation;
+						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
+						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
+						thingy.transform.parent = g.transform;
 
-					continue;
-				}
-				// spawn empturret
-			if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0) {
-					GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					//	thingy.transform.rotation = c.rotation;
-					//thingy.transform.rotation = c.rotation;
-					thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
-					thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
-					thingy.transform.parent = g.transform;
+						continue;
+					}
+					// spawn chaser
+					if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance)) {
+						GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
+						thingy.transform.position = c.position + Vector3.up * .01f;
+						//thingy.transform.rotation = c.rotation;
+						thingy.transform.parent = g.transform;
 
-					continue;
+						tmp_inside_enemy_chaser_chance *= 5;
+					}
 				}
-				// spawn chaser
-				if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance)) {
-					GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
-					thingy.transform.position = c.position + Vector3.up * .01f;
-					//thingy.transform.rotation = c.rotation;
-					thingy.transform.parent = g.transform;
-
-					tmp_inside_enemy_chaser_chance *= 5;
-				}
-			}
+		}
 			
 	}
 
@@ -415,11 +418,12 @@ public class ProcGen : MonoBehaviour {
 			time = 0;
 			GameObject player = GameObject.Find("Player");
 
-			GameObject[] gs = Resources.FindObjectsOfTypeAll<GameObject>();
+			GameObject[] gs = GameObject.FindObjectsOfType<GameObject>();
 			foreach (GameObject r in gs) {
 				bool isRope = r.GetComponent<JointScript>() != null;
-				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null) {
-					if (Vector3.Distance(player.transform.position, r.transform.position) > 100) { //everthing outside of a 100 radius will stop
+				if (r.GetComponent<JointScript>() == null && r.name != "Ship" && r.name != "ProcGenController" && r.GetComponent<GuiTextStarter>() == null 
+				    && r.name != "Hinger" && !r.GetComponent<Edgebounds>()) {
+					if (Vector3.Distance(player.transform.position, r.transform.position) > 40) { //everthing outside of a 100 radius will stop
 						r.gameObject.SetActive(false);
 						if (r.GetComponent<DebrisStart>()) {
 
@@ -437,6 +441,8 @@ public class ProcGen : MonoBehaviour {
 				}
 			}
 		}
+		//GameObject[] gg = Resources.FindObjectsOfTypeAll<GameObject>();
+		//foreach (GameObject g in gg) g.SetActive(true);
 		//update area outside
 	}
 
