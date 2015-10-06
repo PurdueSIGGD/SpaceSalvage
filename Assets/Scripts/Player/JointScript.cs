@@ -12,13 +12,16 @@ public class JointScript : MonoBehaviour {
 	private SpringJoint2D sp;
 	private EdgeCollider2D eg;
 	private bool broken;
+	private float oxyTime, timeSinceOxy, stopOxy = 5;
 	public int shipRopeIndex;
 	public bool shiprope;
 	public bool severed;
 	public bool sleeping;
+	public bool spraying;
 	public float linewidth = .02f;
 	public Material material;
-	private GameObject focus, subline;
+	public GameObject focus, subline;
+
 	//private GameObject connected;
 	// Use this for initialization
 	void Start () {
@@ -47,6 +50,25 @@ public class JointScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		oxyTime += Time.deltaTime;
+
+		if (broken || severed || spraying) {
+			timeSinceOxy +=Time.deltaTime;
+			if (oxyTime > .1f && ( !spraying || (timeSinceOxy < stopOxy && spraying))) {
+				GameObject thingy = (GameObject)Instantiate(GameObject.Find("Player").GetComponent<HealthController>().particle, this.transform.position, Quaternion.identity); //spawning particles
+				float r = Random.value;
+				//thingy.GetComponent<SpriteRenderer>().sprite = ;
+				thingy.transform.localScale = new Vector3(1.5f/(timeSinceOxy+1),1.5f/(timeSinceOxy+1),1.5f/(timeSinceOxy+1)); //typical scale is 5, dont want parts too big or small
+				thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+				//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
+				oxyTime = 0;
+
+
+			}
+		}
+
+
 		sleeping = this.GetComponent<Rigidbody2D>().IsSleeping();
 		if (this.name == "Player" && !shiprope && subline != null	) subline.transform.position = this.transform.position; //keep subline close
 
@@ -146,7 +168,7 @@ public class JointScript : MonoBehaviour {
 
 	}
 	void BrokenJoint() { //get rid of the joint
-
+		if (this.GetComponent<SpringJoint2D>()) this.GetComponent<SpringJoint2D>().connectedBody.GetComponent<JointScript>().spraying = true;
 		Destroy(sp);
 		lr.SetVertexCount(0);
 		broken = true;

@@ -366,19 +366,28 @@ public class CraneController : MonoBehaviour {
 
 		if (Mathf.Abs (lastTheta - thetaersnenig) > 1 && !emp) {
 			if (thetaersnenig < lastTheta) {
-				if (ThrusterCW.color.a < 1 && !deadThrusters)
+				if (ThrusterCW.color.a < 1 && !deadThrusters){
+					ThrusterCW.GetComponent<ParticleThruster>().spawnParticles(true);
 					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a + Time.deltaTime * 5);
-				if (ThrusterCCW.color.a > 0)
+				}
+				if (ThrusterCCW.color.a > 0) {
+					ThrusterCCW.GetComponent<ParticleThruster>().spawnParticles(false);
 					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 5);
+				}
 				
 			} else {
-				if (ThrusterCW.color.a > 0)
+				if (ThrusterCW.color.a > 0) {
+					ThrusterCW.GetComponent<ParticleThruster>().spawnParticles(false);
 					ThrusterCW.color = new Color (ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 5);
-				if (ThrusterCCW.color.a < 1 && !deadThrusters)
+				}
+				if (ThrusterCCW.color.a < 1 && !deadThrusters){
+					ThrusterCCW.GetComponent<ParticleThruster>().spawnParticles(true);
 					ThrusterCCW.color = new Color (ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a + Time.deltaTime * 5);
+				}
 			}
 		} else {
-			
+			ThrusterCW.GetComponent<ParticleThruster>().spawnParticles(false);
+			ThrusterCCW.GetComponent<ParticleThruster>().spawnParticles(false);
 			if (ThrusterCW.color.a > 0) ThrusterCW.color = new Color(ThrusterCW.color.r, ThrusterCW.color.g, ThrusterCW.color.b, ThrusterCW.color.a - Time.deltaTime * 8);
 			if (ThrusterCCW.color.a > 0) ThrusterCCW.color = new Color(ThrusterCCW.color.r, ThrusterCCW.color.g, ThrusterCCW.color.b, ThrusterCCW.color.a - Time.deltaTime * 8);
 		}

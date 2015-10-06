@@ -149,6 +149,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		return ( left && (arg1 || arg2));
 	}
+
 	//Handles movement and stuff
 	void FixedUpdate () {
 		if (emp){
@@ -162,6 +163,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (right)
 		{
+
 			this.GetComponent<Rigidbody2D>().AddForce(this.GetComponent<Rigidbody2D>().mass * new Vector2( moverate /  (70 * Time.deltaTime), 0));
 			rangestart = 100;
 			rangeend = 260;
@@ -169,6 +171,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (left)
 		{
+
 			this.GetComponent<Rigidbody2D>().AddForce(this.GetComponent<Rigidbody2D>().mass * new Vector2(-1 * moverate / (70*Time.deltaTime), 0));
 			rangestart = 280;
 			rangeend = 80;
@@ -176,7 +179,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (up)
 		{
+
 			this.GetComponent<Rigidbody2D>().AddForce(this.GetComponent<Rigidbody2D>().mass * new Vector2(0, moverate / (70*Time.deltaTime)));
+
 			if (flying) {
 				if (right) {
 						rangestart = 125;
@@ -198,6 +203,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (down)
 		{
+
 			this.GetComponent<Rigidbody2D>().AddForce(this.GetComponent<Rigidbody2D>().mass * new Vector2(0, -1 * moverate /(70 * Time.deltaTime)));
 			if (flying) {
 				if (right) {
@@ -229,6 +235,7 @@ public class PlayerMovement : MonoBehaviour {
 				//BackAngle
 				if (inRange(BackAngle, rangestart, rangeend)|| inRangeLeft(BackAngle, rangestart, rangeend)) {
 					if (BackThruster.color.a < 1) {
+						BackThruster.GetComponent<ParticleThruster>().spawnParticles(true);
 						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a + Time.deltaTime * 5);
 
 					}
@@ -237,6 +244,7 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				} else {
 					if (BackThruster.color.a > 0) {
+						BackThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 						BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 					}
 					if (BLight.intensity > 0) {
@@ -247,6 +255,7 @@ public class PlayerMovement : MonoBehaviour {
 				//FrontAngle
 				if (inRange(FrontAngle, rangestart, rangeend)|| inRangeLeft(FrontAngle, rangestart, rangeend)) {
 					if (FrontThruster.color.a < 1) {
+						FrontThruster.GetComponent<ParticleThruster>().spawnParticles(true);
 						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a + Time.deltaTime * 5);
 					}
 					if (FLight.intensity < 0.00f) {
@@ -254,6 +263,7 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				} else {
 					if (FrontThruster.color.a > 0) {
+						FrontThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 						FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
 					}
 					if (FLight.intensity > 0) {
@@ -264,6 +274,7 @@ public class PlayerMovement : MonoBehaviour {
 				//LeftAngle
 				if (inRange(LeftAngle, rangestart, rangeend) || inRangeLeft(LeftAngle, rangestart, rangeend)) {
 					if (LeftThruster.color.a < 1) {
+						LeftThruster.GetComponent<ParticleThruster>().spawnParticles(true);
 						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a + Time.deltaTime * 5);
 					}
 					if (LLight.intensity < 0.00f) {
@@ -271,6 +282,7 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				} else {
 					if (LeftThruster.color.a > 0) {
+						LeftThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 						LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
 					}
 					if (LLight.intensity > 0) {
@@ -280,6 +292,7 @@ public class PlayerMovement : MonoBehaviour {
 				//RightAngle
 				if (inRange(RightAngle, rangestart, rangeend) || inRangeLeft(RightAngle, rangestart, rangeend)) {
 					if (RightThruster.color.a < 1) {
+						RightThruster.GetComponent<ParticleThruster>().spawnParticles(true);
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a + Time.deltaTime * 5);
 					}
 					if (BLight.intensity < 0.00f) {
@@ -287,6 +300,7 @@ public class PlayerMovement : MonoBehaviour {
 					}
 				} else {
 					if (RightThruster.color.a > 0) {
+						RightThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 						RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 					}
 					if (RLight.intensity > 0) {
@@ -295,24 +309,28 @@ public class PlayerMovement : MonoBehaviour {
 				}
 			} else {
 				if (BackThruster.color.a > 0) {
+					BackThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 2);
 				}
 				if (BLight.intensity > 0) {
 					BLight.intensity -= Time.deltaTime * 5;
 				}
 				if (FrontThruster.color.a > 0) {
+					FrontThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 2);
 				}
 				if (FLight.intensity > 0) {
 					FLight.intensity -= Time.deltaTime * 5;
 				}
 				if (LeftThruster.color.a > 0) {
+					LeftThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 2);
 				}
 				if (LLight.intensity > 0) {
 					LLight.intensity -= Time.deltaTime * 5;
 				}
 				if (RightThruster.color.a > 0) {
+					RightThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 2);
 				}
 				if (RLight.intensity > 0) {
@@ -322,24 +340,28 @@ public class PlayerMovement : MonoBehaviour {
 				
 		} else { //if nothing is happening
 				if (BackThruster.color.a > 0) {
+					BackThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					BackThruster.color = new Color (BackThruster.color.r, BackThruster.color.g, BackThruster.color.b, BackThruster.color.a - Time.deltaTime * 5);
 				}
 				if (BLight.intensity > 0) {
 					BLight.intensity -= Time.deltaTime * 5;
 				}
 				if (FrontThruster.color.a > 0) {
+					FrontThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					FrontThruster.color = new Color (FrontThruster.color.r, FrontThruster.color.g, FrontThruster.color.b, FrontThruster.color.a - Time.deltaTime * 5);
 				}
 				if (FLight.intensity > 0) {
 					FLight.intensity -= Time.deltaTime * 5;
 				}
 				if (LeftThruster.color.a > 0) {
+					LeftThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					LeftThruster.color = new Color (LeftThruster.color.r, LeftThruster.color.g, LeftThruster.color.b, LeftThruster.color.a - Time.deltaTime * 5);
 				}
 				if (LLight.intensity > 0) {
 					LLight.intensity -= Time.deltaTime * 5;
 				}
 				if (RightThruster.color.a > 0) {
+					RightThruster.GetComponent<ParticleThruster>().spawnParticles(false);
 					RightThruster.color = new Color (RightThruster.color.r, RightThruster.color.g, RightThruster.color.b, RightThruster.color.a - Time.deltaTime * 5);
 				}
 				if (RLight.intensity > 0) {

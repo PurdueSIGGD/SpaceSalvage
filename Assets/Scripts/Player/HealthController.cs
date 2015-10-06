@@ -145,22 +145,37 @@ public class HealthController : MonoBehaviour {
 
 		if (emp && !pause && med <= 0) emp = false; //we cannot be affected by an emp if we aren't paused or dead
 		cranewarning = (this.GetComponentInChildren<CraneController>().broken); 
+
 		ejected = ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected || ((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope; //finding if rope is disconneted
 		if (ejected) { //change oxygen from being ejected
-			if ((health < 50 && health > 1 )|| health == 0) {
-				changeOxy(-1 * Time.deltaTime * (50 - health)/10 ); 
-				//spawn particles here
+			if (((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected) {
 				oxytime+=Time.deltaTime;
 				if (oxytime > .15f) {
 					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
 					float r = Random.value;
 					//thingy.GetComponent<SpriteRenderer>().sprite = ;
-					thingy.transform.localScale = new Vector3(1,1,1); //typical scale is 5, dont want parts too big or small
+					thingy.transform.localScale = new Vector3(.7f,.7f,.7f); //typical scale is 5, dont want parts too big or small
 					thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
 					thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 					//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
 					oxytime = 0;
+					if (GameObject.Find("Connector")) {
+						GameObject thingy1 = (GameObject)Instantiate(oxyparticle, GameObject.Find("Connector").transform.position, Quaternion.identity); //spawning particles
+						float r1 = Random.value;
+						//thingy.GetComponent<SpriteRenderer>().sprite = ;
+						thingy1.transform.localScale = new Vector3(.7f,.7f,.7f); //typical scale is 5, dont want parts too big or small
+						thingy1.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+						thingy1.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+						//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
+					}
 				}
+			} 
+
+			if ((health < 50 && health > 1 )|| health == 0) {
+
+				changeOxy(-1 * Time.deltaTime * (50 - health)/10 ); 
+				//spawn particles here
+
 			} else {
 				changeOxy(-1 * Time.deltaTime);
 			}
@@ -173,7 +188,7 @@ public class HealthController : MonoBehaviour {
 					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
 					float r = Random.value;
 					//thingy.GetComponent<SpriteRenderer>().sprite = ;
-					thingy.transform.localScale = new Vector3(1,1,1); //typical scale is 5, dont want parts too big or small
+					thingy.transform.localScale = new Vector3(.7f/(health+1),.7f/(health+1),.7f/(health+1)); //typical scale is 5, dont want parts too big or small
 					thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
 					thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 					//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
@@ -217,7 +232,7 @@ public class HealthController : MonoBehaviour {
 					thingy.GetComponent<SpriteRenderer>().sprite = j5;
 				} 
 				//thingy.GetComponent<SpriteRenderer>().sprite = ;
-				thingy.transform.localScale = new Vector3(3,3,1); //typical scale is 5, dont want parts too big or small
+				thingy.transform.localScale = new Vector3(.8f,.8f,.8f); //typical scale is 1, dont want parts too big or small
 				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100)); //make it redder if necessary
 				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 				thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));

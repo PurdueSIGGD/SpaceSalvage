@@ -35,6 +35,7 @@ public class WallTurret : MonoBehaviour {
 	}
 
 	void Focus(bool b) {
+		print("getting the focus");
 		focused = b;
 		if (!b) resetting = true;
 	}
