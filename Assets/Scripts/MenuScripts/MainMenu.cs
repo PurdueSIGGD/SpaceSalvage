@@ -120,6 +120,13 @@ public class MainMenu : MonoBehaviour {
 			if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Options")) {
 				menu = "Options";
 			}
+
+
+			if (GUI.Button (new Rect ((Screen.width - Screen.width*.5f)/2.0f, Screen.height -Screen.height*.1f, Screen.width * .5f, Screen.height * .1f), "Exit Game")) {
+				Application.Quit();
+			}
+
+
 		} 
 		if (menu == "Options") {
 			//GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
