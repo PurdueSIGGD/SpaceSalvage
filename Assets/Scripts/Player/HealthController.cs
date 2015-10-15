@@ -128,7 +128,7 @@ public class HealthController : MonoBehaviour {
 		float newoxy = (oxy >= startingoxy - 3*Time.deltaTime)?startingoxy:oxy; //so it doesnt go from 29 to 30 constantly
 		string final = 
 			"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +
-				"Oxygen Levels: " + newoxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +
+				/*"Oxygen Levels: " + newoxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +*/
 				"Health: " + med.ToString("F2") + "/100.00\n" +
 				"Cash: " + wallet + "\n" + 
 				"Tube length left: " + tubesleft + m + tubesmessage + "\n" + 
@@ -151,14 +151,16 @@ public class HealthController : MonoBehaviour {
 			if (((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected) {
 				oxytime+=Time.deltaTime;
 				if (oxytime > .15f) {
-					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
-					float r = Random.value;
-					//thingy.GetComponent<SpriteRenderer>().sprite = ;
-					thingy.transform.localScale = new Vector3(.7f,.7f,.7f); //typical scale is 5, dont want parts too big or small
-					thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
-					thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
-					//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
-					oxytime = 0;
+					if (oxy > 0) {
+							GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
+							float r = Random.value;
+							//thingy.GetComponent<SpriteRenderer>().sprite = ;
+							thingy.transform.localScale = new Vector3(.7f,.7f,.7f); //typical scale is 5, dont want parts too big or small
+							thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+							thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+							//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
+							oxytime = 0;
+					}	
 					if (GameObject.Find("Connector")) {
 						GameObject thingy1 = (GameObject)Instantiate(oxyparticle, GameObject.Find("Connector").transform.position, Quaternion.identity); //spawning particles
 						float r1 = Random.value;
@@ -184,7 +186,7 @@ public class HealthController : MonoBehaviour {
 				changeOxy(-.2f * Time.deltaTime);
 				//spawn particles here
 				oxytime+=Time.deltaTime;
-				if (oxytime > .15f) {
+				if (oxytime > .15f && oxy>0) {
 					GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
 					float r = Random.value;
 					//thingy.GetComponent<SpriteRenderer>().sprite = ;
@@ -289,6 +291,12 @@ public class HealthController : MonoBehaviour {
 	}
 	void GettingOxy(bool b) { //accepting oxygen, look in oxygenstation.cs
 		gettingOxy = b;
+	}
+	public float GetOxy() {
+		return oxy;
+	}
+	public float GetOxyPercent() {
+		return oxy/this.startingoxy;
 	}
 	void Im_Leaving() { //last function to pass
 		PlayerPrefs.SetInt ("wallet", wallet);
