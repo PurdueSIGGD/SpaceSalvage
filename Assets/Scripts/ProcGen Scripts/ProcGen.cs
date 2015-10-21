@@ -10,6 +10,7 @@ using System.Collections;
 
 public class ProcGen : MonoBehaviour {
 	private float time;
+	private float timesAccessed = 0;
 
 	public GameObject asterioid;
 	public GameObject small_ship;
@@ -72,12 +73,13 @@ public class ProcGen : MonoBehaviour {
 	public Edgebounds bottomEdge;
 	public Edgebounds rightEdge;
 	public Edgebounds leftEdge;
-
+	private bool isGenerating;
 	GameObject topNewEdge;
 
 	private float distanceLootChance;
 	
 	void Start() {
+		isGenerating = true;
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
 		Generate (0, 0); //generate a square of width = initial_distance * 2;
@@ -103,12 +105,16 @@ public class ProcGen : MonoBehaviour {
 		leftEdge.transform.Rotate (new Vector3 (0, 0, 90));
 		rightEdge = (Edgebounds)Instantiate (rightEdge,new Vector3(initial_distance,0,0),new Quaternion(0,0,0,0));
 		rightEdge.transform.Rotate (new Vector3 (0, 0, 270));
+		isGenerating = false;
 	}
 
 	public void Generate(float originX, float originY) { // generate from (startX, startY) to (endX, endY)
 		Vector2 newitembuffer = Vector2.zero;
 		int numspawned = 0;
-		while (numspawned < initial_distance * density/10) {
+		if (!isGenerating) timesAccessed = Vector3.Distance(GameObject.Find("Player").transform.position, this.transform.position)/50;
+		else timesAccessed = 1;
+		//print(timesAccessed);
+		while (numspawned < initial_distance * density/(timesAccessed * 10)) {
 			float i = initial_distance * Random.value * (Random.value > .5f?-1:1) + originX;
 			float j = initial_distance * Random.value * (Random.value > .5f?-1:1) + originY;
 			//Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(i,j), 4); 
@@ -120,7 +126,7 @@ public class ProcGen : MonoBehaviour {
 			}*/
 
 			if (originX == 0 && originY == 0) {
-				if ((i > 12 || i < -11) && (j > 11 || j < -11)) { //not colliding into ship
+				if ((i > 13 || i < -13) && (j > 13 || j < -13)) { //not colliding into ship
 					newitembuffer = FindToGenerate(i, j);
 					j+=newitembuffer.y;
 					i+=newitembuffer.x;
@@ -187,14 +193,20 @@ public class ProcGen : MonoBehaviour {
 			/	So once again, the 2 factors at most will be weighted chance and spawner chance.
 			*/
 			foreach (Transform c in spawners) {
-			//print(g.name);
-			distanceLootChance = Vector3.Distance(c.position, GameObject.Find("Player").transform.position)/1000;
-				if (c != null && c.GetComponent<Spawner>()) {
+
+				//print(g.name);
+			if (c != null && c.GetComponent<Spawner>()) {
+				if (GameObject.Find ("Player") != null) distanceLootChance = Vector3.Distance(c.position, GameObject.Find("Player").transform.position)/1000;
+				else distanceLootChance = Vector3.Distance(c.position, Vector3.zero)/1000;
+				bool bRotation = !c.GetComponent<Spawner>().keepRotation;
+
+				
 					// spawn small_loot
 				if (Random.value < (tmp_inside_loot_chance + inside_small_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(small_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+						if (bRotation) thingy.transform.rotation = c.rotation;
+						else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						thingy.transform.parent = g.transform;
 						continue;
 					}
@@ -202,7 +214,8 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value < (tmp_inside_loot_chance + inside_med_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(med_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						tmp_inside_loot_chance *= 1.5f;
 						thingy.transform.parent = g.transform;
 
@@ -212,7 +225,8 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large1_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						tmp_inside_loot_chance *= 1.5f;
 					//	thingy.transform.parent = g.transform;
 
@@ -222,7 +236,7 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) 	thingy.transform.rotation = c.rotation;
 						tmp_inside_loot_chance *= 2;
 					//	thingy.transform.parent = g.transform;
 
@@ -232,7 +246,8 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						tmp_inside_loot_chance *= 3;
 					//	thingy.transform.parent = g.transform;
 
@@ -242,7 +257,8 @@ public class ProcGen : MonoBehaviour {
 					if (Random.value < (inside_debris_chance)) {
 						GameObject thingy = (GameObject)Instantiate(small_debris, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						thingy.transform.parent = g.transform;
 
 						continue;
@@ -251,7 +267,8 @@ public class ProcGen : MonoBehaviour {
 				if (bHazards && Random.value < (tmp_inside_hazard_laser_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(laser, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation || true) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						tmp_inside_hazard_laser_chance *= 5;
 						thingy.transform.parent = g.transform;
 
@@ -261,7 +278,7 @@ public class ProcGen : MonoBehaviour {
 				if (bHazards && Random.value < (tmp_inside_hazard_emp_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(emp, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation) 	thingy.transform.rotation = c.rotation;
 						tmp_inside_hazard_emp_chance *= 5;
 						thingy.transform.parent = g.transform;
 
@@ -271,7 +288,8 @@ public class ProcGen : MonoBehaviour {
 				if (bHazards && Random.value < (tmp_inside_hazard_airjet_chance + c.GetComponent<Spawner>().hazard_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(airjet, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						thingy.transform.rotation = c.rotation;
+					if (bRotation|| true) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						tmp_inside_hazard_airjet_chance *= 5;
 						thingy.transform.parent = g.transform;
 
@@ -280,8 +298,9 @@ public class ProcGen : MonoBehaviour {
 					// spawn spinturret
 				if (bEnemies && Random.value < (inside_enemy_spinturret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_spinturret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(spinturret, c.position, c.rotation);
-						thingy.transform.position = c.position + Vector3.up * .01f;
-						//thingy.transform.rotation = c.rotation;
+					thingy.transform.position = c.position + Vector3.up * .01f;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
 						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
 						thingy.transform.parent = g.transform;
@@ -292,7 +311,8 @@ public class ProcGen : MonoBehaviour {
 				if (bEnemies && Random.value < (inside_enemy_DMGTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_DMGTurret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(DMGTurret, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						//thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 					//thingy.transform.rotation = c.rotation;
 						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
 						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
@@ -304,7 +324,8 @@ public class ProcGen : MonoBehaviour {
 				if (bEnemies && Random.value < (inside_enemy_EMPTurret_chance + c.GetComponent<Spawner>().turret_chance) && inside_enemy_EMPTurret_chance != 0 + distanceLootChance) {
 						GameObject thingy = (GameObject)Instantiate(EMPTurret, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						//	thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						//thingy.transform.rotation = c.rotation;
 						thingy.GetComponent<PhysicsTurret>().rotationUpperLim = c.GetComponent<Spawner>().turretStart;
 						thingy.GetComponent<PhysicsTurret>().rotationLowerLim = c.GetComponent<Spawner>().turretEnd;
@@ -316,7 +337,8 @@ public class ProcGen : MonoBehaviour {
 				if (bEnemies && Random.value < (tmp_inside_enemy_chaser_chance + c.GetComponent<Spawner>().turret_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(chaser, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
-						//thingy.transform.rotation = c.rotation;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
 						thingy.transform.parent = g.transform;
 
 						tmp_inside_enemy_chaser_chance *= 5;
@@ -394,11 +416,14 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value < large1_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(large1_loot, new Vector3(i, j, 1), Quaternion.identity);
 					Quaternion q = new Quaternion();
+			print("spawning this loot");
+
 					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
 					thingy.transform.rotation = q;					
 					return Vector2.zero;
 				}
 				if (Random.value < large2_loot_chance) {
+			print("spawning this loot");
 					GameObject thingy = (GameObject)Instantiate(large2_loot, new Vector3(i, j, 1), Quaternion.identity);
 					Quaternion q = new Quaternion();
 					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
@@ -408,6 +433,8 @@ public class ProcGen : MonoBehaviour {
 				if (Random.value < large3_loot_chance) {
 					GameObject thingy = (GameObject)Instantiate(large3_loot, new Vector3(i, j, 1), Quaternion.identity);
 					Quaternion q = new Quaternion();
+			print("spawning this loot");
+
 					q.eulerAngles = new Vector3(0,0, Random.Range(0, 360));
 					thingy.transform.rotation = q;
 					return Vector2.zero;
@@ -426,11 +453,14 @@ public class ProcGen : MonoBehaviour {
 			if (player != null) {
 				foreach (GameObject r in gs) {
 					//bool isRope = r.GetComponent<JointScript>() != null;
-					if (r.GetComponent<DebrisStart>() || r.GetComponentInParent<DebrisStart>() || r.GetComponent<Loot>() || r.GetComponent<ItemDissolve>()) { //only change active state if it has the debris start or is loot, (ignoring edgebounds, joints, the ship, etc.)
-						if (Vector3.Distance(player.transform.position, r.transform.position) > 70) { //everthing outside of a 100 radius will stop
+					if (r.GetComponent<DebrisStart>() || r.GetComponent<Loot>() || r.GetComponent<ItemDissolve>()) { //only change active state if it has the debris start or is loot, (ignoring edgebounds, joints, the ship, etc.)
+						if (Vector3.Distance(player.transform.position, r.transform.position) > 60) { //everthing outside of a 100 radius will stop
 							r.gameObject.SetActive(false);
 							if (r.GetComponent<DebrisStart>()) {
-
+								Transform[] ts = r.GetComponentsInChildren<Transform>();
+								foreach (Transform tt in ts) {
+									tt.gameObject.SetActive(false);
+								}
 								//r.SendMessage("Stop");
 							}
 							//r.Sleep();
@@ -438,9 +468,19 @@ public class ProcGen : MonoBehaviour {
 							r.SetActive(true);
 							//r.WakeUp();
 							if (r.GetComponent<DebrisStart>()) {
-
+								Transform[] ts = r.GetComponentsInChildren<Transform>();
+								foreach (Transform tt in ts) {
+									tt.gameObject.SetActive(true);
+								}
 								//r.SendMessage("ReStart");
 							}
+						}
+					}
+					if (r.GetComponent<JointScript>()) {
+						if (Vector3.Distance(player.transform.position, r.transform.position) > 60) { //everthing outside of a 100 radius will stop
+							r.GetComponent<Rigidbody2D>().Sleep();
+						} else {
+							r.GetComponent<Rigidbody2D>().WakeUp();
 						}
 					}
 				}

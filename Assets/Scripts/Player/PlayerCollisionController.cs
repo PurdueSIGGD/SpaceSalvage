@@ -9,7 +9,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	//the Player sprite,
 	//and the sprites of all of the parts of the Player's Crane,
 	// so that I can make them disappear when the screen fades to black
-	private SpriteRenderer Fader;
+	private GUITexture Fader;
 	private SpriteRenderer Arrow,Back,Front,Left,Right,Cw,Ccw;
 	private LineRenderer Crane;
 	
@@ -67,7 +67,7 @@ public class PlayerCollisionController : MonoBehaviour {
 		Cw = GameObject.Find ("ThrusterCW").GetComponent<SpriteRenderer> ();
 		Ccw = GameObject.Find ("ThrusterCCW").GetComponent<SpriteRenderer> ();
 		faderObject = GameObject.Find("Fader");
-		Fader = faderObject.GetComponent<SpriteRenderer> ();
+		Fader = faderObject.GetComponent<GUITexture> ();
 
 
 		Physics2D.IgnoreLayerCollision(0,8);
@@ -95,7 +95,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
 		if (f <= 0) { // if we are dead
 
-			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/3);
+			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/4);
 			this.SendMessage("EMP");
 			Arrow.color = new Color(Arrow.color.r, Arrow.color.g, Arrow.color.b, 0);
 			Front.color = new Color(Front.color.r, Front.color.g, Front.color.b, 0);
@@ -111,7 +111,7 @@ public class PlayerCollisionController : MonoBehaviour {
 			}
 			
 		} else {
-			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, (.5f - f)); //1 = opaque, 0 = transparent
+			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, (.3f - f)); //1 = opaque, 0 = transparent
 		}
 	}
 

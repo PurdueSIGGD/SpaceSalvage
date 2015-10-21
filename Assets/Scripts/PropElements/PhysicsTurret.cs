@@ -41,7 +41,7 @@ public class PhysicsTurret : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Vector3.Distance(GameObject.Find("Player").transform.position, this.transform.position) > 7) focused = false;
+		if (GameObject.Find ("Player") && Vector3.Distance(GameObject.Find("Player").transform.position, this.transform.position) > 7) focused = false;
 		BarrelPivot.transform.localPosition = Vector2.zero;
 		angleCap ();
 		if (!emp) {

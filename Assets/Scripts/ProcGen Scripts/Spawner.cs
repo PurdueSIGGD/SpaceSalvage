@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour {
 	public float turretStart;
 	public float turretEnd;
 	public bool startBigSide;
+	public bool keepRotation;
 	// Use this for initialization
 	void Start () {
 	

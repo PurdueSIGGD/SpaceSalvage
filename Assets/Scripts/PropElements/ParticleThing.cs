@@ -3,7 +3,8 @@ using System.Collections;
 
 public class ParticleThing : MonoBehaviour {
 	private float time;
-	private Vector3 startScale;
+	public float distanceLasting = 2.5f;
+	private Vector3 startScale; 
 	//particle that will move away and get smaller
 	void Start() {
 		startScale = this.transform.localScale;
@@ -12,10 +13,10 @@ public class ParticleThing : MonoBehaviour {
 	void Update () {
 		time+=Time.deltaTime;
 		float foo;
-		if (time < (1/2.5f)) foo = startScale.x * 2.5f;
+		if (time < (1/distanceLasting)) foo = startScale.x * distanceLasting;
 		else foo = startScale.x/time;
 		this.transform.localScale = new Vector3(foo, foo, 1);
-		if (time > 2) {
+		if (foo <= .1f) {
 			Destroy(this.gameObject);
 		}
 	}

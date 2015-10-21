@@ -6,7 +6,7 @@ public class ExitScript : MonoBehaviour {
 
 	private bool exiting;
 	private GameObject faderObject;
-	private SpriteRenderer Fader;
+	private GUITexture Fader;
 	private GameObject Player;
 	public KeyCode usekey = KeyCode.F;
 	public string usestring = "Press 'f' to exit map";
@@ -22,7 +22,7 @@ public class ExitScript : MonoBehaviour {
 			PlayerPrefs.SetString("Use",usekey.ToString());
 		}
 		faderObject = GameObject.Find ("Fader");
-		Fader = faderObject.GetComponent<SpriteRenderer> ();
+		Fader = faderObject.GetComponent<GUITexture> ();
 
 	}
 
@@ -68,11 +68,11 @@ public class ExitScript : MonoBehaviour {
 			Player.transform.position = playerseat + Vector3.back;
 			Player.transform.rotation = Quaternion.Euler(0,0,90);
 			Player.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
-			
-			if (Fader.color.a < 1) {
+			print(Fader.color.a);
+			if (Fader.color.a < .5f) {
 				
 				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
-				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime / 3);
+				Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b,  Fader.color.a + Time.deltaTime / 4);
 				
 			} else {
 			
