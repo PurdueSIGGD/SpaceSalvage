@@ -5,6 +5,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
 	private bool ejected;
 	public AudioClip bump;
+    public AudioClip bumbFaster;
 	// Creating SpriteRender (and a LineRenderer) variables for the Fading Screen,
 	//the Player sprite,
 	//and the sprites of all of the parts of the Player's Crane,
@@ -15,21 +16,24 @@ public class PlayerCollisionController : MonoBehaviour {
 	
 	private float ejectcooldown;
 	private GameObject faderObject;
-
+    private RandomPitch randomPitch;
 
 	void OnCollisionStay2D(Collision2D col) {
 
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 		if (col.gameObject.GetComponent<SpringJoint2D>() == null) { //not cord
-			this.gameObject.GetComponent<AudioSource>().volume = .5f;
+			//this.gameObject.GetComponent<AudioSource>().volume = .5f;
 			if (Vector3.Magnitude(col.relativeVelocity) > .5f) {
 				if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 					this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
 					this.gameObject.GetComponent<AudioSource>().volume = 1f;
 				}
+				float pitchtmp = this.GetComponent<AudioSource>().pitch;
+                this.GetComponent<AudioSource>().pitch = randomPitch.RandomPitchValue();
 				this.GetComponent<AudioSource>().PlayOneShot(bump);
 				this.gameObject.GetComponent<AudioSource>().volume = 1f;
+				this.GetComponent<AudioSource>().pitch = pitchtmp;
 			}
 
 			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity)); //shake the camera and jiggle
@@ -54,7 +58,7 @@ public class PlayerCollisionController : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		
+		randomPitch = this.gameObject.AddComponent<RandomPitch>();
 		/*Here I initialize my many, many SpriteRenderer and LineRenderer variables
 		 that help make the ship look like it disappears right before the screen turns black*/
 
@@ -71,6 +75,8 @@ public class PlayerCollisionController : MonoBehaviour {
 
 
 		Physics2D.IgnoreLayerCollision(0,8);
+		//Physics2D.IgnoreLayerCollision(0,10);
+		//Physics2D.IgnoreLayerCollision(10,8);
 	}
 
 	// Update is called once per frame
@@ -91,11 +97,11 @@ public class PlayerCollisionController : MonoBehaviour {
 
 	}
 	void FaderTime(float f) {
-		Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10); //large
+	//	Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10); //large
 
 		if (f <= 0) { // if we are dead
 
-			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/4);
+			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/3);
 			this.SendMessage("EMP");
 			Arrow.color = new Color(Arrow.color.r, Arrow.color.g, Arrow.color.b, 0);
 			Front.color = new Color(Front.color.r, Front.color.g, Front.color.b, 0);
@@ -111,7 +117,7 @@ public class PlayerCollisionController : MonoBehaviour {
 			}
 			
 		} else {
-			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, (.3f - f)); //1 = opaque, 0 = transparent
+			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, (.5f - f)); //1 = opaque, 0 = transparent
 		}
 	}
 

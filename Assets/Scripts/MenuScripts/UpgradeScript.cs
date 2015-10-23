@@ -61,6 +61,12 @@ public class UpgradeScript : MonoBehaviour {
 		guiPlacementY2 = .10f;
 		
 	}
+
+    public int ReportCash()
+    {
+        return cash;
+    }
+
 	void OnGUI() {
 		GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
 		//Sprite s =  Resources.Load("player", typeof(Sprite)) as Sprite;

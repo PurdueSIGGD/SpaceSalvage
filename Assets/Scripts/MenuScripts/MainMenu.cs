@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour {
 
+	public AudioClip menuSelect;
+	public AudioClip menuBack;
+
 	public bool pressing;
 
 	public Texture backgroundTexture;
@@ -113,16 +116,21 @@ public class MainMenu : MonoBehaviour {
 		//GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
 		if (menu == "Main") {
 			if (GUI.Button(new Rect(Screen.width * guiPlacementX1, Screen.height * guiPlacementY1, Screen.width * .5f, Screen.height * .1f), "Play Game")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				Application.LoadLevel("ProcGen");	
 			}
 
 
 			if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Options")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				menu = "Options";
 			}
 
 
 			if (GUI.Button (new Rect ((Screen.width - Screen.width*.5f)/2.0f, Screen.height -Screen.height*.1f, Screen.width * .5f, Screen.height * .1f), "Exit Game")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				Application.Quit();
 			}
 
@@ -131,6 +139,8 @@ public class MainMenu : MonoBehaviour {
 		if (menu == "Options") {
 			//GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
 			if (GUI.Button(new Rect(Screen.width * guiPlacementX1, Screen.height * guiPlacementY1, Screen.width * .5f, Screen.height * .1f), label)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				if (!clicked) {
 					clicked = true;
 					label = "Are you sure? Cannot be undone";
@@ -144,11 +154,14 @@ public class MainMenu : MonoBehaviour {
 			if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "KeyBinding")) {
 				////print("Just kidding, no keybindings yet");
 				//Application.LoadLevel ("KeyBindings");
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				menu = "Keys";
 			}
 			
 			if (GUI.Button (new Rect ((Screen.width - Screen.width*.5f)/2.0f, Screen.height -Screen.height*.1f, Screen.width * .5f, Screen.height * .1f), backLabel)) {
-				
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuBack);
+
 				menu =  "Main";
 				clicked = false;
 				
@@ -157,6 +170,8 @@ public class MainMenu : MonoBehaviour {
 		if (menu == "Keys") {
 			GUI.Label(new Rect (Screen.width * .37f, Screen.height*.1f, Screen.width * .5f, Screen.height * .1f), "Press your button with your desired key!");
 			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .2f, Screen.width * .2f, Screen.height * .1f), "Up: " + KeyCodeUp)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				KeyCodeUpp = true;
 				pressing = true;
 				KeyCodeUp = "Press any key";
@@ -174,6 +189,8 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .4f, Screen.width * .2f, Screen.height * .1f), "Down: " + KeyCodeDown)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				KeyCodeDownp = true;
 				pressing = true;
 				KeyCodeDown = "Press any key";
@@ -191,6 +208,8 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .6f, Screen.width * .2f, Screen.height * .1f), "Left: " + KeyCodeLeft)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				KeyCodeLeftp = true;
 				pressing = true;
 				KeyCodeLeft = "Press any key";
@@ -209,6 +228,8 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .8f, Screen.width * .2f, Screen.height * .1f), "Right: " + KeyCodeRight)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
+
 				KeyCodeRightp = true;
 				pressing = true;
 				KeyCodeRight = "Press any key";
@@ -227,6 +248,7 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .2f, Screen.width * .2f, Screen.height * .1f), "Retract: " + KeyCodeRetract)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeRetractp = true;
 				pressing = true;
 				KeyCodeRetract = "Press any key";
@@ -245,6 +267,7 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .4f, Screen.width * .2f, Screen.height * .1f), "Extend: " + KeyCodeExtend)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeExtendp = true;
 				pressing = true;
 				KeyCodeExtend = "Press any key";
@@ -263,6 +286,7 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .6f, Screen.width * .2f, Screen.height * .1f), "Claw: " + KeyCodeClaw)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeClawp = true;
 				KeyCodeClaw = "Press any key";
 				pressing = true;
@@ -281,6 +305,7 @@ public class MainMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .8f, Screen.width * .2f, Screen.height * .1f), "Eject: " + KeyCodeEject)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeEjectp = true;
 				pressing = true;
 				KeyCodeEject = "Press any key";
@@ -300,6 +325,7 @@ public class MainMenu : MonoBehaviour {
 			}
 
 			if (GUI.Button(new Rect(Screen.width * .7f, Screen.height * .2f, Screen.width * .2f, Screen.height * .1f), "Use: " + KeyCodeUse)) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeUsep = true;
 				pressing = true;
 				KeyCodeUse = "Press any key";
@@ -319,16 +345,20 @@ public class MainMenu : MonoBehaviour {
 			
 			}
 			if (GUI.Button(new Rect(Screen.width * .7f, Screen.height * .4f, Screen.width * .2f, Screen.height * .1f), "[NOT USED]")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				//print(Input.inputString);
 			}
 			if (GUI.Button(new Rect(Screen.width * .7f, Screen.height * .6f, Screen.width * .2f, Screen.height * .1f), "[NOT USED]")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				//print(Input.inputString);
 			}
 			if (GUI.Button(new Rect(Screen.width * .7f, Screen.height * .8f, Screen.width * .2f, Screen.height * .1f), "[NOT USED]")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				//print(Input.inputString);
 			}
 
 			if (!pressing && GUI.Button (new Rect ((Screen.width - Screen.width*.5f)/2.0f, Screen.height -Screen.height*.1f, Screen.width * .25f, Screen.height * .1f), "Save")) {
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				PlayerPrefs.SetString ("Up",this.KeyCodeUp);
 				PlayerPrefs.SetString ("Down",this.KeyCodeDown);
 				PlayerPrefs.SetString ("Left",this.KeyCodeLeft);
@@ -343,6 +373,7 @@ public class MainMenu : MonoBehaviour {
 			}
 			if (!pressing && GUI.Button (new Rect (Screen.width/2, Screen.height -Screen.height*.1f, Screen.width * .25f, Screen.height * .1f), backLabel)) {
 				
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuBack);
 				menu =  "Options";
 				clicked = false;
 				

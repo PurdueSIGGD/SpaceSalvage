@@ -16,11 +16,19 @@ public class CraneController : MonoBehaviour {
 	public Vector3 current;
 	public bool emp, debugmode, grabbed = false, ended = false, broken, deadThrusters = false;
 	public float rotspeed = 300, movespeed = .5f, changedmovespeed, cranelength = 2, HarpoonSpeed, linewidth;
+    public GameObject grabberAudio; //these two are technically for the latch-on sound effect
+    private AudioSource grabberAudioSource;
 	private Vector3 pz, delta, playerdelta, difference;
 	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime, closingDistance;
 	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
 	private string claw = "Mouse 1";
+    private AudioClip latchedOn;
+    private bool isGrabbedFirstTimeBecauseImBadAtCoding;
+    public GameObject extenderAudio;
+    private AudioSource extenderAudioSource;
+    private AudioClip extend;
+
 
 	// The boolean deadThrusters is here to make the clockwise/counter-clockwise thrusters
 	// not appear when the screen turns black
@@ -55,6 +63,11 @@ public class CraneController : MonoBehaviour {
 		changedmovespeed = movespeed;
 		lastTheta = Player.transform.rotation.z;
 		broken = cranelength == 0;
+        grabberAudioSource = grabberAudio.GetComponent<AudioSource>();
+        latchedOn = grabberAudioSource.clip;
+        isGrabbedFirstTimeBecauseImBadAtCoding = false;
+        extenderAudioSource = extenderAudio.GetComponent<AudioSource>();
+        extend = extenderAudioSource.clip;
 	}
 
 	// Update is called once per frame
@@ -67,6 +80,13 @@ public class CraneController : MonoBehaviour {
 
 		BottomCranePart.position =  new Vector3(BottomCranePart.position.x, BottomCranePart.position.y, -1.5f); //This is so we don't have the material for the rope in front of the crane, makes it look better
 		TopCranePart.position =  new Vector3(TopCranePart.position.x, TopCranePart.position.y, -1.5f);
+
+        if (grabbed && !isGrabbedFirstTimeBecauseImBadAtCoding && Time.timeScale != 0)
+        {
+            grabberAudioSource.PlayOneShot(latchedOn);
+            isGrabbedFirstTimeBecauseImBadAtCoding = true;
+
+        }
 
 		if (opened) {
 			if (TopCranePart.localRotation.eulerAngles.z < 30) {
@@ -129,6 +149,7 @@ public class CraneController : MonoBehaviour {
 		} else {
 			// release grip
 			if (grabbed) {
+                
 				ending.transform.position = ending.transform.position + Vector3.back * .3f;
 				Physics2D.IgnoreCollision(focus.GetComponent<Collider2D>(), ending.GetComponent<Collider2D>(), false);
 				//Player.GetComponent<LineRenderer>().enabled = false;
@@ -142,6 +163,7 @@ public class CraneController : MonoBehaviour {
 
 				grabbed = false;
 				firing = false;
+                isGrabbedFirstTimeBecauseImBadAtCoding = false;
 				retracting = true;
 				closingDistance = dist;
 				opened = false;
@@ -178,7 +200,7 @@ public class CraneController : MonoBehaviour {
 				if (!firing) {
 
 					launchangle = thetaersnenig;
-					if (!broken) Player.GetComponent<AudioSource>().PlayOneShot(firecrane);
+					if (!broken && Time.timeScale != 0) extenderAudioSource.PlayOneShot(extend);
 					
 					this.opened = true;
 					ending.GetComponent<Rigidbody2D>().AddForce(40 * HarpoonSpeed * new Vector2(Mathf.Cos (Mathf.Deg2Rad * launchangle) , Mathf.Sin (Mathf.Deg2Rad * launchangle)));
