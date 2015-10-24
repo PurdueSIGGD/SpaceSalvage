@@ -8,10 +8,10 @@ public class HealthController : MonoBehaviour {
 	 * It also controls the GUIText values displayed in-game.
 	 * It will also save values at the end of the game
 	 */
-	private float health = 100; //suit integrity
-	private float med = 100; //actual health
+	public float health = 100; //suit integrity
+	public float med = 100; //actual health
 	private float startingoxy = 30;
-	private float oxy;
+	public float oxy;
 	private GameObject text;
 	private int wallet = 50;
 	private int startingwallet, tubesleft;
@@ -33,10 +33,14 @@ public class HealthController : MonoBehaviour {
 	private float timesincelastdamage;
 	private float rechargetime;
 	private bool pause;
+    private AudioSource vitalsLowAudioSource;
+    private AudioSource oxyLowAudioSource;
 	private float rechargeEmpDiff; // This is the difference between the recharge time/emp time, which is never negative -- Anna
 	public GameObject particle, oxyparticle;
 	public bool acceptingOxy, emp = false, gettingOxy; //is oxy less than startingoxy?
 	public float emptime = 0;
+    public GameObject vitalsLowAudio;
+    public GameObject oxyLowAudio;
 	public Sprite j1, j2, j3, j4, j5;
 	// Use this for initialization
 	void Start () { 
@@ -68,6 +72,8 @@ public class HealthController : MonoBehaviour {
 		startinghealth = health;
 		oxy = startingoxy;
 		text = GameObject.Find("GuiText");
+        vitalsLowAudioSource = vitalsLowAudio.GetComponent<AudioSource>();
+        oxyLowAudioSource = oxyLowAudio.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -85,6 +91,15 @@ public class HealthController : MonoBehaviour {
 			}
 
 		}
+        if (medwarning && !vitalsLowAudioSource.isPlaying)
+        {
+            vitalsLowAudioSource.Play();
+        }
+        else if (!medwarning)
+        {
+            vitalsLowAudioSource.Stop();
+        }
+        
 		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) { //no warnings
 			emergency = false;
 			words += okmessage;
@@ -92,6 +107,8 @@ public class HealthController : MonoBehaviour {
 		} else { //see what issue we may have
  			emergency = true;
 			if (emp && !pause){
+				//print(transform.FindChild("SoundEffectController").FindChild("EMPSound") + " " + emptime/rechargetime);
+				transform.FindChild("SoundEffectController").FindChild("EMPSound").GetComponent<AudioSource>().volume = 1 - emptime/rechargetime;
 				rechargeEmpDiff = rechargetime - emptime;
 				if(rechargeEmpDiff < 0.0f) rechargeEmpDiff=0.0f;
 				words += (empmessage2 +  (rechargeEmpDiff).ToString("F2") + "\n" + empmessage);
@@ -259,7 +276,15 @@ public class HealthController : MonoBehaviour {
 		//print(oxy);
 		if (!pause) {
 			if (f < 0 && gettingOxy) return; //if getting oxygen and losing some, forget about the losing oxygen
-			if (f + oxy > startingoxy) {
+			if (f < 0 && !oxyLowAudioSource.isPlaying)
+            {
+                oxyLowAudioSource.Play();
+            }
+            else if (f >= 0)
+            {
+                oxyLowAudioSource.Stop();
+            }
+            if (f + oxy > startingoxy) {
 				oxy = startingoxy;
 			} else if (f + oxy <= 0) { // if it is more than we can give, so no negatives
 				oxy = 0;

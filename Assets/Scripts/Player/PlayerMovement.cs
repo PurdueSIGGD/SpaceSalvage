@@ -13,7 +13,9 @@ public class PlayerMovement : MonoBehaviour {
 	public float moverate = 2;
 	public float startingmoverate;
 	public bool emp;
+    public GameObject empAudio;
 
+    private AudioSource empAudioSource;
 	private SpriteRenderer BackThruster;
 	private SpriteRenderer FrontThruster;
 	private SpriteRenderer LeftThruster;
@@ -64,6 +66,7 @@ public class PlayerMovement : MonoBehaviour {
 			PlayerPrefs.SetString("Left",kleft.ToString());
 		}
 
+        empAudioSource = empAudio.GetComponent<AudioSource>();
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
 		FrontThruster = GameObject.Find ("FrontThruster").GetComponent<SpriteRenderer> ();
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
@@ -92,6 +95,10 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (emp) { //controls if we can get control or not
 			currentemptime+= Time.deltaTime;
+            if (!empAudioSource.isPlaying)
+            {
+                empAudioSource.Play();
+            }
 			if (currentemptime > emprechargetime) {
 				emp = false;
 				currentemptime = 0;
@@ -99,15 +106,14 @@ public class PlayerMovement : MonoBehaviour {
 				GameObject.Find ("Crane").GetComponent<CraneController>().emp = false;
 				this.GetComponent<HealthController>().emp = false;
 				this.GetComponent<HealthController>().emptime = 0;
-
+                empAudioSource.Stop();
 			}
 			this.GetComponent<HealthController>().emptime = currentemptime;
 		}
 
         if ((left || right || up || down) && !emp && !this.gameObject.GetComponent<AudioSource>().isPlaying)
         {
-            this.gameObject.GetComponent<AudioSource>().clip = move;
-            this.gameObject.GetComponent<AudioSource>().Play();
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(move);
         }
         else if ((!left && !right && !up && !down) || emp)
         {

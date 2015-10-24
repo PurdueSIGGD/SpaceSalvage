@@ -41,9 +41,9 @@ public class SmoothCamera2D : MonoBehaviour {
 				Background = new Vector3(Background.x += Background.x * factor, Background.y += Background.y * factor, 1);
 				this.transform.FindChild("Background").localScale = Background;
 
-				Vector3 Faders = this.transform.FindChild("Fader").localScale; //to make sure the background does not change
-				Faders = new Vector3(Faders.x += Faders.x * factor, Faders.y += Faders.y * factor, 1);
-				this.transform.FindChild("Fader").localScale = Faders;
+				//Vector3 Faders = this.transform.FindChild("Fader").localScale; //to make sure the background does not change
+				//Faders = new Vector3(Faders.x += Faders.x * factor, Faders.y += Faders.y * factor, 1);
+				//this.transform.FindChild("Fader").localScale = Faders;
 			}
 		}
 		if (target)
