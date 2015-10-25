@@ -27,6 +27,8 @@ public class PhysicsTurret : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		rotationUpperLim = Random.Range(0, 360);
+		rotationLowerLim = Random.Range(0,360);
 		Player = GameObject.Find ("Player");
 		BarrelPivot = transform.FindChild ("BarrelPivot").gameObject; //get child GameObject BarrelPivot
 		Barrel = BarrelPivot.transform.FindChild ("Barrel").gameObject;
@@ -117,10 +119,10 @@ public class PhysicsTurret : MonoBehaviour {
 					Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), projectile.GetComponent<Collider2D>());
 					Physics2D.IgnoreCollision(BarrelPivot.GetComponent<Collider2D>(), projectile.GetComponent<Collider2D>());
 					Physics2D.IgnoreCollision(Barrel.GetComponent<Collider2D>(), projectile.GetComponent<Collider2D>());
-					if (!ammo.name.Equals("Missile")) {
+					if (!(ammo.name.Equals("Missile") || ammo.name.Equals("EMPMissile"))) {
 						
 						projectile.GetComponent<Rigidbody2D>().AddForce(100 * new Vector2(Mathf.Cos(Mathf.Deg2Rad * (Barrel.transform.eulerAngles.z+180)),Mathf.Sin(Mathf.Deg2Rad * (Barrel.transform.eulerAngles.z+180))));
-						projectile.GetComponent<Rigidbody2D>().AddTorque(50);
+						projectile.GetComponent<Rigidbody2D>().AddTorque(30);
 					} else {
 						projectile.GetComponent<MissileScript>().damageoremp = !empshooty;
 					}

@@ -103,6 +103,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
 			Fader.color = new Color(Fader.color.r, Fader.color.g, Fader.color.b, Fader.color.a + Time.deltaTime/3);
 			this.SendMessage("EMP");
+			this.BroadcastMessage("wearedying");
 			Arrow.color = new Color(Arrow.color.r, Arrow.color.g, Arrow.color.b, 0);
 			Front.color = new Color(Front.color.r, Front.color.g, Front.color.b, 0);
 			Back.color = new Color(Back.color.r, Back.color.g, Back.color.b, 0);

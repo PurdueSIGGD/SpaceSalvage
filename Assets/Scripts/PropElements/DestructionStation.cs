@@ -12,7 +12,7 @@ public class DestructionStation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		this.gameObject.layer = 14;
 		//Recognize the player in the game
 		Player = GameObject.Find("Player"); 
 	}

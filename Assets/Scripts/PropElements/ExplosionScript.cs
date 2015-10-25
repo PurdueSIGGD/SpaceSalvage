@@ -13,7 +13,6 @@ public class ExplosionScript : MonoBehaviour {
 	public GameObject particle;
 	// Use this for initialization
 	void Start () {
-		this.GetComponent<AudioSource>().Play();
 
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		Light l = this.GetComponentInChildren<Light>();
@@ -57,7 +56,11 @@ public class ExplosionScript : MonoBehaviour {
 		} else if (time < 2/speed) {
 			this.GetComponentInChildren<Light>().intensity = 2 - time;
 			this.transform.localScale = new Vector3(this.transform.localScale.x - 3 * Time.deltaTime, this.transform.localScale.y - 3 * Time.deltaTime, 1);
-		} else if (time > 2/speed) {
+		} else if (time > 2/speed && time < 8/speed) {
+			this.transform.localScale = Vector3.zero;
+			this.GetComponentInChildren<Light>().intensity = 0;
+
+		} else if (time > 8/speed) {
 			Destroy(this.gameObject);
 		}
 	}

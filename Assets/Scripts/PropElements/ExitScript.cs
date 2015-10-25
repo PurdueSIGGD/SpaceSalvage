@@ -69,7 +69,7 @@ public class ExitScript : MonoBehaviour {
 			Player.SendMessage("EMP");
 			Player.GetComponent<Rigidbody2D>().AddForce(playerseat- Player.transform.position);
 			//Player.transform.position = playerseat + Vector3.back;
-			//Player.transform.rotation = Quaternion.Euler(0,0,90);
+			Player.transform.rotation = Quaternion.Euler(0,0,90);
 			Player.GetComponentInChildren<CraneController>().current = 10 *  new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
 			//print(Fader.color.a);
 			if (Fader.color.a < .5f) {

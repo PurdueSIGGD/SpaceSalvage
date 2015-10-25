@@ -13,6 +13,7 @@ public class OSTController : MonoBehaviour {
 
     void Start()
     {
+
         tracks = new ArrayList();
         tracks.Add(one);
         tracks.Add(two);

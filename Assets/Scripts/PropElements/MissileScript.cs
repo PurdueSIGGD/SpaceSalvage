@@ -27,9 +27,9 @@ public class MissileScript : MonoBehaviour {
 		thruster.GetComponentInChildren<Light>().intensity = 0;
 		SpriteRenderer sp = this.GetComponent<SpriteRenderer>();
 		if (damageoremp) { //color of main sprite
-			sp.color = damagecolor;
+			//sp.color = damagecolor;
 		} else {
-			sp.color = empcolor;
+			//sp.color = empcolor;
 		}
 	}
 
@@ -132,8 +132,9 @@ public class MissileScript : MonoBehaviour {
 		if (this.gameObject.GetComponent<AudioSource> ().isPlaying) {
 			this.gameObject.GetComponent<AudioSource> ().Stop ();
 		}
-		this.gameObject.GetComponent<AudioSource> ().PlayOneShot (missileexplosion);
 		if (this.GetComponent<RopeScript2D>() != null) {
+			print(this.GetComponent<RopeScript2D>().target);
+			this.GetComponent<RopeScript2D>().target.BroadcastMessage("ObjectTakenByShip", this.gameObject);
 			this.BroadcastMessage("DestroyRope");
 
 		}

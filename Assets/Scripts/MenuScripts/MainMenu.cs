@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour {
 	public AudioClip menuSelect;
 	public AudioClip menuBack;
 	public Font thisFont;
-
+	public Texture2D pointer;
 
 	public bool pressing, loading;
 	private float time;
@@ -42,12 +42,12 @@ public class MainMenu : MonoBehaviour {
 	private string KeyCodeEject;
 	private string KeyCodeUse;
 
-	private GUIStyle traverseButton, mainButton, keybindingButton, labelStyle;
+	private GUIStyle traverseButton, mainButton, keybindingButton, labelStyle, sliderStyle;
 	private GUIStyleState gs, gbs;
 
 	private string label,backLabel;
 	private bool clicked,backClicked;
-	public Texture2D buttonTexture, hoverButtonTexture;
+	public Texture2D buttonTexture, hoverButtonTexture, labelTexture;
 
 	private string menu = "Main";
 
@@ -57,11 +57,12 @@ public class MainMenu : MonoBehaviour {
 		validKeyCodes=(KeyCode[])System.Enum.GetValues(typeof(KeyCode));
 	}
 	void Start() {
+		//Cursor.SetCursor(pointer, Vector2.zero,CursorMode.Auto);
 		Time.timeScale = 1;
 		Init();
-		label = "Delete Player Progress";
+		label = "Reset\nProgress";
 		backLabel = "Back";
-		this.transform.position = new Vector3(20.5f, 19.3f, -10);
+		//this.transform.position = new Vector3(20.5f, 19.3f, -10);
 		guiPlacementX2 = .5f;
 		guiPlacementY2 = .5f;
 		guiPlacementY1 = .5f;
@@ -69,12 +70,14 @@ public class MainMenu : MonoBehaviour {
 		mainButton = new GUIStyle();
 		keybindingButton = new GUIStyle();
 		labelStyle = new GUIStyle();
-
-		labelStyle.font = traverseButton.font = mainButton.font = keybindingButton.font = labelStyle.font = thisFont;
+		sliderStyle = new GUIStyle();
+		sliderStyle.font = labelStyle.font = traverseButton.font = mainButton.font = keybindingButton.font = labelStyle.font = thisFont;
 		labelStyle.fontSize = (int)(Screen.height * .05f);
 		traverseButton.fontSize = (int)(Screen.height * .07f);
-		mainButton.fontSize = (int)(Screen.height * .08f);
+		mainButton.fontSize = (int)(Screen.height * .07f);
 		keybindingButton.fontSize = (int)(Screen.height * .05f);
+		sliderStyle.fontSize = mainButton.fontSize;
+		sliderStyle.alignment = TextAnchor.UpperCenter;
 		traverseButton.alignment = TextAnchor.MiddleCenter;
 		mainButton.alignment = TextAnchor.MiddleCenter;
 		keybindingButton.alignment = TextAnchor.MiddleCenter;
@@ -82,15 +85,26 @@ public class MainMenu : MonoBehaviour {
 
 		gbs = new GUIStyleState();
 		gs = new GUIStyleState();
+		GUIStyleState labely = new GUIStyleState();
+		gbs.textColor = Color.grey;
+		gs.textColor = Color.grey;
+		labely.background = this.labelTexture;
 		gs.background = this.buttonTexture;
 		gbs.background = this.hoverButtonTexture;
-
-		keybindingButton.normal = labelStyle.normal = traverseButton.normal = mainButton.normal = keybindingButton.normal = gs;
+		sliderStyle.normal = labelStyle.normal = labely;
+		keybindingButton.normal = traverseButton.normal = mainButton.normal = keybindingButton.normal = gs;
 		keybindingButton.hover = traverseButton.hover = mainButton.hover = keybindingButton.hover = gbs;
 
 
-
-
+		float currentAudioVal = 1;
+		if (PlayerPrefs.HasKey("audioVol")) {
+			currentAudioVal = PlayerPrefs.GetFloat("audioVol");			
+			print(currentAudioVal);
+			
+		} else {
+			PlayerPrefs.SetFloat("audioVol", currentAudioVal);
+		}
+		GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = currentAudioVal;
 		if (PlayerPrefs.HasKey("Up")) {
 			KeyCodeUp = PlayerPrefs.GetString("Up");
 		} else {
@@ -142,7 +156,9 @@ public class MainMenu : MonoBehaviour {
 
 	}
 	void Update() {
+		this.transform.rotation = Quaternion.Euler(0,0,0);
 		if (loading) {
+
 			time+= Time.deltaTime;
 			if (time > 0) {
 				Application.LoadLevel("ProcGen");
@@ -186,24 +202,43 @@ public class MainMenu : MonoBehaviour {
 
 		} 
 		if (menu == "Options") {
+			GUIContent aboutContent = new GUIContent("About");
+			if (GUI.Button(new Rect(Screen.width * .85f, Screen.height * .1f, Screen.width * .15f, Screen.height * .1f),aboutContent, mainButton)) {
+				menu = "about";
+			}
 			GUIContent deleteProgressContent = new GUIContent(label);
 			GUIContent keyContent = new GUIContent("KeyBinding");
 			GUIContent gameContent = new GUIContent(backLabel);
+			GUIContent audioContent = new GUIContent("Music\nVolume");
 			//GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
-			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .65f, Screen.width * .3f, Screen.height * .2f), deleteProgressContent, mainButton)) {
+			float currentAudioVal = 1;
+			if (PlayerPrefs.HasKey("audioVol")) {
+				currentAudioVal = PlayerPrefs.GetFloat("audioVol");			
+				print(currentAudioVal);
+
+			} else {
+				PlayerPrefs.SetFloat("audioVol", currentAudioVal);
+			}
+			float audioVal = 1;
+			GUI.Label(new Rect(Screen.width * .4f, Screen.height * .65f, Screen.width * .2f, Screen.height * .2f), audioContent, sliderStyle);
+			audioVal = GUI.HorizontalSlider(new Rect(Screen.width * .45f, Screen.height * .80f, Screen.width * .1f, Screen.height * .05f),currentAudioVal,0f,1f);
+			PlayerPrefs.SetFloat("audioVol", audioVal);
+			GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = audioVal;
+			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .65f, Screen.width * .25f, Screen.height * .2f), deleteProgressContent, mainButton)) {
 				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 
 				if (!clicked) {
 					clicked = true;
-					label = "Are you sure? Cannot be undone";
+					label = "Are you sure? \nCannot be \nundone";
 				} else {
+					GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = 1;
 					PlayerPrefs.DeleteAll();
 					menu = "Main";
 					
 				}
 			}
 			
-			if (GUI.Button(new Rect(Screen.width * .6f, Screen.height * .65f, Screen.width * .3f, Screen.height * .2f), keyContent, mainButton)) {
+			if (GUI.Button(new Rect(Screen.width * .65f, Screen.height * .65f, Screen.width * .25f, Screen.height * .2f), keyContent, mainButton)) {
 				////print("Just kidding, no keybindings yet");
 				//Application.LoadLevel ("KeyBindings");
 				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
@@ -227,10 +262,10 @@ public class MainMenu : MonoBehaviour {
 
 			GUIContent upContent = new GUIContent("Up: " + KeyCodeUp); 
 			GUIContent downContent = new GUIContent("Down: " + KeyCodeDown); 
-			GUIContent leftContent = new GUIContent("Left: " + KeyCodeLeft); 
-			GUIContent rightContent = new GUIContent("Right: " + KeyCodeRight); 
-			GUIContent retractContent = new GUIContent("Retract: " + KeyCodeRetract); 
-			GUIContent extendContent = new GUIContent("Extend: " + KeyCodeExtend); 
+			GUIContent leftContent = new GUIContent("Right: " + KeyCodeLeft); 
+			GUIContent rightContent = new GUIContent("Left: " + KeyCodeRight); 
+			GUIContent retractContent = new GUIContent("Cable-: " + KeyCodeRetract); 
+			GUIContent extendContent = new GUIContent("Cable+: " + KeyCodeExtend); 
 			GUIContent clawContent = new GUIContent("Claw: " + KeyCodeClaw); 
 			GUIContent ejectContent = new GUIContent("Eject: " + KeyCodeEject); 
 			GUIContent useContent = new GUIContent("Use: " + KeyCodeUse); 
@@ -449,6 +484,19 @@ public class MainMenu : MonoBehaviour {
 				
 			}
 
+
+		} else if (menu == "about") {
+			GUIContent labelContent = new GUIContent("This game was the project for Purdue's SIGGD,\n an ACM special interest group in game development.\n " +
+			                                         "Beginning in the spring of 2015,\n this game has had ongoing\n development with several members,\n and will be continued to be updated.");
+			GUI.Label(new Rect (Screen.width * .1f, Screen.height*.05f, Screen.width * .8f, Screen.height * .8f), labelContent, labelStyle);
+			GUIContent backContent = new GUIContent("Back");
+			if (!pressing && GUI.Button (new Rect (Screen.width/2 - Screen.width * .5f * .25f, Screen.height - Screen.height * .05f, Screen.width * .25f, Screen.height * .05f), backContent, mainButton)) {
+				
+				this.GetComponent<AudioSource>().PlayOneShot(this.menuBack);
+				menu =  "Options";
+				clicked = false;
+				
+			}
 		} else {
 			if (!loading) GUI.DrawTexture(new Rect(Screen.width * .1f, Screen.height * .1f, Screen.width * .8f, Screen.height * .5f), mainLogo);
 		}

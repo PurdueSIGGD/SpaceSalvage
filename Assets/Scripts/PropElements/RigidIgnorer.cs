@@ -13,15 +13,17 @@ public class RigidIgnorer : MonoBehaviour {
 	private float time;
 	// Use this for initialization
 	void Start () {
-		refresh_rigids();
+		//Rigidbody2D[] rigids = GameObject.FindObjectsOfType<Rigidbody2D>();
+
+		//refresh_rigids(rigids);
 
 
 	}
 	void OnCollisionEnter2D(Collision2D col) {
 
 	}
-	void refresh_rigids() {
-		Rigidbody2D[] rigids = GameObject.FindObjectsOfType<Rigidbody2D>();
+	void refresh_rigids(Rigidbody2D[] rigids) {
+
 		foreach (Rigidbody2D d in rigids) {
 			if (d.GetComponent<RopeCrusher>() == null) { //add the exceptions here
 				Physics2D.IgnoreCollision(d.GetComponent<Collider2D>(), this.GetComponent<Rigidbody2D>().GetComponent<Collider2D>());
@@ -30,13 +32,9 @@ public class RigidIgnorer : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		time+= Time.deltaTime;
 
-		if (time > 1) {
-			refresh_rigids();
-			time = 0;
-		}
 	}
+
 	void IgnoreMe(Collider2D col) {
 		Physics2D.IgnoreCollision(col, this.GetComponent<Collider2D>());
 	}

@@ -145,11 +145,11 @@ public class HealthController : MonoBehaviour {
 		string tubesmessage = ejected?" (disconnected)":"";
 		float newoxy = (oxy >= startingoxy - 3*Time.deltaTime)?startingoxy:oxy; //so it doesnt go from 29 to 30 constantly
 		string final = 
-			"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +
+			/*"Suit Integrity: " + health.ToString("F2") + "/" + startinghealth.ToString("F2") + "\n" +*/
 				/*"Oxygen Levels: " + newoxy.ToString("F2") + "/" + startingoxy.ToString("F2") + "\n" +*/
-				"Health: " + med.ToString("F2") + "/100.00\n" +
-				"Cash: " + wallet + "\n" + 
-				"Tube length left: " + tubesleft + m + tubesmessage + "\n" + 
+				/*"Health: " + med.ToString("F2") + "/100.00\n" +*/
+				/*"Cash: " + wallet + "\n" + */
+				/*"Tube length left: " + tubesleft + m + tubesmessage + "\n" + */
 				words;
 		((GUIText)text.GetComponent("GUIText")).text = final;
 
@@ -306,6 +306,9 @@ public class HealthController : MonoBehaviour {
 			}
 		}
 	}
+	public float GetArmor() {
+		return health>100 ? health%100 : 0;
+	}
 	void changeWallet(int i) {
 		wallet += i;
 	}
@@ -321,8 +324,21 @@ public class HealthController : MonoBehaviour {
 	public float GetOxy() {
 		return oxy;
 	}
+	public float GetHealth() {
+		return this.med;
+	}
+	public float getIntegrity() {
+		return this.health;
+	}
+	public float getIntegrityPercent() {
+		return this.health/this.startinghealth;
+	}
 	public float GetOxyPercent() {
 		return oxy/this.startingoxy;
+	}
+	public int GetWallet() {
+
+		return wallet;
 	}
 	void Im_Leaving() { //last function to pass
 		PlayerPrefs.SetInt ("wallet", wallet);

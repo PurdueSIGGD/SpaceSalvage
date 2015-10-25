@@ -12,7 +12,6 @@ public class BackgroundSound : MonoBehaviour {
     public AudioClip eight;
     public AudioClip nine;
     public AudioClip ten;
-    public AudioClip eleven;
     public AudioClip mOne;
     public AudioClip mTwo;
     public AudioClip mThree;
@@ -30,10 +29,24 @@ public class BackgroundSound : MonoBehaviour {
     private ArrayList aggregateMusic;
 	// Use this for initialization
 	void Start () {
+		float audioVol = 1;
+		if (PlayerPrefs.HasKey("audioVol")) {
+			audioVol = PlayerPrefs.GetFloat("audioVol");
+		} else {
+			PlayerPrefs.SetFloat("audioVol", audioVol);
+		}
+		this.GetComponent<AudioSource>().volume = audioVol;
         commercials = new ArrayList();
         commercials.Add(one);
         commercials.Add(two);
         commercials.Add(three);
+		commercials.Add(four);
+		commercials.Add(five);
+		commercials.Add(six);
+		commercials.Add(seven);
+		commercials.Add(eight);
+		commercials.Add(nine);
+		commercials.Add (ten);
         aggregateMusic = new ArrayList();
         tracks = new ArrayList();
         tracks.Add(mOne);
@@ -51,12 +64,12 @@ public class BackgroundSound : MonoBehaviour {
         foreach (AudioClip sound in tracks)
         {
             aggregateMusic.Add(sound); //Seven Duplicates balnce out a 3:1 Ratio for 11 commercials
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
         }
         foreach (AudioClip sound in commercials)
         {

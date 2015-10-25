@@ -7,6 +7,8 @@ public class PauseScript : MonoBehaviour {
 	bool IsPaused;
 	bool tutorial;
 	bool playing;
+	bool loading;
+	float time;
 	GameObject[] infos;
 	public AudioClip clip;
 	GUIStyle labelStyle, buttonStyle; 
@@ -18,7 +20,7 @@ public class PauseScript : MonoBehaviour {
 		buttonStyle = new GUIStyle();
 
 		labelStyle.fontSize = (int)(Screen.height * .2f);
-		buttonStyle.fontSize = (int)(Screen.height * .08f);
+		buttonStyle.fontSize = (int)(Screen.height * .05f);
 		labelStyle.font = buttonStyle.font = thisFont;
 		gbs = new GUIStyleState();
 		gs = new GUIStyleState();
@@ -49,6 +51,11 @@ public class PauseScript : MonoBehaviour {
 	
 	void Update () {
 		//print(PlayerPrefs.GetInt("tutorial"));
+
+		if (loading) {
+				
+				Application.LoadLevel("MainMenu");
+		}
 		if (Input.GetKeyDown(KeyCode.Escape) ){
 			IsPaused = !IsPaused;
 
@@ -61,8 +68,8 @@ public class PauseScript : MonoBehaviour {
 	
 	void OnGUI(){
 		GUIContent labelContent = new GUIContent("Paused");
-		GUIContent tutorialOnContent = new GUIContent("Turn Tutorial OFF");
-		GUIContent tutorialOffContent = new GUIContent("Turn Tutorial ON");
+		GUIContent tutorialOnContent = new GUIContent("Turn Tutorial\nOFF");
+		GUIContent tutorialOffContent = new GUIContent("Turn Tutorial\nON");
 		GUIContent returnContent = new GUIContent("Return");
 		GUIContent mainContent = new GUIContent("Main Menu");
 		GUIContent exitContent = new GUIContent("Exit Game");
@@ -70,12 +77,14 @@ public class PauseScript : MonoBehaviour {
 		if (IsPaused){
 			this.BroadcastMessage("PauseGame", true);
 			Time.timeScale = 0;
-			GUI.Box (new Rect ((Screen.width * .3f),Screen.height * .1f,Screen.width * .4f,Screen.height * .2f), labelContent, labelStyle);
+			Vector2 ffs = labelStyle.CalcSize(labelContent);
+			GUI.Box (new Rect (Screen.width * .5f - 1.3f* ffs.x * .5f,Screen.height * .1f,1.3f*ffs.x,ffs.y), labelContent, labelStyle);
 			if (tutorial) {
 				if (GUI.Button(new Rect (Screen.width * .4f,Screen.height * .5f,Screen.width * .2f,Screen.height * .1f), tutorialOnContent, buttonStyle)) {
 					playing = true;
 					tutorial = false;
 					PlayerPrefs.SetInt("tutorial", 1);
+					this.GetComponent<InteractController>().SendMessage("GetMessage","");
 					foreach (GameObject g in infos) {
 						g.SetActive(false);
 					}
@@ -93,8 +102,9 @@ public class PauseScript : MonoBehaviour {
 
 			// Make the Quit button.
 			if (GUI.Button (new Rect (Screen.width * .2f, (Screen.height * .9f) ,Screen.width * .2f,Screen.height * .1f), mainContent, buttonStyle)) {
-				playing = true;
-				Application.LoadLevel("MainMenu");
+				//playing = true;
+				loading = true;
+				time = 0;
 			}
 
 			if(GUI.Button(new Rect(Screen.width * .4f,Screen.height * .7f,Screen.width * .2f,Screen.height * .1f), returnContent, buttonStyle)){

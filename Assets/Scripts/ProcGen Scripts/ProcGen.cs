@@ -11,7 +11,7 @@ using System.Collections;
 public class ProcGen : MonoBehaviour {
 	private float time;
 	private float timesAccessed = 0;
-
+	private ArrayList frozen;
 	public GameObject asterioid;
 	public GameObject small_ship;
 	public GameObject large_ship;
@@ -23,6 +23,7 @@ public class ProcGen : MonoBehaviour {
 	public GameObject large1_loot;
 	public GameObject large2_loot;
 	public GameObject large3_loot;
+	public GameObject oxyStation;
 
 	public GameObject laser;
 	public GameObject emp;
@@ -46,6 +47,7 @@ public class ProcGen : MonoBehaviour {
 	public float large1_loot_chance;
 	public float large2_loot_chance;
 	public float large3_loot_chance;
+	public float OxyStation_Chance;
 			
 	public float inside_small_loot_chance;
 	public float inside_med_loot_chance;
@@ -79,6 +81,7 @@ public class ProcGen : MonoBehaviour {
 	private float distanceLootChance;
 	
 	void Start() {
+		frozen = new ArrayList();
 		isGenerating = true;
 		//we load up the initial level, which will consist of the player, the ship, the guitext, a random GameObject containing this script, and the camera.
 		//camera has the focus set to the player, the ship has the focus set to the player
@@ -198,7 +201,7 @@ public class ProcGen : MonoBehaviour {
 
 				//print(g.name);
 			if (c != null && c.GetComponent<Spawner>()) {
-				if (GameObject.Find ("Player") != null) distanceLootChance = Vector3.Distance(c.position, GameObject.Find("Player").transform.position)/1000;
+				if (GameObject.Find ("Player") != null) distanceLootChance = Vector3.Distance(c.position, GameObject.Find("Player").transform.position)/3000;
 				else distanceLootChance = Vector3.Distance(c.position, Vector3.zero)/1000;
 				bool bRotation = !c.GetComponent<Spawner>().keepRotation;
 
@@ -224,7 +227,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large1 loot
-				if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
+				if (Random.value <  (tmp_inside_loot_chance + inside_large1_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large1_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 					if (bRotation) thingy.transform.rotation = c.rotation;
@@ -235,7 +238,7 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large2 loot
-				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
+				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + distanceLootChance)) {
 						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 					if (bRotation) 	thingy.transform.rotation = c.rotation;
@@ -245,8 +248,8 @@ public class ProcGen : MonoBehaviour {
 						continue;
 					}
 					// spawn large3 loot
-				if (Random.value < (tmp_inside_loot_chance + inside_large2_loot_chance + c.GetComponent<Spawner>().all_loot_chance + distanceLootChance)) {
-						GameObject thingy = (GameObject)Instantiate(large2_loot, c.position, Quaternion.identity);
+				if (Random.value < (tmp_inside_loot_chance + inside_large3_loot_chance + distanceLootChance)) {
+						GameObject thingy = (GameObject)Instantiate(large3_loot, c.position, Quaternion.identity);
 						thingy.transform.position = c.position + Vector3.up * .01f;
 					if (bRotation) thingy.transform.rotation = c.rotation;
 					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
@@ -255,6 +258,16 @@ public class ProcGen : MonoBehaviour {
 
 						continue;
 					}
+				//spawn oxy station
+				if (Random.value < (OxyStation_Chance + distanceLootChance)) {
+					GameObject thingy = (GameObject)Instantiate(this.oxyStation, c.position, Quaternion.identity);
+					thingy.transform.position = c.position + Vector3.up * .01f;
+					if (bRotation) thingy.transform.rotation = c.rotation;
+					else thingy.transform.rotation = Quaternion.Euler(0,0,Random.Range(0, 360));
+					//	thingy.transform.parent = g.transform;
+					
+					continue;
+				}
 					// spawn debris chance
 					if (Random.value < (inside_debris_chance)) {
 						GameObject thingy = (GameObject)Instantiate(small_debris, c.position, Quaternion.identity);
@@ -350,6 +363,7 @@ public class ProcGen : MonoBehaviour {
 			
 	}
 	GameObject instantiateVerify(GameObject g, Vector3 v, Quaternion i) {
+		if (!g.GetComponent<MultiResultStarter>()) return (GameObject)GameObject.Instantiate(g, v, i);
 		Collider2D[] hitColliders = Physics2D.OverlapCircleAll(v, g.GetComponent<MultiResultStarter>().radius); 
 		foreach (Collider2D c in hitColliders) {
 			return null;
@@ -486,6 +500,7 @@ public class ProcGen : MonoBehaviour {
 					//bool isRope = r.GetComponent<JointScript>() != null;
 					if (r.GetComponent<DebrisStart>() || r.GetComponent<Loot>() || r.GetComponent<ItemDissolve>()) { //only change active state if it has the debris start or is loot, (ignoring edgebounds, joints, the ship, etc.)
 						if (Vector3.Distance(player.transform.position, r.transform.position) > 60) { //everthing outside of a 100 radius will stop
+							frozen.Add(r.gameObject);
 							r.gameObject.SetActive(false);
 							if (r.GetComponent<DebrisStart>()) {
 								Transform[] ts = r.GetComponentsInChildren<Transform>();
@@ -495,8 +510,8 @@ public class ProcGen : MonoBehaviour {
 								//r.SendMessage("Stop");
 							}
 							//r.Sleep();
-						} else {
-							r.SetActive(true);
+						}/* else {
+							r.gameObject.SetActive(true);
 							//r.WakeUp();
 							if (r.GetComponent<DebrisStart>()) {
 								Transform[] ts = r.GetComponentsInChildren<Transform>();
@@ -505,7 +520,7 @@ public class ProcGen : MonoBehaviour {
 								}
 								//r.SendMessage("ReStart");
 							}
-						}
+						}*/
 					}
 					if (r.GetComponent<JointScript>()) {
 						if (Vector3.Distance(player.transform.position, r.transform.position) > 60) { //everthing outside of a 100 radius will stop
@@ -515,6 +530,23 @@ public class ProcGen : MonoBehaviour {
 						}
 					}
 				}
+				ArrayList temp = new ArrayList();
+				foreach (GameObject r in frozen) {
+					if ((player != null &&  r != null) && Vector3.Distance(player.transform.position, r.transform.position) < 60) {
+						r.SetActive(true);
+						if (r.GetComponent<DebrisStart>()) {
+							Transform[] ts = r.GetComponentsInChildren<Transform>();
+							foreach (Transform tt in ts) {
+								tt.gameObject.SetActive(true);
+							}
+							//r.SendMessage("ReStart");
+						}
+
+					} else {
+						temp.Add(r.gameObject);
+					}
+				}
+				frozen = temp;
 			}
 		}
 		//GameObject[] gg = Resources.FindObjectsOfTypeAll<GameObject>();

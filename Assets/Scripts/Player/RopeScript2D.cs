@@ -56,11 +56,16 @@ public class RopeScript2D : MonoBehaviour {
 	private float startingdistance;
 	private int tubecut;
 
+	public AudioClip brokenRopeClip, brokenRopeAir;
 	void Start() {
-		if (PlayerPrefs.HasKey("tubecut")) {
-			tubecut = PlayerPrefs.GetInt("tubecut");
+		if (shiprope) {
+			if (PlayerPrefs.HasKey("tubecut")) {
+				tubecut = PlayerPrefs.GetInt("tubecut");
+			} else {
+				PlayerPrefs.SetInt("tubecut",0);
+			}
 		} else {
-			PlayerPrefs.SetInt("tubecut",0);
+			tubecut = 0;
 		}
 
 
@@ -80,7 +85,7 @@ public class RopeScript2D : MonoBehaviour {
 			BuildRope();
 		} 
 		//print(tubecut);
-		if (tubecut == 1) {
+		if (shiprope && tubecut == 1) {
 			this.brokenrope = true;
 
 		}
@@ -129,6 +134,7 @@ public class RopeScript2D : MonoBehaviour {
 				if (indexovertime==1) {
 					hinger = new GameObject("Hinger"); //the hinger's purpose is to connect the rope to the center of gravity, as if it was the outside of the object
 					hinger.transform.position = vec;
+					hinger.layer = 11;
 					//do this thing
 					DistanceJoint2D dj = hinger.AddComponent<DistanceJoint2D>();
 					hinger.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -285,7 +291,7 @@ public class RopeScript2D : MonoBehaviour {
 			if (line != null) line.enabled = false;
 
 		} else {
-			if (this.hasgotvec) { //so no rope appears before it has the proper plaements
+			if (this.hasgotvec && !this.isgenerating) { //so no rope appears before it has the proper plaements
 
 				line.SetVertexCount(2);
 				if (vec == Vector3.zero) {
@@ -303,6 +309,7 @@ public class RopeScript2D : MonoBehaviour {
 	{
 		//creating the game objects to initiate physics, function called upon earlier
 		GameObject newie = new GameObject("Joint_" + n);
+		newie.layer = 11;
 		joints.Add (newie);
 		lastnew = newie;
 		Rigidbody2D rigid = newie.AddComponent<Rigidbody2D>();
@@ -327,7 +334,7 @@ public class RopeScript2D : MonoBehaviour {
 			SpriteRenderer sp = newie.AddComponent<SpriteRenderer>();
 			sp.sprite = spriteconnector;
 		}
-		newie.AddComponent<RigidIgnorer>();
+		//newie.AddComponent<RigidIgnorer>();
 		ph.enableCollision = false;
 		ph.frequency = frequency;
 		ph.dampingRatio = dampening;
@@ -421,17 +428,20 @@ public class RopeScript2D : MonoBehaviour {
 	void Eject() {
 		if (!isgenerating) {
 			if (!ejected) {
+				GameObject.Find("SoundEffectController").transform.FindChild("EjectSound").GetComponent<AudioSource>().Play();
+
 				if (!brokenrope) { //spawn a connector, float away
 					ejected = true;
 					connector = new GameObject ("Connector");
 					GameObject innercol = new GameObject("Innercol");
+					connector.layer = 11;
 					CircleCollider2D icc = innercol.AddComponent<CircleCollider2D>();
 					Rigidbody2D rg = connector.AddComponent<Rigidbody2D> ();
 					CircleCollider2D cc = connector.AddComponent<CircleCollider2D> ();
 					SpriteRenderer sp = connector.AddComponent<SpriteRenderer> ();
 					SpringJoint2D sj = connector.AddComponent<SpringJoint2D> ();
 					LineRenderer lr = connector.AddComponent<LineRenderer> ();
-					connector.AddComponent<RigidIgnorer>();
+					//connector.AddComponent<RigidIgnorer>();
 					lr.material = line.material;
 					lr.SetWidth (linewidth, linewidth);
 					GameObject.Find("Player").GetComponent<LineRenderer>().enabled = false;
@@ -463,6 +473,7 @@ public class RopeScript2D : MonoBehaviour {
 				
 				} 
 				ejected = true;
+				target.GetComponent<LineRenderer>().enabled = false;
 				LineRenderer ls = target.GetComponent<LineRenderer>();
 				SpringJoint2D[] sjs = target.GetComponents<SpringJoint2D>();
 				foreach (SpringJoint2D sj in sjs) {

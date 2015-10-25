@@ -16,7 +16,7 @@ public class OxygenStation : MonoBehaviour {
 
 		startingoxy = oxygenAmt;
 		child = new GameObject("Gauge");
-		child.transform.position = this.transform.position;
+		child.transform.position = this.transform.position + Vector3.up * .01f;
 		//child.transform.position = new Vector3);
 		child.transform.parent = this.transform;
 		SpriteRenderer sp = child.AddComponent<SpriteRenderer>();
@@ -29,7 +29,7 @@ public class OxygenStation : MonoBehaviour {
 	void Update () {
 		SpriteRenderer sp = child.GetComponent<SpriteRenderer>();
 		sp.color = new Color(1 - oxygenAmt/startingoxy, oxygenAmt/startingoxy, 0 , sp.color.a);
-		child.transform.position = new Vector3(this.transform.position.x + oxygaugeoffset, this.transform.position.y, this.transform.position.z);
+		child.transform.position = new Vector3(this.transform.position.x + oxygaugeoffset, this.transform.position.y, this.transform.position.z - .3f);
 		if (oxygenAmt > .2f) {
 			child.transform.localScale = new Vector2(1/this.transform.localScale.x,10 *(1-(oxygenAmt))/(startingoxy * this.transform.localScale.y));
 
@@ -46,7 +46,11 @@ public class OxygenStation : MonoBehaviour {
 				oxygenAmt -= 3 * Time.deltaTime;
 				col.SendMessage("changeOxy", 10 * Time.deltaTime);
 				col.SendMessage("GettingOxy", true);
-			} 
+			} else {
+				if (oxygenAmt > 0) {
+					oxygenAmt -= Time.deltaTime;
+				}
+			}
 
 		}
 

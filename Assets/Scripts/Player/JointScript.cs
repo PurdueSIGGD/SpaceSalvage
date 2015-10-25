@@ -25,6 +25,7 @@ public class JointScript : MonoBehaviour {
 	//private GameObject connected;
 	// Use this for initialization
 	void Start () {
+		//Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), GameObject.Find("Ending").GetComponent<Collider2D>());
 		severed = false;
 		if (!shiprope) shipRopeIndex = -1;
 		if (this.name == "Player" && !shiprope && this.transform.FindChild("SubLine") == null) {
@@ -45,16 +46,23 @@ public class JointScript : MonoBehaviour {
 		//}
 			sp = this.GetComponent<SpringJoint2D>();
 		lr.SetVertexCount(2);
+		lr.useLightProbes = false;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		oxyTime += Time.deltaTime;
-
-		if (broken || severed || spraying) {
+		if (this.timeSinceOxy > 10) GameObject.Destroy(this.gameObject);
+		if ((broken || severed || spraying)&&this.name != "Player" && shiprope) {
 			timeSinceOxy +=Time.deltaTime;
+			AudioSource a;
+			if (!(a=this.GetComponent<AudioSource>())) a = this.gameObject.AddComponent<AudioSource>();
+			a.clip = GameObject.Find("Ship").GetComponent<RopeScript2D>().brokenRopeAir;
+			if (!a.isPlaying) a.Play();
+			a.volume -= 0.2f*Time.deltaTime;
 			if (oxyTime > .1f && ( !spraying || (timeSinceOxy < stopOxy && spraying))) {
+
 				GameObject thingy = (GameObject)Instantiate(GameObject.Find("Player").GetComponent<HealthController>().particle, this.transform.position, Quaternion.identity); //spawning particles
 				float r = Random.value;
 				//thingy.GetComponent<SpriteRenderer>().sprite = ;
@@ -67,6 +75,7 @@ public class JointScript : MonoBehaviour {
 
 			}
 		}
+
 
 
 		sleeping = this.GetComponent<Rigidbody2D>().IsSleeping();
@@ -130,6 +139,11 @@ public class JointScript : MonoBehaviour {
 							lr.SetPosition(2, new Vector3(attempt.connectedBody.transform.position.x, attempt.connectedBody.transform.position.y, -0.29f));
 						}
 					}
+				} else {
+					if (sp.connectedBody == null) {
+						lr.SetVertexCount(0);
+
+					}
 				}
 				/*if (this.name != "Player") {
 					thepoints[i] = Vector2.zero;
@@ -168,7 +182,22 @@ public class JointScript : MonoBehaviour {
 
 	}
 	void BrokenJoint() { //get rid of the joint
-		if (this.GetComponent<SpringJoint2D>()) this.GetComponent<SpringJoint2D>().connectedBody.GetComponent<JointScript>().spraying = true;
+		if (!GameObject.Find("Ship").GetComponent<RopeScript2D>().brokenrope && this.name != "Player") {
+			AudioSource a = this.gameObject.AddComponent<AudioSource>();
+			a.clip = GameObject.Find("Ship").GetComponent<RopeScript2D>().brokenRopeClip;
+			a.volume = .6f;
+			a.loop = false;
+			a.Play();
+		}
+
+
+		if (this.GetComponent<SpringJoint2D>()) {
+			if (this.GetComponent<SpringJoint2D>().connectedBody.GetComponent<JointScript>()) {
+				this.GetComponent<SpringJoint2D>().connectedBody.GetComponent<JointScript>().spraying = true;
+			} else {
+				//do nothing
+			}
+		}
 		Destroy(sp);
 		lr.SetVertexCount(0);
 		broken = true;

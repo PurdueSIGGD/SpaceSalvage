@@ -14,7 +14,7 @@ public class TurretRanger : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (time > 3) {
+		if (time > 1.5f) {
 			tenabled = true;
 		} else {
 			time+= Time.deltaTime;

@@ -4,15 +4,15 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 	public KeyCode kup = KeyCode.W;
 	public KeyCode kdown = KeyCode.S;
-	public KeyCode kleft = KeyCode.A;
-	public KeyCode kright = KeyCode.D;
+	public KeyCode kleft = KeyCode.D;
+	public KeyCode kright = KeyCode.A;
 
 	public int position = 0;
 	public int sampleRate = 0;
 	public float frequency = 440;
 	public float moverate = 2;
 	public float startingmoverate;
-	public bool emp, pause;
+	public bool emp, pause, dying;
     public GameObject empAudio;
 
     private AudioSource empAudioSource;
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 
 
-		if (emp && !pause) { //controls if we can get control or not
+		if (emp && !pause && !dying) { //controls if we can get control or not
 			currentemptime+= Time.deltaTime;
             if (!empAudioSource.isPlaying)
             {
@@ -380,5 +380,8 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	void StopDoingThat() {
 		pause = true;
+	}
+	void wearedying() {
+		dying = true;
 	}
 }

@@ -301,7 +301,7 @@ public class CraneController : MonoBehaviour {
 				Collider2D[] hitColliders = Physics2D.OverlapCircleAll(ending.transform.position, .25f); 
 				foreach (Collider2D c in hitColliders) {
 
-					if (c.gameObject.layer == this.gameObject.layer && c != null && c.gameObject != Player && !c.isTrigger && c.GetComponent<RigidIgnorer>() == null && !releaseready) { //see if colliding
+					if (!c.GetComponent<JointScript>() && (c.gameObject.layer == this.gameObject.layer || c.gameObject.layer == 12 /*crates*/ || c.gameObject.layer == 13 /*missiles*/) && c != null && c.gameObject != Player && !c.isTrigger && !releaseready) { //see if colliding
 						retracting = true;
 						this.opened = false;
 						firing = false;
@@ -373,13 +373,30 @@ public class CraneController : MonoBehaviour {
 				}
 			} 
 		} else {
-			if (focus != null && focus.GetComponent<RopeScript2D>() != null) {
+			if (focus != null && focus.GetComponent<RopeScript2D>() != null && focus.GetComponent<RopeScript2D>().hinger != null) {
 				ending.transform.position = focus.GetComponent<RopeScript2D>().hinger.transform.position;
 				if (!pause) {
 					ending.eulerAngles = new Vector3(0,0, lastendingangle + (focus.transform.eulerAngles.z - firstfocusangle ));
 				}
 			} else {
-				ending.transform.position = Player.transform.position + new Vector3(0,0,.01f);
+				grabbed = false;
+				//GameObject subline = Player.transform.FindChild("SubLine").gameObject;
+				//			print(subline.name);
+				Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().enabled = false;
+				Player.transform.FindChild("SubLine").GetComponent<LineRenderer>().SetVertexCount(0);
+				Destroy(focus.GetComponent<LineRenderer>());
+				this.opened = false;	
+				//Player.GetComponent<LineRenderer>().enabled = false;
+				// normally I would destroy the component here, however I am not sure how to get the specific component for springjoing2D without destroying my other one.
+				firing = false;
+				retracting = true;
+				focus.BroadcastMessage("DestroyRope");
+				opened = true;
+				Player.GetComponent<LineRenderer>().material = this.shipmat; //so player isnt stuck with crane mat
+				JointScript[] jss = Player.GetComponents<JointScript>();
+				foreach (JointScript jass in jss) {
+					if (!jass.shiprope) 	Destroy(jass);
+				}
 			}
 		}
 
@@ -444,4 +461,5 @@ public class CraneController : MonoBehaviour {
 			}
 		}
 	}
+
 }
