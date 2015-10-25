@@ -2,7 +2,10 @@
 using System.Collections;
 
 public class UpgradeScript : MonoBehaviour {
-	
+	public AudioClip[] coinSounds;
+
+
+
 	public Texture backgroundTexture;
 	public Texture player;
 	public float guiPlacementX1;

@@ -24,6 +24,7 @@ public class ItemDissolve : MonoBehaviour {
 			col.SendMessage("changeWallet", 1);
 			DestroyObject(this.gameObject);
 		} else if(col.transform.GetComponentInParent<CraneController>() != null){
+			CoinSound.GetComponent<AudioSource>().Play();
 			col.transform.parent.transform.parent.SendMessage("changeWallet", 1);
 			DestroyObject(this.gameObject);
 

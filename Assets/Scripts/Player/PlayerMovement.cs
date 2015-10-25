@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float frequency = 440;
 	public float moverate = 2;
 	public float startingmoverate;
-	public bool emp;
+	public bool emp, pause;
     public GameObject empAudio;
 
     private AudioSource empAudioSource;
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update() {
 
 
-		if (emp) { //controls if we can get control or not
+		if (emp && !pause) { //controls if we can get control or not
 			currentemptime+= Time.deltaTime;
             if (!empAudioSource.isPlaying)
             {
@@ -377,5 +377,8 @@ public class PlayerMovement : MonoBehaviour {
 
 			
 
+	}
+	void StopDoingThat() {
+		pause = true;
 	}
 }

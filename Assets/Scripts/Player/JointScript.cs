@@ -127,7 +127,7 @@ public class JointScript : MonoBehaviour {
 							/*if (this.name != "Player" && this.name != "Joint_1") thepoints[i] = (attempt.connectedBody.transform.position - this.transform.position);
 							i++;*/
 							lr.SetVertexCount(3);
-							lr.SetPosition(2, attempt.connectedBody.transform.position);
+							lr.SetPosition(2, new Vector3(attempt.connectedBody.transform.position.x, attempt.connectedBody.transform.position.y, -0.29f));
 						}
 					}
 				}

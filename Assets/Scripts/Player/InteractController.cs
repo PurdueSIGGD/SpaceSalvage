@@ -25,6 +25,7 @@ using System.Collections;
  * 
  */
 public class InteractController : MonoBehaviour {
+	public Font thisFont;
 	private GameObject go, target;
 	public string message;
 	private KeyCode use = KeyCode.F;
@@ -34,10 +35,12 @@ public class InteractController : MonoBehaviour {
 
 		go = new GameObject("ExitText");
 		GUIText gu = go.AddComponent<GUIText>();
+		gu.transform.position = new Vector3(.6f, .5f, 0);
+		gu.font = thisFont;
 		gu.text = "";
 		message = "";
 		gu.color = new Color(1,1,1);
-		gu.pixelOffset = new Vector2(Screen.width * 4 / 6, Screen.height/2); //positioning in screen
+		//gu.pixelOffset = new Vector2(Screen.width * 4 / 6, Screen.height/2); //positioning in screen
 		gu.fontSize = 15;
 
 		if (PlayerPrefs.HasKey("Use")) { //get key we use for the use function

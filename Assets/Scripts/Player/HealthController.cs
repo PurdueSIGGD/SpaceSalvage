@@ -107,6 +107,7 @@ public class HealthController : MonoBehaviour {
 		} else { //see what issue we may have
  			emergency = true;
 			if (emp && !pause){
+				//print("in emp");
 				//print(transform.FindChild("SoundEffectController").FindChild("EMPSound") + " " + emptime/rechargetime);
 				transform.FindChild("SoundEffectController").FindChild("EMPSound").GetComponent<AudioSource>().volume = 1 - emptime/rechargetime;
 				rechargeEmpDiff = rechargetime - emptime;

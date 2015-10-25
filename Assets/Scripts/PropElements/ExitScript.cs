@@ -29,6 +29,8 @@ public class ExitScript : MonoBehaviour {
 
 	void Use() {
 		if (!exiting) {
+			Player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			Player.GetComponent<Rigidbody2D>().drag = .4f;
 			exiting = true;
 		}
 	}
@@ -41,7 +43,7 @@ public class ExitScript : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
-			col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map!");
+			col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
 			col.SendMessage("GetGO", this.gameObject);
 
 		}
@@ -51,7 +53,7 @@ public class ExitScript : MonoBehaviour {
 			if (exiting) {
 				col.SendMessage("GetMessage", "");
 			} else {
-				col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map!");
+				col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
 					col.SendMessage("GetGO", this.gameObject);
 					
 
@@ -62,13 +64,14 @@ public class ExitScript : MonoBehaviour {
 	void Update () {
 
 		if (exiting) {
-				
+
 			Player.SendMessage("StopDoingThat"); //stop the health and oxy loss
 			Player.SendMessage("EMP");
-			Player.transform.position = playerseat + Vector3.back;
-			Player.transform.rotation = Quaternion.Euler(0,0,90);
-			Player.GetComponentInChildren<CraneController>().current = new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
-			print(Fader.color.a);
+			Player.GetComponent<Rigidbody2D>().AddForce(playerseat- Player.transform.position);
+			//Player.transform.position = playerseat + Vector3.back;
+			//Player.transform.rotation = Quaternion.Euler(0,0,90);
+			Player.GetComponentInChildren<CraneController>().current = 10 *  new Vector3(playerseat.x, playerseat.y + .5f, playerseat.z);
+			//print(Fader.color.a);
 			if (Fader.color.a < .5f) {
 				
 				Fader.transform.localScale = new Vector3(442.6756f, 163.451f, 10);
