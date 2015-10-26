@@ -6,6 +6,7 @@ public class Loot : MonoBehaviour {
 	public bool isbelonging = false;
 	public string itemtype;
 	public float timesincekinematic;
+	public int index;
 
 
 	// Use this for initialization

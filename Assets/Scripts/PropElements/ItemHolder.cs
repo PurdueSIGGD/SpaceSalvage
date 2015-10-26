@@ -4,7 +4,7 @@ using System;
 
 public class ItemHolder : MonoBehaviour {
 	//to hold items in the ship
-
+	private int[] placements;
 	public int numpackages;
 	public int maxnumpackages = 3;
 	public Vector2 packagearea;
@@ -16,13 +16,22 @@ public class ItemHolder : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetInt("capacity",3);
 		}
+		placements = new int[maxnumpackages];
 		numpackages = 0;
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 
 		if (col.GetComponent<Rigidbody2D>() != null) { //attach the item to the ship
 			if (numpackages < maxnumpackages && !col.GetComponent<Rigidbody2D>().isKinematic && col.GetComponent<Loot>() && col.GetComponent<Loot>().timesincekinematic > 8) {
-				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * numpackages), this.transform.position.y + packagearea.y ,-1 + (.01f * numpackages));
+				int i;
+				for (i = 0; i < maxnumpackages; i++) {
+					if (placements[i] == 0) {
+						col.GetComponent<Loot>().index = i;
+						placements[i] = 1;
+						break;
+					}
+				}
+				col.transform.position = new Vector3(packagearea.x + this.transform.position.x - (1 * i), this.transform.position.y + packagearea.y ,-1 + (.01f * i));
 				this.GetComponent<AudioSource>().Play();
 
 				col.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -50,6 +59,7 @@ public class ItemHolder : MonoBehaviour {
 		if (col.GetComponent<Loot>() != null) {
 			if (col.GetComponent<Loot>().isbelonging) {
 				col.GetComponent<Loot>().isbelonging = false;
+				placements[col.GetComponent<Loot>().index] = 0;
 				if (numpackages > 0) {
 						numpackages--;
 					}

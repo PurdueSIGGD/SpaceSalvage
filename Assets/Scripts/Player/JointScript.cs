@@ -59,7 +59,7 @@ public class JointScript : MonoBehaviour {
 			AudioSource a;
 			if (!(a=this.GetComponent<AudioSource>())) a = this.gameObject.AddComponent<AudioSource>();
 			a.clip = GameObject.Find("Ship").GetComponent<RopeScript2D>().brokenRopeAir;
-			if (!a.isPlaying) a.Play();
+			if (!a.isPlaying && a.enabled) a.Play();
 			a.volume -= 0.2f*Time.deltaTime;
 			if (oxyTime > .1f && ( !spraying || (timeSinceOxy < stopOxy && spraying))) {
 

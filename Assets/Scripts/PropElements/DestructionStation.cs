@@ -20,6 +20,8 @@ public class DestructionStation : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D col){
 
 		if (col.gameObject == Player) {
+			if (!GameObject.Find("LaserHit").GetComponent<AudioSource>().isPlaying) GameObject.Find("LaserHit").GetComponent<AudioSource>().Play();
+
 			attack ();
 			GameObject.Find ("Camera").SendMessage ("ShakeOnOff", true); //shaking
 			GameObject.Find("Camera").SendMessage("Shake",1);
@@ -38,9 +40,10 @@ public class DestructionStation : MonoBehaviour {
 		}
 	}
 	void OnTriggerExit2D(Collider2D col){
-		if (col.gameObject == Player)
+		if (col.gameObject == Player) {
+			GameObject.Find("LaserHit").GetComponent<AudioSource>().Stop();
 			GameObject.Find("Camera").SendMessage("ShakeOnOff", false);
-
+		}
 	}
 
 	void attack(){

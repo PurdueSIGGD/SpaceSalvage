@@ -561,14 +561,17 @@ public class MissionResultsScript : MonoBehaviour {
 				}
 				
 			}
+			fixCranes.normal = labels;
+			fixCranes.hover = labels;
 			t1.normal = labels;
 			t1.hover = labels;
 			GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .3f, Screen.height * .06f), craneContent, t1);
 			if (cranelength == 6 || cash < 40) { //6 being max length
 				GUI.Box (new Rect (Screen.width * (xval1 +.254f + .1f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), craneContent1, fixCranes);
 			} else {
-				t1.normal = gs;
-				t1.hover = gbs;
+				fixCranes.normal = gs;
+				fixCranes.hover = gbs;
+				if (craneContent1.text == "Fix") fixCranes.normal.textColor = fixCranes.hover.textColor = Color.red;
 				if (cash >= 40 && GUI.Button (new Rect (Screen.width * (xval1 +.254f + .1f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), craneContent1, fixCranes)) {
 					this.GetComponent<AudioSource>().PlayOneShot(coinSounds[Random.Range(0,3)]);
 					if (startingcranelength == 0 && cranelength == 0) {
@@ -596,14 +599,17 @@ public class MissionResultsScript : MonoBehaviour {
 				}
 				
 			}
+			fixTubes.normal = labels;
+			fixTubes.hover = labels;
 			t1.normal = labels;
 			t1.hover = labels;
 			GUI.Box (new Rect (Screen.width * (xval1 + .052f), Screen.height * yval1, Screen.width * .3f, Screen.height * .06f), tubeContent, t1);
 			if (tubesleft == 500 || cash < 10) { //4 being max time
 				GUI.Box (new Rect (Screen.width * (xval1 +.254f + .1f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), tubeContent1, fixTubes);
 			} else {
-				t1.normal = gs;
-				t1.hover = gbs;
+				fixTubes.normal = gs;
+				fixTubes.hover = gbs;
+				if (tubeContent1.text == "Fix") fixTubes.normal.textColor = fixTubes.hover.textColor = Color.red;
 				if (cash >= 10 && GUI.Button (new Rect (Screen.width * (xval1 +.254f + .1f), Screen.height * yval1, Screen.width * .05f, Screen.height * .06f), tubeContent1, fixTubes)) {
 					this.GetComponent<AudioSource>().PlayOneShot(coinSounds[Random.Range(0,3)]);
 					if (tubecut == 1) {

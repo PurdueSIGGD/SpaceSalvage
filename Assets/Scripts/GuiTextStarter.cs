@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class GuiTextStarter : MonoBehaviour {
-	private float startingX = -.35f;
-	private float startingHealthX = .2625f;
+	private float startingX = -.353f;
+	private float startingHealthX = .266f;
 	private float startingBloodX = .3685f;
 	private float startingTubeX = -.15f;
 	// Use this for initialization
@@ -14,11 +14,11 @@ public class GuiTextStarter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Handler for needlepoint
-		this.transform.FindChild("Needle").transform.localPosition = new Vector3(startingX + (.215f * (GameObject.Find("Player").GetComponent<HealthController>().GetOxyPercent() - .65f)), -0.89f, .9f);
-		this.transform.FindChild("OxyText").GetComponent<GUIText>().text = "Oxy:" + GameObject.Find("Player").GetComponent<HealthController>().GetOxy().ToString("F2")	+ "%";
+		this.transform.FindChild("Needle").transform.localPosition = new Vector3(startingX + (.21f * (GameObject.Find("Player").GetComponent<HealthController>().GetOxyPercent() - .65f)), -0.89f, .9f);
+		this.transform.FindChild("OxyText").GetComponent<GUIText>().text = "Oxy: " + GameObject.Find("Player").GetComponent<HealthController>().GetOxy().ToString("F2");
 
 		this.transform.FindChild("HealthNeedle").transform.localPosition = new Vector3(startingHealthX + (1-GameObject.Find("Player").GetComponent<HealthController>().getIntegrityPercent()) * .215f, -0.89f, .9f);
-		this.transform.FindChild("HealthText").GetComponent<GUIText>().text = "Suit:" + GameObject.Find("Player").GetComponent<HealthController>().getIntegrity().ToString("F2") + "%";
+		this.transform.FindChild("HealthText").GetComponent<GUIText>().text = "Suit: " + GameObject.Find("Player").GetComponent<HealthController>().getIntegrity().ToString("F2") + "%";
 		this.transform.FindChild("HealthRedBar").transform.localPosition = new Vector3(startingBloodX + (.47f-.37f) * (1- (GameObject.Find("Player").GetComponent<HealthController>().GetHealth()/100)), this.transform.FindChild("HealthRedBar").transform.localPosition.y, .5f);
 		this.transform.FindChild("HealthRedBar").transform.localScale = new Vector3(.23f - .22f * (1-GameObject.Find("Player").GetComponent<HealthController>().GetHealth()/100), .09f, .5f);
 		Color rgb = this.transform.FindChild("HealthBlood").GetComponent<GUITexture>().color;

@@ -22,6 +22,7 @@ public class Chaser : MonoBehaviour {
 	}
 	void EMP() {
 		emp = true;
+		focused = false;
 	}
 	// Update is called once per frame
 	void Update () {

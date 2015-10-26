@@ -103,10 +103,14 @@ public class HealthController : MonoBehaviour {
 		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) { //no warnings
 			emergency = false;
 			words += okmessage;
+			GameObject.Find("GuiText").GetComponent<GUIText>().color = Color.green;
 
 		} else { //see what issue we may have
  			emergency = true;
+			GameObject.Find("GuiText").GetComponent<GUIText>().color = Color.red;
+
 			if (emp && !pause){
+
 				//print("in emp");
 				//print(transform.FindChild("SoundEffectController").FindChild("EMPSound") + " " + emptime/rechargetime);
 				transform.FindChild("SoundEffectController").FindChild("EMPSound").GetComponent<AudioSource>().volume = 1 - emptime/rechargetime;
@@ -331,7 +335,7 @@ public class HealthController : MonoBehaviour {
 		return this.health;
 	}
 	public float getIntegrityPercent() {
-		return this.health/this.startinghealth;
+		return this.health/100;
 	}
 	public float GetOxyPercent() {
 		return oxy/this.startingoxy;

@@ -101,7 +101,7 @@ public class RopeScript2D : MonoBehaviour {
 		if (retract_on_death && brokenrope) { //code in order to retract the cable if shit goes down and one is broken
 			if (timepassed > .8f) {
 				if (joints != null) {
-					if (joints[retractindex]!= null) {
+					if (joints[retractindex + 1]!= null) {
 						if (joints.Count > retractindex + 1 && ((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>() != null && ((GameObject)joints[retractindex]).GetComponent<SpringJoint2D>().connectedBody != null) {
 							timepassed = 0;
 							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.GetComponent<Rigidbody2D>();

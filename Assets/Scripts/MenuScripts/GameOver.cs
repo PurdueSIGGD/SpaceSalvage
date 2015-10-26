@@ -41,8 +41,8 @@ public class GameOver : MonoBehaviour {
 
 		GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height),backgroundTexture);
 		Vector2 gg = gText.CalcSize(gameOver);
-		GUI.DrawTexture(new Rect((Screen.width / 2) - 1.05f*gg.x*.5f, 0, gg.x*1.05f, gg.y), labelTexture);
-		GUI.DrawTexture(new Rect((Screen.width / 2) - 1.05f*gg.x*.5f, 0, gg.x*1.05f, gg.y), bloodTexture);
+		//GUI.DrawTexture(new Rect((Screen.width / 2) - 1.05f*gg.x*.5f, 0, gg.x*1.05f, gg.y), labelTexture);
+		//GUI.DrawTexture(new Rect((Screen.width / 2) - 1.05f*gg.x*.5f, 0, gg.x*1.05f, gg.y), bloodTexture);
 		GUI.Box(new Rect((Screen.width / 2) - 1.05f*gg.x*.5f, 0, gg.x*1.05f, gg.y), gameOver, gText);
 		if (GUI.Button(new Rect(Screen.width * .1f, (Screen.height * .9f)  , Screen.width * .3f, Screen.height * .1f), mainContent, gButton)) {
 			this.GetComponent<AudioSource>().Play();
