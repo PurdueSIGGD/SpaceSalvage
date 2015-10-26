@@ -82,12 +82,12 @@ public class RopeTubeController : MonoBehaviour {
 		sub = (Input.GetKey(kretract));
 	}
 	void FixedUpdate() {
-		if (add && timepassed > rate && !ejected && !emp && tubesleft > 0) {
+		if (add && timepassed > rate && !ejected && !emp && tubesleft > 0 && !this.GetComponent<RopeScript2D>().brokenrope) {
 			SendMessage("AddRope");
 			timepassed = 0;
 			tubesleft--;
 		}
-		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes - 1) {
+		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes - 1&& !this.GetComponent<RopeScript2D>().brokenrope) {
 			SendMessage("SubRope");
 			timepassed = 0;
 		} else {

@@ -28,7 +28,7 @@ public class ExitScript : MonoBehaviour {
 
 
 	void Use() {
-		if (!exiting) {
+		if (!exiting && Player.GetComponent<HealthController>().GetWallet() >= 20) {
 			Player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 			Player.GetComponent<Rigidbody2D>().drag = .4f;
 			exiting = true;
@@ -43,7 +43,12 @@ public class ExitScript : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D col) {
 		if (col.GetComponent<InteractController>() != null) {
-			col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
+			if (Player.GetComponent<HealthController>().GetWallet() >= 20) {
+				col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
+			} else {
+				col.SendMessage("GetMessage", "Must have at least $20 to exit map");
+
+			}
 			col.SendMessage("GetGO", this.gameObject);
 
 		}
@@ -53,8 +58,13 @@ public class ExitScript : MonoBehaviour {
 			if (exiting) {
 				col.SendMessage("GetMessage", "");
 			} else {
-				col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
-					col.SendMessage("GetGO", this.gameObject);
+				if (Player.GetComponent<HealthController>().GetWallet() >= 20) {
+					col.SendMessage("GetMessage", "Press " + this.usekey.ToString () + " to exit map");
+				} else {
+					col.SendMessage("GetMessage", "Must have at least $20 to exit map");
+					
+				}					
+				col.SendMessage("GetGO", this.gameObject);
 					
 
 			}

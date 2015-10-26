@@ -27,6 +27,8 @@ public class HealthController : MonoBehaviour {
 	//private static string cranedis = "DISCONNECTING CRANE IN ";
 	private static string empmessage = "WARNING: EMP DETECTED\n";
 	private static string empmessage2 = "TIME UNTIL SYSTEM REBOOT: ";
+	private static string ejectedmessage = "WARNING: CABLE DISCONNECTED\n";
+	private static string cutmessage = "WARNING: CABLE CUT\n";
 	private bool ejected;
 	private bool emergency, on;
 	private float timesince, timeerror, oxytime;
@@ -100,7 +102,7 @@ public class HealthController : MonoBehaviour {
             vitalsLowAudioSource.Stop();
         }
         
-		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause))) { //no warnings
+		if (!(medwarning || oxywarning || oxyerror || suitwarning || suiterror || cranewarning || (emp && !pause) || this.ejected)) { //no warnings
 			emergency = false;
 			words += okmessage;
 			GameObject.Find("GuiText").GetComponent<GUIText>().color = Color.green;
@@ -124,6 +126,9 @@ public class HealthController : MonoBehaviour {
 			if (oxyerror) words += oxymessagegone;
 			if (medwarning) words += medmessage;
 			if (cranewarning) words += cranemessage;
+			if (((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).brokenrope) words += cutmessage;
+			else if (((RopeScript2D)GameObject.Find("Ship").GetComponent("RopeScript2D")).ejected) words += ejectedmessage;
+
 			//if (cranewarning && cranetime < 5) words += cranedis + (5 - cranetime) + "\n";
 
 		}
@@ -177,9 +182,12 @@ public class HealthController : MonoBehaviour {
 							GameObject thingy = (GameObject)Instantiate(oxyparticle, this.transform.position, Quaternion.identity); //spawning particles
 							float r = Random.value;
 							//thingy.GetComponent<SpriteRenderer>().sprite = ;
-							thingy.transform.localScale = new Vector3(.7f,.7f,.7f); //typical scale is 5, dont want parts too big or small
+							thingy.transform.localScale = new Vector3(2.5f,2.5f,2.5f); //typical scale is 5, dont want parts too big or small
 							thingy.GetComponent<SpriteRenderer>().color = new Color(1,1,1); //make it redder if necessary
+							thingy.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
 							thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
+							thingy.GetComponent<ParticleThing>().distanceLasting = 8;
 							//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
 							oxytime = 0;
 					}	

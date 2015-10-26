@@ -53,7 +53,7 @@ public class JointScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		oxyTime += Time.deltaTime;
-		if (this.timeSinceOxy > 10) GameObject.Destroy(this.gameObject);
+		if (this.timeSinceOxy > 10 && this.broken) GameObject.Destroy(this.gameObject);
 		if ((broken || severed || spraying)&&this.name != "Player" && shiprope) {
 			timeSinceOxy +=Time.deltaTime;
 			AudioSource a;
@@ -188,6 +188,8 @@ public class JointScript : MonoBehaviour {
 			a.volume = .6f;
 			a.loop = false;
 			a.Play();
+			//focus.GetComponent<RopeScript2D>().SendMessage("BrokenJoint",shipRopeIndex);
+
 		}
 
 
@@ -202,7 +204,7 @@ public class JointScript : MonoBehaviour {
 		lr.SetVertexCount(0);
 		broken = true;
 
-		if (!severed && focus != null && focus.GetComponent<RopeScript2D>() != null) {
+		if (focus != null && focus.GetComponent<RopeScript2D>() != null) {
 			focus.BroadcastMessage ("BrokenRope");
 		}
 

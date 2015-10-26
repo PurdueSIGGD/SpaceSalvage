@@ -24,9 +24,11 @@ public class PlayerMovement : MonoBehaviour {
 	private static double FrontAngle = 90;
 	private static double LeftAngle = 180;
 	private static double RightAngle = 0;
+	private float engineVolume = 0;
 	public float emprechargetime = 10;
 	private float currentemptime;
 	public bool debugmode;
+	private bool thrusting;
 	public AudioClip move;
     private AudioClip defaultClip;
 
@@ -65,8 +67,9 @@ public class PlayerMovement : MonoBehaviour {
 		} else {
 			PlayerPrefs.SetString("Left",kleft.ToString());
 		}
-
+		
         empAudioSource = empAudio.GetComponent<AudioSource>();
+		engineVolume = this.GetComponent<AudioSource>().volume;
 		BackThruster = GameObject.Find ("BackThruster").GetComponent<SpriteRenderer> ();
 		FrontThruster = GameObject.Find ("FrontThruster").GetComponent<SpriteRenderer> ();
 		LeftThruster = GameObject.Find ("LeftThruster").GetComponent<SpriteRenderer> ();
@@ -113,18 +116,35 @@ public class PlayerMovement : MonoBehaviour {
 
         if ((left || right || up || down) && !emp && !this.gameObject.GetComponent<AudioSource>().isPlaying)
         {
-            this.gameObject.GetComponent<AudioSource>().PlayOneShot(move);
-        }
+			thrusting = true;
+		}
         else if ((!left && !right && !up && !down) || emp)
         {
-            this.gameObject.GetComponent<AudioSource>().Stop();
-        }
+			thrusting = false;
+		}
         else
         {
             //this.gameObject.GetComponent<AudioSource>().Stop();
             this.gameObject.GetComponent<AudioSource>().clip = defaultClip;
         }
+		this.gameObject.GetComponent<AudioSource>().volume = engineVolume;
 
+		if (thrusting) {
+			if (engineVolume < 1) engineVolume+=Time.deltaTime * 10;
+			else engineVolume = 1;
+			if (!this.GetComponent<AudioSource>().isPlaying) {
+				this.gameObject.GetComponent<AudioSource>().Play();
+			}
+
+		} else {
+			if (engineVolume > 0) {
+				engineVolume-=Time.deltaTime * 10;
+			} else {
+				engineVolume = 0;
+				this.gameObject.GetComponent<AudioSource>().Stop();
+			}
+
+		}
 		if (this.GetComponent<Rigidbody2D>().velocity.y < 10) {
 			up = Input.GetKey (kup);
 		} else {

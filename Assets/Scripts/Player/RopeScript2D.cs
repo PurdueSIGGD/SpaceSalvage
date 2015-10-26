@@ -101,14 +101,15 @@ public class RopeScript2D : MonoBehaviour {
 		if (retract_on_death && brokenrope) { //code in order to retract the cable if shit goes down and one is broken
 			if (timepassed > .8f) {
 				if (joints != null) {
-					if (joints[retractindex + 1]!= null) {
-						if (joints.Count > retractindex + 1 && ((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>() != null && ((GameObject)joints[retractindex]).GetComponent<SpringJoint2D>().connectedBody != null) {
+					if (joints[retractindex] != null) {
+						if (!(retractindex == joints.Count - 3) && (GameObject)joints[retractindex + 1] != null && joints.Count > retractindex + 1 && ((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>() != null && ((GameObject)joints[retractindex]).GetComponent<SpringJoint2D>().connectedBody != null) {
 							timepassed = 0;
+						
 							((GameObject)joints[retractindex + 1]).GetComponent<SpringJoint2D>().connectedBody = hinger.GetComponent<Rigidbody2D>();
-							Destroy((GameObject)joints[retractindex]);
+							if (joints[retractindex] != null) Destroy((GameObject)joints[retractindex]);
 							retractindex++;
 							if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
-						} else {
+						} else { //done with retracting, this is the last one
 							Destroy((GameObject)joints[retractindex]); 
 							if (!iscrane) this.BroadcastMessage("GiveTubesLeft",retractindex);
 							retract_on_death = false;
@@ -244,7 +245,7 @@ public class RopeScript2D : MonoBehaviour {
 		}
 	}
 	void AddRope() {
-		if (!isgenerating) {
+		if (!isgenerating && !this.brokenrope) {
 			segments++;
 			segmentPos.Add(GameObject.Find("Player").transform.position); //add to araylist
 			GameObject newobj = AddJointPhysics(joints.Count + 1); //increment physics points
@@ -267,7 +268,7 @@ public class RopeScript2D : MonoBehaviour {
 
 	void SubRope() {
 
-		if (segments > 3 && !isgenerating) {
+		if (segments > 3 && !isgenerating && !this.brokenrope) {
 			if ( Vector3.Distance(((GameObject)joints[segments - 1]).transform.position,target.transform.position) < .4f) {
 				pushing = false;
 				Destroy(((GameObject)joints[segments - 1]));
@@ -428,9 +429,10 @@ public class RopeScript2D : MonoBehaviour {
 	void Eject() {
 		if (!isgenerating) {
 			if (!ejected) {
-				GameObject.Find("SoundEffectController").transform.FindChild("EjectSound").GetComponent<AudioSource>().Play();
+					GameObject.Find("SoundEffectController").transform.FindChild("EjectSound").GetComponent<AudioSource>().Play();
 
 				if (!brokenrope) { //spawn a connector, float away
+
 					ejected = true;
 					connector = new GameObject ("Connector");
 					GameObject innercol = new GameObject("Innercol");
@@ -534,6 +536,9 @@ public class RopeScript2D : MonoBehaviour {
 		if (connector != null) {
 			Destroy(connector);
 		}
+	}
+	void BrokenJoint(int i) {
+		joints[i] = null;
 	}
 	void Disconnect() {
 		Destroy(((GameObject)joints[joints.Count-1]));

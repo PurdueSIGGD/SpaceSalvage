@@ -141,16 +141,16 @@ public class MissionResultsScript : MonoBehaviour {
 		for (int i = 0; i < items.Length; i++) {
 			int cost = 0;
 			if (items[i].Equals("Cash Safe") ){
-				cost = 100;
+				cost = 60;
 				cashitems++;
 			} else {
 				if (items[i].Equals("Medical Supplies")) {
-					cost = 50;
+					cost = 35;
 					healthitems++;
 				} else {
 					if (items[i].Equals("Food")) {
 						fooditems++;
-						cost = 25;
+						cost = 20;
 					} else {
 						break;
 					}
@@ -239,7 +239,7 @@ public class MissionResultsScript : MonoBehaviour {
 
 			if (cashitems > 0) {
 				if (cashitems > 1) s = "s"; else s = "";
-				cost = 100;
+				cost = 60;
 				itemContent = new GUIContent(cashitems + " Cash Safe" + s + " for $" + cost + " each");
 				offset = .5f * 1.05f * t3.CalcSize(itemContent).x;
 				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, t3);
@@ -247,7 +247,7 @@ public class MissionResultsScript : MonoBehaviour {
 			}
 			if (healthitems > 0) {
 				if (healthitems > 1) s = "s"; else s = "";
-				cost = 50;
+				cost = 35;
 				itemContent = new GUIContent(healthitems +" crate" + s + " of Medical Supplies" + " for $" + cost + " each");
 				offset = .5f * 1.05f * t3.CalcSize(itemContent).x;
 				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y),itemContent, t3);
@@ -255,7 +255,7 @@ public class MissionResultsScript : MonoBehaviour {
 			}
 			if (fooditems > 0) {
 				if (fooditems > 1) s = "s"; else s = "";
-				cost = 25;
+				cost = 20;
 				itemContent = new GUIContent(fooditems + " Food Crate" + s + " for $" + cost + " each");
 				offset = .5f *1.05f *  t3.CalcSize(itemContent).x;
 				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, t3);
