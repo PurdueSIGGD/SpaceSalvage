@@ -4,7 +4,7 @@ using System.Collections;
 public class GuiTextStarter : MonoBehaviour {
 	private float startingX = -.353f;
 	private float startingHealthX = .266f;
-	private float startingBloodX = .3685f;
+	private float startingBloodX = .369f;
 	private float startingTubeX = -.15f;
 	// Use this for initialization
 	void Start () {

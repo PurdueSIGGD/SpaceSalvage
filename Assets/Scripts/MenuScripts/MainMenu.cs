@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour {
 
 	private string label,backLabel;
 	private bool clicked,backClicked;
-	public Texture2D buttonTexture, hoverButtonTexture, labelTexture;
+	public Texture2D buttonTexture, hoverButtonTexture, labelTexture, smallLabel;
 
 	private string menu = "Main";
 
@@ -214,7 +214,7 @@ public class MainMenu : MonoBehaviour {
 			float currentAudioVal = 1;
 			if (PlayerPrefs.HasKey("audioVol")) {
 				currentAudioVal = PlayerPrefs.GetFloat("audioVol");			
-				print(currentAudioVal);
+//				print(currentAudioVal);
 
 			} else {
 				PlayerPrefs.SetFloat("audioVol", currentAudioVal);
@@ -272,8 +272,11 @@ public class MainMenu : MonoBehaviour {
 
 
 
-	
+			labelStyle.normal.background = smallLabel;
+			labelStyle.hover.background = smallLabel;
 			GUI.Label(new Rect (Screen.width * .15f, Screen.height*.05f, Screen.width * .7f, Screen.height * .1f), labelContent, labelStyle);
+			labelStyle.normal.background = this.labelTexture;
+			labelStyle.hover.background = labelTexture;
 			if (GUI.Button(new Rect(Screen.width * .1f, Screen.height * .2f, Screen.width * .25f, Screen.height * .1f), upContent, keybindingButton)) {
 				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 

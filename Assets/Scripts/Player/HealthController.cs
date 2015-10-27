@@ -187,7 +187,6 @@ public class HealthController : MonoBehaviour {
 							thingy.GetComponent<SpriteRenderer>().sortingOrder = 1;
 
 							thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
-							thingy.GetComponent<ParticleThing>().distanceLasting = 8;
 							//thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));
 							oxytime = 0;
 					}	
@@ -264,7 +263,9 @@ public class HealthController : MonoBehaviour {
 					thingy.GetComponent<SpriteRenderer>().sprite = j5;
 				} 
 				//thingy.GetComponent<SpriteRenderer>().sprite = ;
-				thingy.transform.localScale = new Vector3(.8f,.8f,.8f); //typical scale is 1, dont want parts too big or small
+				thingy.GetComponent<ParticleThing>().distanceLasting = 30;
+				thingy.GetComponent<SpriteRenderer>().sortingOrder = 0;
+				thingy.transform.localScale = new Vector3(2f,2f,2); //typical scale is 1, dont want parts too big or small
 				thingy.GetComponent<SpriteRenderer>().color = new Color(1, (health/100), (health/100)); //make it redder if necessary
 				thingy.GetComponent<Rigidbody2D>().AddForce(new Vector2(UnityEngine.Random.Range(-50,50), UnityEngine.Random.Range(-50,50)));
 				thingy.GetComponent<Rigidbody2D>().AddTorque(thingy.GetComponent<Rigidbody2D>().mass * UnityEngine.Random.Range(-25,25));

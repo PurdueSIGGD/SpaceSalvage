@@ -90,7 +90,7 @@ public class MissionResultsScript : MonoBehaviour {
 		t1.normal = labels;
 		t2.normal = labels;
 		t3.normal = labels;
-		t2.alignment = h1.alignment = h2.alignment = cashStyle.alignment = t3.alignment = t1.alignment = TextAnchor.MiddleCenter;
+		button.alignment = t2.alignment = h1.alignment = h2.alignment = cashStyle.alignment = t3.alignment = t1.alignment = TextAnchor.MiddleCenter;
 		cashStyle.alignment = TextAnchor.MiddleCenter;
 		//t1.contentOffset= new Vector2(7.7f, 7f);
 		//cashStyle.contentOffset= new Vector2(0, 7f);
@@ -313,7 +313,7 @@ public class MissionResultsScript : MonoBehaviour {
 			}
 			labelVal = cranesucks + "  ($40)";
 			GUIContent craneContent = new GUIContent(labelVal);
-			GUIContent craneContent0 = new GUIContent("- 0.2");
+			GUIContent craneContent0 = new GUIContent("-0.2");
 			GUIContent craneContent1 = new GUIContent(cranerep);
 			string ropesucks, roperep;
 			if (tubecut == 1) {

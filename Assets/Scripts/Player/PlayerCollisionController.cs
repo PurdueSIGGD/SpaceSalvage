@@ -27,13 +27,19 @@ public class PlayerCollisionController : MonoBehaviour {
 			if (Vector3.Magnitude(col.relativeVelocity) > .5f) {
 				if (Vector3.Magnitude(col.relativeVelocity) > 4) {
 					this.SendMessage("changeHealth",-1 * col.relativeVelocity.magnitude);
-					this.gameObject.GetComponent<AudioSource>().volume = 1f;
+					GameObject.Find("BumpSound").gameObject.GetComponent<AudioSource>().volume = 1f;
+					GameObject.Find("BumpSound").GetComponent<AudioSource>().pitch = 4/Vector3.Magnitude(col.relativeVelocity);//randomPitch.RandomPitchValue();				
+
+				} else {
+					GameObject.Find("BumpSound").gameObject.GetComponent<AudioSource>().volume = .4f;
+
+					GameObject.Find("BumpSound").GetComponent<AudioSource>().pitch = 1;//randomPitch.RandomPitchValue();				
+
 				}
-				float pitchtmp = this.GetComponent<AudioSource>().pitch;
-                this.GetComponent<AudioSource>().pitch = randomPitch.RandomPitchValue();
-				this.GetComponent<AudioSource>().PlayOneShot(bump);
-				this.gameObject.GetComponent<AudioSource>().volume = 1f;
-				this.GetComponent<AudioSource>().pitch = pitchtmp;
+				float pitchtmp = GameObject.Find("BumpSound").GetComponent<AudioSource>().pitch;
+
+				GameObject.Find("BumpSound").GetComponent<AudioSource>().PlayOneShot(bump);
+			//	GameObject.Find("BumpSound").GetComponent<AudioSource>().pitch = pitchtmp;
 			}
 
 			GameObject.Find("Camera").SendMessage("Shake",Vector3.Magnitude(col.relativeVelocity)); //shake the camera and jiggle
