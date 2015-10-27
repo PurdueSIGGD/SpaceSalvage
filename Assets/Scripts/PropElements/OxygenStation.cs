@@ -39,7 +39,15 @@ public class OxygenStation : MonoBehaviour {
 
 	}
 
+	void OnTriggerEnter2D(Collider2D col) {
+		if (col.GetComponent<InteractController>() != null) {
 
+			col.SendMessage("GetMessage", "Refilling Oxygen");
+			
+			col.SendMessage("GetGO", this.gameObject);
+			
+		}
+	}
 	void OnTriggerStay2D(Collider2D col){
 		if (col.gameObject.Equals(Player)){
 			if(Player.GetComponent<HealthController>().acceptingOxy && oxygenAmt > 0) {
@@ -56,6 +64,11 @@ public class OxygenStation : MonoBehaviour {
 
 	}
 	void OnTriggerExit2D(Collider2D col) {
+		if (col.GetComponent<InteractController>() != null) {
+			
+			col.SendMessage("GetMessage", "");
+			col.SendMessage("LoseGO");
+		}
 		if (col.gameObject.Equals(Player)){
 			col.SendMessage("GettingOxy", false);	
 		}

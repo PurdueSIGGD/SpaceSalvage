@@ -60,12 +60,12 @@ public class PlayerMovement : MonoBehaviour {
 		if (PlayerPrefs.HasKey("Right")) {
 			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
 		} else {
-			PlayerPrefs.SetString("Right",kright.ToString());
+			PlayerPrefs.SetString("Right",KeyCode.D.ToString());
 		}
 		if (PlayerPrefs.HasKey("Left")) {
 			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
 		} else {
-			PlayerPrefs.SetString("Left",kleft.ToString());
+			PlayerPrefs.SetString("Left",KeyCode.A.ToString());
 		}
 		
         empAudioSource = empAudio.GetComponent<AudioSource>();

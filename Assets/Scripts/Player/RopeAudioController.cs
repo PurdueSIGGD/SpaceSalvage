@@ -4,31 +4,60 @@ using System.Collections;
 public class RopeAudioController : MonoBehaviour {
     public AudioClip extend;
     public AudioClip extendFaster;
-    public AudioClip retract;
-    public AudioClip retractFaster;
 
-    public float cClipTimer;
-    private float timer;
+	private float timer;
 
-    public KeyCode kextend = KeyCode.LeftShift;
-    public KeyCode kretract = KeyCode.LeftControl;
+	public bool kextend;
+	public bool kretract;
+	private bool switcheroo;
+
+	static float ropetime = 1.880f;
 
     void Start()
     {
-        cClipTimer = 1.5f;
-    }
+
+	}
 
 	void FixedUpdate () {
-        if ((Input.GetKey(kextend) || Input.GetKey(kretract)) && !this.GetComponent<AudioSource>().isPlaying)
+		if (kextend || kretract) {
+			timer += Time.deltaTime;
+		//	if(!this.GetComponent<AudioSource>().isPlaying) print(this.GetComponent<AudioSource>().isPlaying);
+			if (this.GetComponent<AudioSource>().isPlaying || timer > ropetime) { 
+				if (timer > ropetime) {
+					if (!switcheroo) {
+						//this.transform.FindChild("Looper").GetComponent<AudioSource>().clip = extendFaster;
+						this.transform.FindChild("Looper").GetComponent<AudioSource>().Play();
+						this.GetComponent<AudioSource>().Stop();
+					}
+					switcheroo = true;
+					
+				} else {
+					//this.GetComponent<AudioSource>().clip = extend;
+					switcheroo = false;
+				}
+			} else {
+				if (!switcheroo) {
+					this.GetComponent<AudioSource>().clip = extend;
+					this.GetComponent<AudioSource>().Play();
+				}
+			}
+		} else {
+			switcheroo = false;
+			this.transform.FindChild("Looper").GetComponent<AudioSource>().Stop();
+			this.GetComponent<AudioSource>().Stop();
+			timer = 0;
+		}
+       /* if ((kextend || kretract) && !this.GetComponent<AudioSource>().isPlaying)
         {
-            this.GetComponent<AudioSource>().PlayOneShot(extend);
+			this.GetComponent<AudioSource>().clip = extend;
+			this.GetComponent<AudioSource>().Play();
             
-            if (timer == 0f)
+            if (timer == 0)
             {
                 timer = Time.deltaTime;
             }
         }
-        else if ((Input.GetKey(kextend) || Input.GetKey(kretract)) && this.GetComponent<AudioSource>().isPlaying && (cClipTimer <= timer))
+		else if ((kextend || kretract) &&  this.GetComponent<AudioSource>().isPlaying && (cClipTimer <= timer))
         {
             this.GetComponent<AudioSource>().clip = extendFaster;
             this.GetComponent<AudioSource>().loop = true;
@@ -38,6 +67,6 @@ public class RopeAudioController : MonoBehaviour {
         {
             this.GetComponent<AudioSource>().Stop();
             timer = 0f;
-        }
+        }*/
 	}
 }

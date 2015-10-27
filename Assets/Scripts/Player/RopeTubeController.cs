@@ -80,17 +80,36 @@ public class RopeTubeController : MonoBehaviour {
 		timepassed += Time.deltaTime;
 		add = (Input.GetKey(kextend));
 		sub = (Input.GetKey(kretract));
+
+		if ((add||sub) && !ejected && !emp && tubesleft > 0 && !this.GetComponent<RopeScript2D>().brokenrope) {
+			GameObject.Find("Crane").GetComponent<RopeAudioController>().kextend = true;
+			GameObject.Find("Crane").GetComponent<RopeAudioController>().kretract = true;
+
+
+		} else {		
+			GameObject.Find("Crane").GetComponent<RopeAudioController>().kextend = false;
+			GameObject.Find("Crane").GetComponent<RopeAudioController>().kretract = false;
+
+		}
 	}
 	void FixedUpdate() {
 		if (add && timepassed > rate && !ejected && !emp && tubesleft > 0 && !this.GetComponent<RopeScript2D>().brokenrope) {
+			//GameObject.Find("Crane").GetComponent<RopeAudioController>().kextend = true;
 			SendMessage("AddRope");
 			timepassed = 0;
 			tubesleft--;
+		} else {
+			//GameObject.Find("Crane").GetComponent<RopeAudioController>().kextend = false;
+
 		}
 		if (sub && timepassed > rate && !ejected && !emp && tubesleft <= startingtubes - 1&& !this.GetComponent<RopeScript2D>().brokenrope) {
+			//GameObject.Find("Crane").GetComponent<RopeAudioController>().kretract = true;
 			SendMessage("SubRope");
 			timepassed = 0;
 		} else {
+			//GameObject.Find("Crane").GetComponent<RopeAudioController>().kretract = false;
+
+
 			if (sub) {
 				this.GetComponent<RopeScript2D>().pushing = true;
 			} else {

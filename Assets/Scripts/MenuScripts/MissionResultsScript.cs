@@ -41,7 +41,7 @@ public class MissionResultsScript : MonoBehaviour {
 	private int capacity;
 	private int startingcapacity;
 
-	private GUIStyle h1, h2, t1, t2, t3, button, cashStyle, fixTubes, fixCranes; //headers, text
+	private GUIStyle h1, h2, t1, t2, t3, button, cashStyle, fixTubes, fixCranes, transparent; //headers, text
 
 	private GUIStyleState gbs;
 	private GUIStyleState gs;
@@ -63,17 +63,18 @@ public class MissionResultsScript : MonoBehaviour {
 		t3 = new GUIStyle();
 		cashStyle = new GUIStyle();
 		button = new GUIStyle();
+		transparent = new GUIStyle();
 		h1.stretchHeight = true;
 		h2.stretchHeight = true;
 
 		h1.fontSize = (int)(Screen.height * .09f);
-		h2.fontSize = (int)(Screen.height * .08f);
+		h2.fontSize =  transparent.fontSize = (int)(Screen.height * .08f);
 		t1.fontSize = (int)(Screen.height * .03f);
 		t2.fontSize = (int)(Screen.height * .02f);
 		t3.fontSize = (int)(Screen.height * .035f);
 		button.fontSize = (int)(Screen.height * .1f);
 		cashStyle.fontSize = (int)(Screen.height * .1f);
-		h1.font = h2.font = t1.font = t2.font = t3.font = button.font = cashStyle.font = thisFont;
+		h1.font = h2.font = t1.font = t2.font = t3.font = button.font = cashStyle.font = transparent.font =  thisFont;
 		gbs = new GUIStyleState();
 		gs = new GUIStyleState();
 		labels = new GUIStyleState();
@@ -89,8 +90,8 @@ public class MissionResultsScript : MonoBehaviour {
 		t1.normal = labels;
 		t1.normal = labels;
 		t2.normal = labels;
-		t3.normal = labels;
-		button.alignment = t2.alignment = h1.alignment = h2.alignment = cashStyle.alignment = t3.alignment = t1.alignment = TextAnchor.MiddleCenter;
+		//t3.normal = labels;
+		button.alignment =  transparent.alignment = t2.alignment = h1.alignment = h2.alignment = cashStyle.alignment = t3.alignment = t1.alignment = TextAnchor.MiddleCenter;
 		cashStyle.alignment = TextAnchor.MiddleCenter;
 		//t1.contentOffset= new Vector2(7.7f, 7f);
 		//cashStyle.contentOffset= new Vector2(0, 7f);
@@ -225,24 +226,25 @@ public class MissionResultsScript : MonoBehaviour {
 				status = 1;
 			}
 			offset = .5f * 1.05f * h2.CalcSize(integrityContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * healthPlacementY, 1.05f * h2.CalcSize(integrityContent).x,h2.CalcSize(integrityContent).y),integrityContent, this.h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * healthPlacementY, 1.05f * h2.CalcSize(integrityContent).x,h2.CalcSize(integrityContent).y),integrityContent, this.transparent);
 			offset = .5f *1.05f *  h2.CalcSize(cashContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * walletPlacementY, 1.05f * h2.CalcSize(cashContent).x,h2.CalcSize(cashContent).y),cashContent,this.h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * walletPlacementY, 1.05f * h2.CalcSize(cashContent).x,h2.CalcSize(cashContent).y),cashContent,this.transparent);
 			offset = .5f *1.05f *  h2.CalcSize(collectedCashContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .25f, 1.05f * h2.CalcSize(collectedCashContent).x,h2.CalcSize(collectedCashContent).y),collectedCashContent,this.h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .25f, 1.05f * h2.CalcSize(collectedCashContent).x,h2.CalcSize(collectedCashContent).y),collectedCashContent,this.transparent);
 			offset = .5f *1.05f *  h2.CalcSize(collectedItemContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .35f, 1.05f * h2.CalcSize(collectedItemContent).x,h2.CalcSize(collectedItemContent).y),collectedItemContent,this.h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .35f, 1.05f * h2.CalcSize(collectedItemContent).x,h2.CalcSize(collectedItemContent).y),collectedItemContent,this.transparent);
 
 			int cost;
 			int f = 0;
 			string s = "";
-
+			transparent.fontSize = (int)(Screen.height * .035f);
 			if (cashitems > 0) {
 				if (cashitems > 1) s = "s"; else s = "";
 				cost = 60;
 				itemContent = new GUIContent(cashitems + " Cash Safe" + s + " for $" + cost + " each");
 				offset = .5f * 1.05f * t3.CalcSize(itemContent).x;
-				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, t3);
+
+				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, transparent);
 				f++;
 			}
 			if (healthitems > 0) {
@@ -250,7 +252,7 @@ public class MissionResultsScript : MonoBehaviour {
 				cost = 35;
 				itemContent = new GUIContent(healthitems +" crate" + s + " of Medical Supplies" + " for $" + cost + " each");
 				offset = .5f * 1.05f * t3.CalcSize(itemContent).x;
-				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y),itemContent, t3);
+				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y),itemContent, transparent);
 				f++;
 			}
 			if (fooditems > 0) {
@@ -258,13 +260,14 @@ public class MissionResultsScript : MonoBehaviour {
 				cost = 20;
 				itemContent = new GUIContent(fooditems + " Food Crate" + s + " for $" + cost + " each");
 				offset = .5f *1.05f *  t3.CalcSize(itemContent).x;
-				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, t3);
+				GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * (.45f + (f * .1f)), 1.05f * t3.CalcSize(itemContent).x, t3.CalcSize(itemContent).y), itemContent, transparent);
 				f++;
 			}
+			transparent.fontSize = h2.fontSize;
 			offset = .5f *1.05f *  h2.CalcSize(expensesContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .7f, 1.05f * h2.CalcSize(expensesContent).x,h2.CalcSize(expensesContent).y), expensesContent, h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .7f, 1.05f * h2.CalcSize(expensesContent).x,h2.CalcSize(expensesContent).y), expensesContent, transparent);
 			offset = .5f *1.05f *  h2.CalcSize(totalCashContent).x;
-			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .80f, 1.05f * h2.CalcSize(totalCashContent).x,h2.CalcSize(totalCashContent).y), totalCashContent, h2);
+			GUI.Box (new Rect (Screen.width * .5f - offset, Screen.height * .80f, 1.05f * h2.CalcSize(totalCashContent).x,h2.CalcSize(totalCashContent).y), totalCashContent, transparent);
 
 			/*if (GUI.Button(new Rect(Screen.width * guiPlacementX2, Screen.height * guiPlacementY2, Screen.width * .5f, Screen.height * .1f), "Controls")) {
 				

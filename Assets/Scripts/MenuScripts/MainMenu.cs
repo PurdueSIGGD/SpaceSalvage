@@ -355,7 +355,7 @@ public class MainMenu : MonoBehaviour {
 					
 				}
 			}
-			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .2f, Screen.width * .25f, Screen.height * .1f), rightContent, keybindingButton)) {
+			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .2f, Screen.width * .25f, Screen.height * .1f), retractContent, keybindingButton)) {
 				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeRetractp = true;
 				pressing = true;
@@ -393,7 +393,7 @@ public class MainMenu : MonoBehaviour {
 					
 				}
 			}
-			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .6f, Screen.width * .25f, Screen.height * .1f), retractContent, keybindingButton)) {
+			if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .6f, Screen.width * .25f, Screen.height * .1f), clawContent, keybindingButton)) {
 				this.GetComponent<AudioSource>().PlayOneShot(this.menuSelect);
 				KeyCodeClawp = true;
 				KeyCodeClaw = "Press any key";

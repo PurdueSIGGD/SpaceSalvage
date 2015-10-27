@@ -199,7 +199,7 @@ public class BackgroundSound : MonoBehaviour {
     private int RollD3()
     {
         int value = 0;
-        value = Random.Range(0, 3);
+        value = Random.Range(0, 1);
         return value;
     }
 }

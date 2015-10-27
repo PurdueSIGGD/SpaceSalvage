@@ -22,7 +22,7 @@ public class CraneController : MonoBehaviour {
 	private float lastTheta, lengthx, lengthy, thetaersnenig, launchangle, lastendingangle, firstfocusangle, brokentime, ClosingTime, closingDistance;
 	private bool retracting, releaseready, firing, pause;
 	private Transform ending;
-	private string claw = "Mouse 1";
+	private string claw = "Mouse0";
     private AudioClip latchedOn;
     private bool isGrabbedFirstTimeBecauseImBadAtCoding;
     public GameObject extenderAudio;
@@ -190,8 +190,10 @@ public class CraneController : MonoBehaviour {
 		if (!emp && !pause) Player.transform.rotation = Quaternion.Euler(0,0,  (thetaersnenig + 90)); //set player rotation, 90 because they did not start at 0 degrees
 
 		bool buttonClicked;
-		if (claw == "Mouse 1") {
+		if (claw == "Mouse0") {
 			buttonClicked = Input.GetMouseButton(0);
+		} else if (claw == "Mouse1") {
+			buttonClicked = Input.GetMouseButton(1);
 		} else {
 			buttonClicked = Input.GetKey((KeyCode)(System.Enum.Parse(typeof(KeyCode), this.claw)));
 		}
