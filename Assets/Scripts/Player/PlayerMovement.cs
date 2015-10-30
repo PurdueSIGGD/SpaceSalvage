@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 	public KeyCode kup = KeyCode.W;
 	public KeyCode kdown = KeyCode.S;
-	public KeyCode kleft = KeyCode.D;
-	public KeyCode kright = KeyCode.A;
+	public KeyCode kleft = KeyCode.A;
+	public KeyCode kright = KeyCode.D;
 
 	public int position = 0;
 	public int sampleRate = 0;
@@ -60,12 +60,12 @@ public class PlayerMovement : MonoBehaviour {
 		if (PlayerPrefs.HasKey("Right")) {
 			kright = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right")) ;
 		} else {
-			PlayerPrefs.SetString("Right",KeyCode.D.ToString());
+			PlayerPrefs.SetString("Right",kright.ToString());
 		}
 		if (PlayerPrefs.HasKey("Left")) {
 			kleft = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left")) ;
 		} else {
-			PlayerPrefs.SetString("Left",KeyCode.A.ToString());
+			PlayerPrefs.SetString("Left",kleft.ToString());
 		}
 		
         empAudioSource = empAudio.GetComponent<AudioSource>();

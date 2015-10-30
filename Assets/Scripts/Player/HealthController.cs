@@ -69,6 +69,8 @@ public class HealthController : MonoBehaviour {
 			rechargetime = PlayerPrefs.GetFloat("emprechargetime");
 		} else {
 			PlayerPrefs.SetFloat("emprechargetime", 10);
+			rechargetime = PlayerPrefs.GetFloat("emprechargetime");
+
 		}
 		timesince = 0;
 		startinghealth = health;

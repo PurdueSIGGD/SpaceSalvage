@@ -37,15 +37,17 @@ public class GuiTextStarter : MonoBehaviour {
 		if (f == 0) f = 1;
 		f = 1-f;
 		//print(f);
-			this.transform.FindChild("EMPScreen").GetComponent<GUITexture>().pixelInset = new Rect(Random.Range(-50,50), Random.Range(-50,50), 0, 0);
-		/*	int i = Random.Range(0, statics.Length - 2);
+		timer += Time.deltaTime;
+		if (timer > .2f) {
+						this.transform.FindChild ("EMPScreen").GetComponent<GUITexture> ().pixelInset = new Rect (Random.Range (-50, 50), Random.Range (-50, 50), 0, 0);
+						/*	int i = Random.Range(0, statics.Length - 2);
 			if (i == lasti) i = statics.Length-1;
 			lasti = i;
 
 
 			this.transform.FindChild("EMPScreen").GetComponent<GUITexture>().texture = statics[i];
 			timer = 0;*/
-
+				}
 		this.transform.FindChild("EMPScreen").GetComponent<GUITexture>().color = new Color(1,1,1, .3f * f);
 
 

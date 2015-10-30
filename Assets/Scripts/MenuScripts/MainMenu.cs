@@ -95,67 +95,94 @@ public class MainMenu : MonoBehaviour {
 		keybindingButton.normal = traverseButton.normal = mainButton.normal = keybindingButton.normal = gs;
 		keybindingButton.hover = traverseButton.hover = mainButton.hover = keybindingButton.hover = gbs;
 
+		GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = 1;
+		PlayerPrefs.DeleteAll();
+		loadPrefs();
 
+	}
+	void loadPrefs() {
 		float currentAudioVal = 1;
+
 		if (PlayerPrefs.HasKey("audioVol")) {
 			currentAudioVal = PlayerPrefs.GetFloat("audioVol");			
-			print(currentAudioVal);
-			
+
 		} else {
-			PlayerPrefs.SetFloat("audioVol", currentAudioVal);
+			PlayerPrefs.SetFloat("audioVol", currentAudioVal);			
+			currentAudioVal = PlayerPrefs.GetFloat("audioVol");			
+
+
 		}
 		GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = currentAudioVal;
 		if (PlayerPrefs.HasKey("Up")) {
 			KeyCodeUp = PlayerPrefs.GetString("Up");
 		} else {
 			PlayerPrefs.SetString("Up","W");
+			KeyCodeUp = PlayerPrefs.GetString("Up");
+
 		}
 		if (PlayerPrefs.HasKey("Down")) {
 			KeyCodeDown = PlayerPrefs.GetString("Down");
 		} else {
 			PlayerPrefs.SetString("Down","S");
+			KeyCodeDown = PlayerPrefs.GetString("Down");
+
 		}
 		if (PlayerPrefs.HasKey("Left")) {
 			KeyCodeLeft = PlayerPrefs.GetString("Left");
 		} else {
-			PlayerPrefs.SetString("Left","D");
+			PlayerPrefs.SetString("Left","A");
+			KeyCodeLeft = PlayerPrefs.GetString("Left");
+
 		}
 		if (PlayerPrefs.HasKey("Right")) {
 			KeyCodeRight = PlayerPrefs.GetString("Right");
 		} else {
-			PlayerPrefs.SetString("Right","A");
+			PlayerPrefs.SetString("Right","D");
+			KeyCodeRight = PlayerPrefs.GetString("Right");
+
 		}
-
-
+		
+		
 		if (PlayerPrefs.HasKey("Retract")) {
 			KeyCodeRetract = PlayerPrefs.GetString("Retract");
 		} else {
 			PlayerPrefs.SetString("Retract","LeftControl");
+			KeyCodeRetract = PlayerPrefs.GetString("Retract");
+
 		}
 		if (PlayerPrefs.HasKey("Extend")) {
 			KeyCodeExtend = PlayerPrefs.GetString("Extend");
 		} else {
 			PlayerPrefs.SetString("Extend","LeftShift");
+			KeyCodeExtend = PlayerPrefs.GetString("Extend");
+
 		}
 		if (PlayerPrefs.HasKey("Eject")) {
 			KeyCodeEject = PlayerPrefs.GetString("Eject");
 		} else {
 			PlayerPrefs.SetString("Eject","G");
-		}
+			KeyCodeEject = PlayerPrefs.GetString("Eject");
 
+		}
+		
 		if (PlayerPrefs.HasKey("Claw")) {
 			KeyCodeClaw = PlayerPrefs.GetString("Claw");
 		} else {
-			PlayerPrefs.SetString("Claw","Mouse1");
+			PlayerPrefs.SetString("Claw","Mouse0");
+			KeyCodeClaw = PlayerPrefs.GetString("Claw");
+
 		}
 		if (PlayerPrefs.HasKey("Use")) {
 			KeyCodeUse = PlayerPrefs.GetString("Use");
 		} else {
 			PlayerPrefs.SetString("Use","F");
+			KeyCodeUse = PlayerPrefs.GetString("Use");
+
 		}
 
 	}
 	void Update() {
+		//loadPrefs ();
 		this.transform.rotation = Quaternion.Euler(0,0,0);
 		if (loading) {
 
@@ -231,8 +258,11 @@ public class MainMenu : MonoBehaviour {
 					clicked = true;
 					label = "Are you sure? \nCannot be \nundone";
 				} else {
+					label = "Reset\nProgress";
+					clicked = false;
 					GameObject.Find("MenuMusic").GetComponent<AudioSource>().volume = 1;
 					PlayerPrefs.DeleteAll();
+					loadPrefs();
 					menu = "Main";
 					
 				}
@@ -262,8 +292,8 @@ public class MainMenu : MonoBehaviour {
 
 			GUIContent upContent = new GUIContent("Up: " + KeyCodeUp); 
 			GUIContent downContent = new GUIContent("Down: " + KeyCodeDown); 
-			GUIContent leftContent = new GUIContent("Right: " + KeyCodeLeft); 
-			GUIContent rightContent = new GUIContent("Left: " + KeyCodeRight); 
+			GUIContent leftContent = new GUIContent("Left: " + KeyCodeLeft); 
+			GUIContent rightContent = new GUIContent("Right: " + KeyCodeRight); 
 			GUIContent retractContent = new GUIContent("Cable-: " + KeyCodeRetract); 
 			GUIContent extendContent = new GUIContent("Cable+: " + KeyCodeExtend); 
 			GUIContent clawContent = new GUIContent("Claw: " + KeyCodeClaw); 
@@ -476,8 +506,9 @@ public class MainMenu : MonoBehaviour {
 				PlayerPrefs.SetString ("Eject",this.KeyCodeEject);
 				PlayerPrefs.SetString ("Claw",this.KeyCodeClaw);
 				PlayerPrefs.SetString ("Use",this.KeyCodeUse);
+				loadPrefs();
+				menu = "Options";
 
-				
 			}
 			if (!pressing && GUI.Button (new Rect (Screen.width/2, Screen.height - Screen.height * .05f, Screen.width * .25f, Screen.height * .05f), backContent, keybindingButton)) {
 				

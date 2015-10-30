@@ -7,7 +7,7 @@ public class JointScript : MonoBehaviour {
 	 * Can be cut or changed
 	 * Similar to a linkedlist
 	 */
-
+	public bool debugBroken;
 	private LineRenderer lr;
 	private SpringJoint2D sp;
 	private EdgeCollider2D eg;
@@ -52,6 +52,8 @@ public class JointScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (debugBroken && !severed)
+						BrokenJoint ();
 		oxyTime += Time.deltaTime;
 		if (this.timeSinceOxy > 10 && this.broken) GameObject.Destroy(this.gameObject);
 		if ((broken || severed || spraying)&&this.name != "Player" && shiprope) {
@@ -204,7 +206,7 @@ public class JointScript : MonoBehaviour {
 		lr.SetVertexCount(0);
 		broken = true;
 
-		if (focus != null && focus.GetComponent<RopeScript2D>() != null) {
+		if (shiprope) {
 			focus.BroadcastMessage ("BrokenRope");
 		}
 
