@@ -66,10 +66,10 @@ public class BackgroundSound : MonoBehaviour {
             aggregateMusic.Add(sound); //Seven Duplicates balnce out a 3:1 Ratio for 11 commercials
             aggregateMusic.Add(sound); //Remove Comment when all commercials in place
             aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
-            aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
+            //aggregateMusic.Add(sound); //Remove Comment when all commercials in place
         }
         foreach (AudioClip sound in commercials)
         {
