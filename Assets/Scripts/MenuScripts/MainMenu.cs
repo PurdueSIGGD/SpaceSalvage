@@ -128,14 +128,14 @@ public class MainMenu : MonoBehaviour {
 
 		}
 		if (PlayerPrefs.HasKey("Left")) {
-			KeyCodeLeft = PlayerPrefs.GetString("Left");
+			//KeyCodeLeft = PlayerPrefs.GetString("Left");
 		} else {
 			PlayerPrefs.SetString("Left","A");
 			KeyCodeLeft = PlayerPrefs.GetString("Left");
 
 		}
 		if (PlayerPrefs.HasKey("Right")) {
-			KeyCodeRight = PlayerPrefs.GetString("Right");
+			//KeyCodeRight = PlayerPrefs.GetString("Right");
 		} else {
 			PlayerPrefs.SetString("Right","D");
 			KeyCodeRight = PlayerPrefs.GetString("Right");
