@@ -138,6 +138,7 @@ public class RopeScript2D : MonoBehaviour {
 					hinger.layer = 11;
 					//do this thing
 					DistanceJoint2D dj = hinger.AddComponent<DistanceJoint2D>();
+					dj.autoConfigureDistance = false;
 					hinger.GetComponent<Rigidbody2D>().gravityScale = 0;
 					dj.connectedBody = this.GetComponent<Rigidbody2D>();
 					dj.maxDistanceOnly = true;
@@ -187,6 +188,7 @@ public class RopeScript2D : MonoBehaviour {
 					firstjoint.GetComponent<LineRenderer>().enabled = true;
 					// Attach the joints to the target object and parent it to this object	
 					SpringJoint2D end = target.gameObject.AddComponent<SpringJoint2D>();
+					end.autoConfigureDistance = false;
 					spree = end;
 					end.frequency = frequency;
 					LineRenderer lr = target.gameObject.GetComponent<LineRenderer>();
